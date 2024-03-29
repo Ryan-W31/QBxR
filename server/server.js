@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 
 require("dotenv").config();
-const path = require("path");
+
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
