@@ -61,5 +61,6 @@ jobs:
           application_name: ${{ secrets.AWS_APP_NAME }}
           environment_name: ${{ secrets.AWS_ENV_NAME }}
           region: ${{ secrets.AWS_REGION }}
+          existing_bucket_name: ${{ secrets.AWS_BUCKET_NAME }}
           version_label: "version-${{ github.run_number }}"
           deployment_package: docker-compose.yml
