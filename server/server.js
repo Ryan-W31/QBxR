@@ -14,8 +14,6 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 app.use(express.json());
 
-//mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
-
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);
 });
