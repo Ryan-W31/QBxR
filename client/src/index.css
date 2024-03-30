@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
 body {
   background-repeat: no-repeat;
   background-size: 800px;
@@ -39,7 +41,7 @@ body {
   left: 0;
   width: 24px;
   height: 2px;
-  background: #000;
+  background: #1FB622;
   transform: rotate(0);
   transition: all 0.5s;
 }
