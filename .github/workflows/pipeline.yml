@@ -15,7 +15,7 @@ jobs:
         working-directory: ./client
         run: |
           npm install
-          npm test
+          npm run test
 
       - name: Install and Test Server
         working-directory: ./server
@@ -26,12 +26,17 @@ jobs:
       - name: Build Client Docker Image
         working-directory: ./client
         run: |
-          docker build -t ryanw31/qbxr:client-${{github.run_number}} .
+          docker build -t ryanw31/qbxr:client-${{github.run_number}} -t ryanw31/qbxr:client-latest .
 
       - name: Build Server Docker Image
         working-directory: ./server
         run: |
-          docker build -t ryanw31/qbxr:server-${{github.run_number}} .
+          docker build -t ryanw31/qbxr:server-${{github.run_number}} -t ryanw31/qbxr:server-latest .
+
+      - name: Build NGINX Docker Image
+        working-directory: ./nginx
+        run: |
+          docker build -t ryanw31/qbxr:nginx-${{github.run_number}} -t ryanw31/qbxr:nginx-latest .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -43,6 +48,10 @@ jobs:
         run: |
           docker push ryanw31/qbxr:client-${{github.run_number}}
           docker push ryanw31/qbxr:server-${{github.run_number}}
+          docker push ryanw31/qbxr:nginx-${{github.run_number}}
+          docker push ryanw31/qbxr:client-latest
+          docker push ryanw31/qbxr:server-latest
+          docker push ryanw31/qbxr:nginx-latest
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
