@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=5000",
     "dev": "nodemon -L server.js"
   },
   "keywords": [],
@@ -16,5 +16,10 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.2.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
   }
 }

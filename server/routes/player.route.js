@@ -2,6 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
-const {} = require("../controllers/player.controller");
+const { testEndpoint } = require("../controllers/player.controller");
+
+router.get("/player", testEndpoint);
 
 module.exports = router;
