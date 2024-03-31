@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 
 const LandingPage = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
@@ -39,23 +39,15 @@ const LandingPage = () => {
             </Link>
           </div>
           <Link
-            to="/"
+            to="/login"
             className="hidden py-2 px-6 text-light-primary font-Audiowide  bg-green-primary rounded-full baseline hover:bg-green-secondary md:block"
           >
             Sign In
           </Link>
-          <button
-            className={
-              toggleMenu
-                ? "hidden open hamburger md:hidden focus:outline-none"
-                : "block hamburger md:hidden focus:outline-none"
-            }
+          <AiOutlineMenu
+            className="md:hidden text-3xl text-green-primary cursor-pointer"
             onClick={() => setToggleMenu(!toggleMenu)}
-          >
-            <span className="hamburger-top"></span>
-            <span className="hamburger-middle"></span>
-            <span className="hamburger-bottom"></span>
-          </button>
+          ></AiOutlineMenu>
         </div>
       </nav>
 
@@ -74,8 +66,7 @@ const LandingPage = () => {
               </h2>
               <AiOutlineClose
                 onClick={() => setToggleMenu(!toggleMenu)}
-                size={30}
-                className="cursor-pointer text-green-primary"
+                className="cursor-pointer text-3xl text-green-primary"
               />
             </div>
 
@@ -99,7 +90,7 @@ const LandingPage = () => {
                 How QBxR Works
               </Link>
               <Link
-                to="/"
+                to="/login"
                 className="py-2 px-6 text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary text-center"
               >
                 Sign In
@@ -124,7 +115,7 @@ const LandingPage = () => {
             </p>
             <div className="flex justify-center">
               <Link
-                to="/"
+                to="/login"
                 className="py-2 px-6 text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary"
               >
                 Get Started
@@ -271,7 +262,7 @@ const LandingPage = () => {
           </div>
           <div className="my-16">
             <Link
-              to="/"
+              to="/login"
               className="py-2 px-6 text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary"
             >
               Get Started
@@ -289,7 +280,7 @@ const LandingPage = () => {
           </h2>
           <div>
             <Link
-              to="/"
+              to="/login"
               className="py-2 px-6 text-green-primary font-Audiowide bg-light-primary rounded-full shadow-2xl baseline hover:bg-dark-primary"
             >
               Get Started
@@ -301,7 +292,7 @@ const LandingPage = () => {
         className={toggleMenu ? "blur-lg bg-dark-primary" : "bg-dark-primary"}
       >
         <div className="container flex flex-col-reverse justify-between px-6 py-10 mx-auto space-y-8 md:flex-row md:space-y-0">
-          <div className="flex flex-row justify-center py-9 space-x-8">
+          <div className="flex flex-row justify-center py-2 space-x-8">
             <Link
               to="#"
               className="flex flex-col items-center text-light-primary hover:text-green-primary"
