@@ -15,8 +15,11 @@ const RegisterPage = () => {
   }
 
   return (
-    <section className="h-screen flex flex-col bg-dark-primary md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
-      <div className="md:w-1/3 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
+    <section className="h-screen flex flex-col bg-dark-primary md:flex-row justify-center space-y-10 md:space-x-16 items-center">
+      <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
+        <div className="mb-6 text-center font-Audiowide font-bold">
+          <label className="text-5xl text-green-primary">QBxR</label>
+        </div>
         <div className="text-center">
           <label className="mr-1 font-Audiowide font-semibold text-light-primary ">
             Sign up with
@@ -88,7 +91,7 @@ const RegisterPage = () => {
             )}
           </button>
         </div>
-        <div className="mt-4 flex justify-center font-semibold text-sm">
+        <div className="mt-4 flex justify-left font-semibold text-sm">
           <label className="flex text-light-primary cursor-pointer">
             <input className="mr-1" type="checkbox" />
             <span>

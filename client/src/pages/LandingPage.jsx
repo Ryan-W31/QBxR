@@ -1,12 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { BiArrowFromBottom } from "react-icons/bi";
 
 const LandingPage = () => {
   const [toggleMenu, setToggleMenu] = useState(false);
+  const [isScrollToTopVisible, setIsScrollToTopVisible] = useState(false);
+
+  const toggleScollToTop = () => {
+    if (window.scrollY > 300) {
+      setIsScrollToTopVisible(true);
+    } else {
+      setIsScrollToTopVisible(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const classNames = (...classes) => {
+    return classes.filter(Boolean).join(" ");
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", toggleScollToTop);
+
+    return () => {
+      window.removeEventListener("scroll", toggleScollToTop);
+    };
+  }, []);
 
   return (
     <div className="bg-dark-primary">
+      <div
+        className={
+          toggleMenu ? "hidden fixed bottom-2 left-2" : "fixed bottom-2 left-2"
+        }
+      >
+        <button
+          type="button"
+          onClick={scrollToTop}
+          className={classNames(
+            isScrollToTopVisible ? "opacity-100" : "opacity-0",
+            "bg-green-primary hover:bg-green-secondary inline-flex items-center rounded-full p-3 text-light-primary transition-opacity"
+          )}
+        >
+          <BiArrowFromBottom className="h-6 w-6" aria-hidden="true" />
+        </button>
+      </div>
       <nav
         className={
           toggleMenu
