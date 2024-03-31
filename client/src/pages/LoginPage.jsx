@@ -13,7 +13,9 @@ const LoginPage = () => {
     <section className="h-screen flex flex-col bg-dark-primary md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
       <div className="md:w-1/3 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
         <div className="text-center">
-          <label className="mr-1 text-light-primary">Sign in with</label>
+          <label className="mr-1 font-Audiowide font-semibold text-light-primary">
+            Sign in with
+          </label>
           <button
             type="button"
             className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary shadow-[0_4px_9px_-4px_#3b71ca]"
@@ -28,7 +30,7 @@ const LoginPage = () => {
           </button>
         </div>
         <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-light-secondary after:mt-0.5 after:flex-1 after:border-t after:border-light-secondary">
-          <p className="mx-4 mb-0 text-center font-semibold text-green-primary">
+          <p className="mx-4 mb-0 text-center font-Audiowide font-semibold text-green-primary">
             Or
           </p>
         </div>
@@ -72,7 +74,7 @@ const LoginPage = () => {
         </div>
         <div className="text-center font-bold">
           <button
-            className="mt-4 bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full text-sm tracking-wider"
+            className="mt-4 font-Audiowide font-md bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
             type="submit"
           >
             Login
