@@ -19,7 +19,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
         </div>
         {isLandingPage ? (
           <>
-            <div className="hidden space-x-6 md:flex">
+            <div className="hidden space-x-6 md:flex font-Audiowide text-md">
               <Link
                 to="#"
                 className="relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]"
@@ -41,7 +41,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
             </div>
             <Link
               to="/login"
-              className="hidden py-2 px-6 text-light-primary font-Audiowide  bg-green-primary rounded-full baseline hover:bg-green-secondary md:block"
+              className="hidden py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary md:block"
             >
               Sign In
             </Link>
@@ -52,7 +52,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
           </>
         ) : (
           <>
-            <div className="hidden space-x-6 md:flex">
+            <div className="hidden space-x-6 md:flex font-Audiowide">
               <Link
                 to="#"
                 className="relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]"

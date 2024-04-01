@@ -21,7 +21,7 @@ const ProfileDropdown = () => {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute top-16 right-0 z-10 w-56 origin-top-right divide-y divide-light-secondary/80 rounded-md bg-dark-secondary/80">
+        <Menu.Items className="absolute top-16 right-0 z-10 w-56 origin-top-right divide-y divide-light-secondary/80 rounded-md bg-dark-secondary/80 font-Audiowide text-md">
           <div>
             <Menu.Item>
               {({ active }) => (
@@ -31,7 +31,7 @@ const ProfileDropdown = () => {
                     active
                       ? "bg-green-primary text-light-primary"
                       : "text-light-secondary",
-                    "block px-4 py-2 text-sm rounded-t-md"
+                    "block px-4 py-2 rounded-t-md"
                   )}
                 >
                   My Profile
@@ -46,7 +46,7 @@ const ProfileDropdown = () => {
                     active
                       ? "bg-green-primary text-light-primary"
                       : "text-light-secondary",
-                    "block px-4 py-2 text-sm"
+                    "block px-4 py-2"
                   )}
                 >
                   Settings
@@ -64,10 +64,10 @@ const ProfileDropdown = () => {
                       active
                         ? "bg-red-600 text-light-primary"
                         : "text-light-secondary",
-                      "block w-full px-4 py-2 text-left text-sm rounded-b-md"
+                      "block w-full px-4 py-2 text-left rounded-b-md"
                     )}
                   >
-                    Sign out
+                    Log Out
                   </button>
                 )}
               </Menu.Item>

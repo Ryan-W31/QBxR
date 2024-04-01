@@ -1,8 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AiOutlineClose } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlineHome,
+  AiOutlineSetting,
+  AiOutlineSearch,
+  AiOutlineInfoCircle,
+  AiOutlineUser,
+} from "react-icons/ai";
+import {
+  MdOutlineLeaderboard,
+  MdOutlineSportsFootball,
+  MdOutlineLogout,
+} from "react-icons/md";
 
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width >= 768 && showMenu) {
+        toggleMenu();
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [showMenu, toggleMenu]);
+
   return (
     <div>
       <div className="md:hidden">
@@ -25,58 +52,84 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
             </div>
 
             {isLandingPage ? (
-              <div className="flex flex-col mt-6 space-y-6">
+              <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary"
                 >
-                  Home
+                  <AiOutlineHome className="inline-block mb-2 mr-2" />
+                  <span>Home</span>
                 </Link>
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary"
                 >
-                  About Us
+                  <AiOutlineInfoCircle className="inline-block mb-1 mr-2" />
+                  <span>About Us</span>
                 </Link>
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary"
                 >
-                  How QBxR Works
+                  <MdOutlineSportsFootball className="inline-block mb-1 mr-2" />
+                  <span>How QBxR Works</span>
                 </Link>
                 <Link
                   to="/login"
-                  className="py-2 px-6 text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary text-center"
+                  className="py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary text-center"
                 >
                   Sign In
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col mt-6 space-y-6">
+              <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary "
                 >
-                  Home
+                  <AiOutlineHome className="inline-block mb-2 mr-2" />
+                  <span>Home</span>
                 </Link>
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary "
                 >
-                  Leaderboard
+                  <MdOutlineLeaderboard className="inline-block mb-1 mr-2" />
+                  <span>Leaderboard</span>
                 </Link>
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary "
                 >
-                  Search
+                  <AiOutlineSearch className="inline-block mb-1 mr-2" />
+                  <span>Search</span>
                 </Link>
                 <Link
                   to="#"
-                  className="text-light-primary hover:text-green-primary font-bold"
+                  className="text-light-primary hover:text-green-primary "
                 >
-                  Profile
+                  <AiOutlineUser className="inline-block mb-1 mr-2" />
+                  <span>My Profile</span>
                 </Link>
+                <Link
+                  to="#"
+                  className="text-light-primary hover:text-green-primary "
+                >
+                  <AiOutlineSetting className="inline-block mb-1 mr-2" />
+                  <span>Settings</span>
+                </Link>
+
+                <div className="absolute w-full bottom-0 right-0">
+                  <form action="/">
+                    <button
+                      type="submit"
+                      className="bg-red-600 hover:bg-red-800 text-lg text-light-primary block w-full px-4 py-2 text-center rounded-b-md"
+                    >
+                      <MdOutlineLogout className="inline-block mb-1 mr-2" />
+                      <span>Log Out</span>
+                    </button>
+                  </form>
+                </div>
               </div>
             )}
           </div>
