@@ -10,6 +10,7 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use("/api", PlayerRouter);
+app.use("/api/player", PlayerRouter);
+app.use("/api/nonplayer", NonplayerRouter);
 
 module.exports = app;

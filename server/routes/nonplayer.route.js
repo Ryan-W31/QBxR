@@ -2,6 +2,9 @@ const express = require("express");
 
 const router = express.Router();
 
-const {} = require("../controllers/nonplayer.controller");
+const nonplayersController = require("../controllers/nonplayer.controller");
+
+router.route("/signup").post(nonplayersController.signUp);
+router.route("/login").get(nonplayersController.login);
 
 module.exports = router;

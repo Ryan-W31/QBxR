@@ -4,6 +4,9 @@ on:
     branches:
       - main
 
+env:
+  MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -21,6 +24,7 @@ jobs:
         working-directory: ./server
         run: |
           npm install
+          export MONGODB_URI=$MONGODB_URI
           npm run test
 
       - name: Login to Docker Hub
