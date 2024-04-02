@@ -76,12 +76,12 @@ const LoginPage = () => {
           </a>
         </div>
         <div className="text-center font-bold">
-          <button
+          <a
             className="mt-4 font-Audiowide font-md bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
-            type="submit"
+            href="/home"
           >
             Login
-          </button>
+          </a>
         </div>
         <div className="mt-4 font-semibold text-sm text-light-primary text-center">
           Don't have an account?{" "}
