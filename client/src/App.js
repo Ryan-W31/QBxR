@@ -6,6 +6,13 @@ import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HomePage from "./pages/HomePage";
 
+import ProtectedRoutes from "./hooks/protectedRoutes/ProtectedRoutes";
+
+const ROLES = {
+  Player: "Player",
+  NonPlayer: "NonPlayer",
+};
+
 function App() {
   return (
     <Router>
@@ -14,7 +21,12 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgotpassword" element={<ForgotPasswordPage />} />
-        <Route path="/home" element={<HomePage />} />
+
+        <Route
+          element={<ProtectedRoutes allowedRoles={[...Object.values(ROLES)]} />}
+        >
+          <Route path="/home" element={<HomePage />} />
+        </Route>
       </Routes>
     </Router>
   );

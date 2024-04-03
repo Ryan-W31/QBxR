@@ -3,8 +3,12 @@ const crypto = require("crypto");
 
 const Schema = mongoose.Schema;
 
-const playerSchema = new Schema(
+const userSchema = new Schema(
   {
+    role: {
+      type: String,
+      required: true,
+    },
     firstname: {
       type: String,
       required: true,
@@ -25,29 +29,25 @@ const playerSchema = new Schema(
       type: String,
       required: true,
     },
-    username: {
-      type: String,
-      required: true,
-    },
     school_organization: {
       type: String,
     },
   },
-  { collection: "Players" }
+  { collection: "Users" }
 );
 
-playerSchema.methods.createHash = async function (password) {
+userSchema.methods.createHash = async function (password) {
   this.salt = crypto.randomBytes(10).toString("hex");
   this.password = crypto
     .pbkdf2Sync(password, this.salt, 1000, 64, "sha512")
     .toString("hex");
 };
 
-playerSchema.methods.verifyPassword = async function (password) {
+userSchema.methods.verifyPassword = async function (password) {
   const hash = crypto
     .pbkdf2Sync(password, this.salt, 1000, 64, "sha512")
     .toString("hex");
   return this.password === hash;
 };
 
-module.exports = mongoose.model("Player", playerSchema);
+module.exports = mongoose.model("User", userSchema);
