@@ -14,6 +14,7 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:5000",
   "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/",
 ];
 
