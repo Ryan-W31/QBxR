@@ -1,12 +1,14 @@
-import React, { useState } from "react";
-import { useLoginMutation } from "../hooks/auth/auth";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { useLoginMutation } from "../hooks/auth/authApiSlice";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../hooks/auth/auth";
+import { setCredentials } from "../hooks/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const LoginPage = () => {
+  const userRef = useRef();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,6 +18,10 @@ const LoginPage = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
+  useEffect(() => {
+    userRef.current.focus();
+  }, []);
+
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
   }
@@ -24,18 +30,22 @@ const LoginPage = () => {
     event.preventDefault();
 
     try {
-      const { data } = await login({ email, password });
-      console.log(data);
-      dispatch(setCredentials({ aToken: data.aToken }));
+      const { aToken } = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ aToken }));
       setEmail("");
       setPassword("");
       navigate("/home");
     } catch (err) {
-      console.log(err);
+      if (!err.status || !err.data) {
+        console.log("Server Error");
+      }
+      console.log(err.data.message);
     }
   };
 
-  return (
+  const content = isLoading ? (
+    <div>Loading...</div>
+  ) : (
     <section className="h-screen flex flex-col bg-dark-primary justify-center space-y-10 md:space-x-16 items-center">
       <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
         <div className="mb-6 text-center font-Audiowide font-bold">
@@ -43,17 +53,17 @@ const LoginPage = () => {
         </div>
         <div className="text-center">
           <label className="mr-1 font-Audiowide font-semibold text-light-primary">
-            Sign in with
+            Log in with
           </label>
           <button
             type="button"
-            className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary shadow-[0_4px_9px_-4px_#3b71ca]"
+            className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary"
           >
             <FaFacebook className="mx-auto h-3.5 w-3.5 " />
           </button>
           <button
             type="button"
-            className="inlne-block mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary uppercase leading-normal text-light-primary shadow-[0_4px_9px_-4px_#3b71ca]"
+            className="inlne-block mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary uppercase leading-normal text-light-primary"
           >
             <FaGoogle className="mx-auto h-3.5 w-3.5 " />
           </button>
@@ -68,6 +78,7 @@ const LoginPage = () => {
             <input
               className="text-sm w-full px-4 py-2 border outline-none  focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded"
               required
+              ref={userRef}
               placeholder="Email Address"
               onChange={(c) => setEmail(c.target.value)}
             />
@@ -97,12 +108,12 @@ const LoginPage = () => {
             <input className="mr-1" type="checkbox" />
             <span>Remember Me</span>
           </label>
-          <a
+          <Link
             className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4"
-            href="/forgotpassword"
+            to="/forgotpassword"
           >
             Forgot Password?
-          </a>
+          </Link>
         </div>
         <div className="text-center font-bold">
           <button
@@ -114,16 +125,18 @@ const LoginPage = () => {
         </div>
         <div className="mt-4 font-semibold text-sm text-light-primary text-center">
           Don't have an account?{" "}
-          <a
+          <Link
             className="text-green-primary hover:underline hover:text-green-secondary hover:underline-offset-4"
-            href="/register"
+            to="/register"
           >
             Register
-          </a>
+          </Link>
         </div>
       </div>
     </section>
   );
+
+  return content;
 };
 
 export default LoginPage;

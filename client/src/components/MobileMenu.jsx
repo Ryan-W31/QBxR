@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   AiOutlineClose,
   AiOutlineHome,
@@ -13,8 +13,12 @@ import {
   MdOutlineSportsFootball,
   MdOutlineLogout,
 } from "react-icons/md";
+import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
+  const [logout, { isLoading, isSuccess }] = useLogoutMutation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -29,6 +33,15 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
       window.removeEventListener("resize", handleResize);
     };
   }, [showMenu, toggleMenu]);
+
+  if (isSuccess) navigate("/");
+
+  const hangleLogout = (event) => {
+    event.preventDefault();
+    logout();
+  };
+
+  if (isLoading) return <div>Logging out...</div>;
 
   return (
     <div>
@@ -120,7 +133,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
                 </Link>
 
                 <div className="absolute w-full bottom-0 right-0">
-                  <form action="/">
+                  <form onSubmit={hangleLogout}>
                     <button
                       type="submit"
                       className="bg-red-600 hover:bg-red-800 text-lg text-light-primary block w-full px-4 py-2 text-center rounded-b-md"

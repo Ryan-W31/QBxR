@@ -1,10 +1,10 @@
 import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
-import { api } from "../hooks/auth/auth";
+import { apiSlice } from "../../app/api/apiSlice";
 
 const userAdapter = createEntityAdapter({});
 const initialState = userAdapter.getInitialState();
 
-const userApiSlice = api.injectEndpoints({
+const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation({
       query: (body) => ({

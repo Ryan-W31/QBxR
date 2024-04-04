@@ -1,9 +1,25 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { AiOutlineUser } from "react-icons/ai";
 import { classNames } from "../utils/utils";
+import { useLogoutMutation } from "../hooks/auth/authApiSlice";
+import { useNavigate } from "react-router-dom";
 
 const ProfileDropdown = () => {
+  const [logout, { isLoading, isSuccess }] = useLogoutMutation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isSuccess) navigate("/");
+  }, [isSuccess, navigate]);
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    logout();
+  };
+
+  if (isLoading) return <div>Logging out...</div>;
+
   return (
     <Menu as="div" className="hidden relative md:inline-block text-left">
       <div>
@@ -55,7 +71,7 @@ const ProfileDropdown = () => {
             </Menu.Item>
           </div>
           <div>
-            <form action="/">
+            <form onSubmit={handleLogout}>
               <Menu.Item>
                 {({ active }) => (
                   <button

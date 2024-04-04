@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
-import { useSignUpMutation } from "../utils/userApiSlice";
+import { useNavigate, Link } from "react-router-dom";
+import { useSignUpMutation } from "../hooks/users/userApiSlice";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
 
-  const [signUp, { isLoading, isSuccess, isError, error }] =
-    useSignUpMutation();
+  const [signUp, { isLoading, isSuccess }] = useSignUpMutation();
   const navigate = useNavigate();
 
   const [role, setRole] = useState("nonplayer");
@@ -20,6 +19,7 @@ const RegisterPage = () => {
   const [school_organization, setSchool_Organization] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isChecked, setIsChecked] = useState(false);
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
@@ -56,6 +56,10 @@ const RegisterPage = () => {
     }
   };
 
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  };
+
   const canSave =
     [
       role,
@@ -76,6 +80,11 @@ const RegisterPage = () => {
         return;
       }
 
+      if (!isChecked) {
+        alert("Please agree to the terms and conditions");
+        return;
+      }
+
       var obj = {
         role,
         firstname,
@@ -86,6 +95,8 @@ const RegisterPage = () => {
       };
 
       await signUp(obj);
+    } else {
+      alert("Please fill all fields");
     }
   };
 
@@ -97,7 +108,7 @@ const RegisterPage = () => {
         </div>
         <div className="text-center">
           <label className="mr-1 font-Audiowide font-semibold text-light-primary ">
-            Sign up with
+            Register with
           </label>
           <button
             type="button"
@@ -199,7 +210,13 @@ const RegisterPage = () => {
         </div>
         <div className="mt-4 flex justify-left font-semibold text-sm">
           <label className="flex text-light-primary cursor-pointer">
-            <input id="TnC" className="mr-1" type="checkbox" />
+            <input
+              id="TnC"
+              className="mr-1"
+              type="checkbox"
+              checked={isChecked}
+              onChange={handleCheck}
+            />
             <span>
               <span className="font-bold text-green-primary">I agree </span>to
               the terms & conditions and privacy policy
@@ -217,12 +234,12 @@ const RegisterPage = () => {
         </div>
         <div className="mt-4 font-semibold text-sm text-light-primary text-center">
           Have an account already?{" "}
-          <a
+          <Link
             className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4"
-            href="/login"
+            to="/login"
           >
             Sign In
-          </a>
+          </Link>
         </div>
       </div>
     </section>
