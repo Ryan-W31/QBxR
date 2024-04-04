@@ -14,16 +14,16 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:5000",
   "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/",
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    if (allowedOrigins.indexOf(origin) === -1 || !origin) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
       return callback(null, true);
+    } else {
+      return callback(new Error("Not allowed by CORS "));
     }
-    return callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
   optionsSuccessStatus: 200,
@@ -48,6 +48,17 @@ const AuthRouter = require("./routes/auth.route");
 
 app.use("/api/user", UserRouter);
 app.use("/api/auth", AuthRouter);
+
+app.all("*", (req, res) => {
+  res.status(404);
+  if (req.accepts("html")) {
+    res.sendFile(path.join(__dirname, "404.html"));
+  } else if (req.accepts("json")) {
+    res.json({ message: "404 Not Found" });
+  } else {
+    res.type("txt").send("404 Not Found");
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on port: ${PORT}`);

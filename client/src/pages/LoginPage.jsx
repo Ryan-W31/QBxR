@@ -1,13 +1,39 @@
 import React, { useState } from "react";
+import { useLoginMutation } from "../hooks/auth/auth";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../hooks/auth/auth";
+import { useNavigate } from "react-router-dom";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const LoginPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
   }
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    try {
+      const { data } = await login({ email, password });
+      console.log(data);
+      dispatch(setCredentials({ aToken: data.aToken }));
+      setEmail("");
+      setPassword("");
+      navigate("/home");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <section className="h-screen flex flex-col bg-dark-primary justify-center space-y-10 md:space-x-16 items-center">
@@ -41,15 +67,18 @@ const LoginPage = () => {
           <div>
             <input
               className="text-sm w-full px-4 py-2 border outline-none  focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded"
-              type="text"
+              required
               placeholder="Email Address"
+              onChange={(c) => setEmail(c.target.value)}
             />
           </div>
           <div className="relative container mt-4">
             <input
               type={isPasswordVisible ? "text" : "password"}
               placeholder="Password"
+              required
               className="w-full px-4 py-2 text-sm border rounded outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1"
+              onChange={(c) => setPassword(c.target.value)}
             />
             <button
               className="absolute outline-none inset-y-0 right-0 flex items-center px-4 text-green-primary"
@@ -76,12 +105,12 @@ const LoginPage = () => {
           </a>
         </div>
         <div className="text-center font-bold">
-          <a
+          <button
             className="mt-4 font-Audiowide font-md bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
-            href="/home"
+            onClick={handleLogin}
           >
             Login
-          </a>
+          </button>
         </div>
         <div className="mt-4 font-semibold text-sm text-light-primary text-center">
           Don't have an account?{" "}

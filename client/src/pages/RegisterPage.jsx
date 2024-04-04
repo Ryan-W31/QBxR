@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import { useSignUpMutation } from "../utils/userApiSlice";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
+
+  const [signUp, { isLoading, isSuccess, isError, error }] =
+    useSignUpMutation();
+  const navigate = useNavigate();
+
+  const [role, setRole] = useState("nonplayer");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [school_organization, setSchool_Organization] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
@@ -13,6 +27,67 @@ const RegisterPage = () => {
   function toggleConfirmPasswordVisibility() {
     setIsConfirmPasswordVisible((prevState) => !prevState);
   }
+
+  useEffect(() => {
+    if (isSuccess) {
+      alert("User created");
+      setFirstname("");
+      setLastname("");
+      setEmail("");
+      setPassword("");
+      setSchool_Organization("");
+      setConfirmPassword("");
+      navigate("/login");
+    }
+  }, [isSuccess, navigate]);
+
+  const handleRole = (event) => {
+    event.preventDefault();
+
+    const pSwitch = document.getElementById("Pswitch");
+    if (pSwitch.classList.contains("left-0")) {
+      pSwitch.classList.remove("left-0");
+      pSwitch.classList.add("left-1/2");
+      setRole("player");
+    } else {
+      pSwitch.classList.remove("left-1/2");
+      pSwitch.classList.add("left-0");
+      setRole("nonplayer");
+    }
+  };
+
+  const canSave =
+    [
+      role,
+      firstname,
+      lastname,
+      email,
+      password,
+      confirmPassword,
+      school_organization,
+    ].every(Boolean) && !isLoading;
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+
+    if (canSave) {
+      if (password !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+      }
+
+      var obj = {
+        role,
+        firstname,
+        lastname,
+        email,
+        password,
+        school_organization,
+      };
+
+      await signUp(obj);
+    }
+  };
 
   return (
     <section className="h-screen flex flex-col bg-dark-primary md:flex-row justify-center space-y-10 md:space-x-16 items-center">
@@ -26,42 +101,72 @@ const RegisterPage = () => {
           </label>
           <button
             type="button"
-            className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary shadow-[0_4px_9px_-4px_#3b71ca]"
+            className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary"
           >
             <FaFacebook className="mx-auto h-3.5 w-3.5 " />
           </button>
           <button
             type="button"
-            className="inlne-block mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary uppercase leading-normal text-light-primary shadow-[0_4px_9px_-4px_#3b71ca]"
+            className="inlne-block mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary uppercase leading-normal text-light-primary"
           >
             <FaGoogle className="mx-auto h-3.5 w-3.5 " />
           </button>
         </div>
         <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-light-secondary after:mt-0.5 after:flex-1 after:border-t after:border-light-secondary">
-          <p className="mx-4 mb-0 text-center font-Audiowide font-semibold text-green-primary">
+          <p className="mx-4 text-center font-Audiowide font-semibold text-green-primary">
             Or
           </p>
         </div>
+        <div className="flex h-full justify-center">
+          <label className="w-full flex px-4 bg-dark-primary relative rounded-full">
+            <div
+              id="Pswitch"
+              className="w-1/2 h-full bg-green-primary rounded-full transition-all absolute left-0"
+            ></div>
+            <button
+              onClick={handleRole}
+              className="transition w-full flex font-bold justify-center items-center text-light-primary z-10"
+            >
+              Not A Player
+            </button>
+            <button
+              onClick={handleRole}
+              className="transition w-full flex font-bold items-center justify-center text-center text-light-primary z-10"
+            >
+              Player
+            </button>
+          </label>
+        </div>
         <input
-          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded"
+          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
           type="text"
           placeholder="First Name"
+          onChange={(c) => setFirstname(c.target.value)}
         />
         <input
           className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
           type="text"
           placeholder="Last Name"
+          onChange={(c) => setLastname(c.target.value)}
+        />
+        <input
+          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
+          type="text"
+          placeholder="School or Organization"
+          onChange={(c) => setSchool_Organization(c.target.value)}
         />
         <input
           className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
           type="text"
           placeholder="Email Address"
+          onChange={(c) => setEmail(c.target.value)}
         />
         <div className="relative container mt-4">
           <input
             type={isPasswordVisible ? "text" : "password"}
             placeholder="Password"
             className="w-full px-4 py-2 text-sm border rounded outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1"
+            onChange={(c) => setPassword(c.target.value)}
           />
           <button
             className="absolute outline-none inset-y-0 right-0 flex items-center px-4 text-green-primary"
@@ -79,6 +184,7 @@ const RegisterPage = () => {
             type={isConfirmPasswordVisible ? "text" : "password"}
             placeholder="Confirm Password"
             className="w-full px-4 py-2 text-sm border rounded outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1"
+            onChange={(c) => setConfirmPassword(c.target.value)}
           />
           <button
             className="absolute outline-none inset-y-0 right-0 flex items-center px-4 text-green-primary"
@@ -93,7 +199,7 @@ const RegisterPage = () => {
         </div>
         <div className="mt-4 flex justify-left font-semibold text-sm">
           <label className="flex text-light-primary cursor-pointer">
-            <input className="mr-1" type="checkbox" />
+            <input id="TnC" className="mr-1" type="checkbox" />
             <span>
               <span className="font-bold text-green-primary">I agree </span>to
               the terms & conditions and privacy policy
@@ -102,6 +208,7 @@ const RegisterPage = () => {
         </div>
         <div className="text-center">
           <button
+            onClick={handleSignUp}
             className="mt-4 text-lg  font-semibold font-Audiowide bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
             type="submit"
           >

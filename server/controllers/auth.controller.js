@@ -3,10 +3,17 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
+function secure() {
+  if (process.env.NODE_ENV === "production") {
+    return true;
+  }
+  return false;
+}
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!username || !password) {
+  if (!email || !password) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -30,14 +37,22 @@ const login = async (req, res) => {
     expiresIn: "7d",
   });
 
-  res.cookie("jwt_refresh", rToken, {
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
+  if (secure()) {
+    res.cookie("jwt_refresh", rToken, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+  } else {
+    res.cookie("jwt_refresh", rToken, {
+      httpOnly: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+  }
 
-  res.json({ aToken });
+  res.status(200).json({ aToken });
 };
 
 const refreshCookie = (req, res) => {
@@ -78,11 +93,18 @@ const logout = (req, res) => {
     res.sendStatus(204);
   }
 
-  res.clearCookie("jwt_refresh", {
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-  });
+  if (secure()) {
+    res.clearCookie("jwt_refresh", {
+      httpOnly: true,
+      sameSite: "none",
+      secure: true,
+    });
+  } else {
+    res.clearCookie("jwt_refresh", {
+      httpOnly: true,
+      sameSite: "none",
+    });
+  }
   res.json({ message: "Logged out" });
 };
 

@@ -25,21 +25,16 @@ const signUp = async (req, res) => {
       .json({ message: "User with this email already exists." });
   }
 
-  const user = {
-    role: role,
-    firstname: firstname,
-    lastname: lastname,
-    email: email,
-    school_organization: school_organization,
-  };
+  const user = new User({
+    role,
+    firstname,
+    lastname,
+    email,
+    school_organization,
+  });
 
   await user.createHash(password);
-  const userInstance = await User.createOne(user);
-
-  if (!userInstance) {
-    return res.status(500).json({ message: "Error creating user" });
-  }
-
+  await user.save();
   res.status(201).json({ message: "User created" });
 };
 

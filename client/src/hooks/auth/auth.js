@@ -1,14 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { buildPath } from "../../utils/utils";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${process.env.REACT_APP_BACKEND_URL}`,
+  baseUrl: buildPath(""),
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.aToken;
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
+
     return headers;
   },
 });
@@ -35,9 +37,7 @@ const baseQueryWithRefresh = async (args, apiR, options) => {
 };
 
 const api = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseQueryWithRefresh,
-  }),
+  baseQuery: baseQueryWithRefresh,
   endpoints: (builder) => ({}),
 });
 
@@ -48,7 +48,8 @@ const authSlice = createSlice({
   },
   reducers: {
     setCredentials: (state, action) => {
-      state.aToken = action.payload;
+      const { aToken } = action.payload;
+      state.aToken = aToken;
     },
     logOut: (state, action) => {
       state.aToken = null;
@@ -70,6 +71,16 @@ const authApiSlice = api.injectEndpoints({
         url: "/api/auth/refresh",
         method: "GET",
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(data);
+          const { aToken } = data;
+          dispatch(setCredentials({ aToken }));
+        } catch (err) {
+          console.log(err);
+        }
+      },
     }),
     logout: builder.mutation({
       query: () => ({
@@ -78,9 +89,12 @@ const authApiSlice = api.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          console.log(data);
           dispatch(logOut());
-          dispatch(api.util.resetApiState());
+          setTimeout(() => {
+            dispatch(api.util.resetApiState());
+          }, 1000);
         } catch (err) {
           console.log(err);
         }

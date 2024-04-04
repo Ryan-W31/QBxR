@@ -6,6 +6,8 @@ on:
 
 env:
   MONGODB_URI: ${{ secrets.MONGODB_URI }}
+  JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
+  JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
 
 jobs:
   build-and-deploy:

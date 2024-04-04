@@ -42,7 +42,7 @@ const userApiSlice = api.injectEndpoints({
 });
 
 export const { useSignUpMutation, useGetUsersQuery } = userApiSlice;
-export const selectUsersResult = user;
+export const selectUsersResult = userApiSlice.endpoints.getUsers.select();
 
 const selectUsersData = createSelector(
   selectUsersResult,
