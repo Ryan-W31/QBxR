@@ -87,4 +87,8 @@ const logout = (req, res) => {
   res.json({ message: "Logged out" });
 };
 
-module.exports = { login, refreshCookie, logout };
+const test = (req, res) => {
+  res.status(200).json({ message: "Test" });
+};
+
+module.exports = { login, refreshCookie, logout, test };

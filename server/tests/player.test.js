@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const request = require("supertest");
 
 const app = require("../app");
@@ -13,11 +12,11 @@ require("dotenv").config();
 //   await mongoose.connection.close();
 // });
 
-describe("GET /api/player", () => {
+describe("GET /api/auth/test", () => {
   it("test", async () => {
-    const response = await request(app).get("/api/player");
+    const response = await request(app).get("/api/auth/test");
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body.message).toBe("Test");
   });
 });
