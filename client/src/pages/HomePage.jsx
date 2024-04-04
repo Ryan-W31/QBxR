@@ -11,7 +11,7 @@ const HomePage = () => {
     setShowMenu((prevState) => !prevState);
   };
 
-  return (
+  const content = (
     <div className="h-screen bg-dark-primary">
       <ScrollToTop showMenu={showMenu} />
       <NavBar
@@ -26,6 +26,8 @@ const HomePage = () => {
       />
     </div>
   );
+
+  return content;
 };
 
 export default HomePage;
