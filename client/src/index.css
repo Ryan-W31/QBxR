@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
 body {
   background-repeat: no-repeat;
   background-size: 800px;
@@ -22,65 +24,26 @@ body {
   }
 }
 
-/* Hamburger Menu */
-.hamburger {
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  transition: all 0.25s;
-  position: relative;
-}
-
-.hamburger-top,
-.hamburger-middle,
-.hamburger-bottom {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 24px;
-  height: 2px;
-  background: #000;
-  transform: rotate(0);
-  transition: all 0.5s;
-}
-
-.hamburger-middle {
-  transform: translateY(7px);
-}
-
-.hamburger-bottom {
-  transform: translateY(14px);
-}
-
-.open {
-  transform: rotate(90deg);
-  transform: translateY(0px);
-}
-
-.open .hamburger-top {
-  transform: rotate(45deg) translateY(6px) translate(6px);
-}
-
-.open .hamburger-middle {
-  display: none;
-}
-
-.open .hamburger-bottom {
-  transform: rotate(-45deg) translateY(6px) translate(-6px);
-}
-
 .fade-out {
-  opacity: 1;
+  opacity: 0;
+  background-color: #000000;
   transition: opacity 1s ease-in-out;
+  --webkit-backface-visibility: hidden;
 }
 
 .fade-out.fade-in {
   opacity: 1;
+  background-color: #000000;
+  --webkit-backface-visibility: hidden;
+
 }
 
 .fade-in {
   opacity: 1;
   animation: fadeIn 1s ease-in-out;
+  background-color: #000000;
+  --webkit-backface-visibility: hidden;
+
 }
 
 @keyframes fadeIn {
