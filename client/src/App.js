@@ -11,23 +11,28 @@ import Layout from "./components/Layout";
 
 import ProtectedRoutes from "./hooks/protectedRoutes/ProtectedRoutes";
 
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<LandingPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="forgotpassword" element={<ForgotPasswordPage />} />
-          <Route path="vr" element={<VRPage />} />
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<LandingPage />} />
+            <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
+            <Route path="forgotpassword" element={<ForgotPasswordPage />} />
+            <Route path="vr" element={<VRPage />} />
 
-          <Route element={<ProtectedRoutes />}>
-            <Route path="home" element={<HomePage />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path="home" element={<HomePage />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </Provider>
   );
 }
 
