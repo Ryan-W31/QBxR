@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-unity-webgl": "^9.5.1",
+    "unity-package-installer": "^0.3.1"
+  }
+}
