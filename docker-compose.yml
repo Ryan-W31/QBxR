@@ -10,13 +10,17 @@ services:
     ports:
       - "80:80"
 
-  client:
+  qbxr:
     image: ryanw31/qbxr:client-latest
+    ports:
+      - "3000:3000"
     environment:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 
   server:
     image: ryanw31/qbxr:server-latest
+    ports:
+      - "5000:5000"
     environment:
       - MONGODB_URI=${MONGODB_URI}
