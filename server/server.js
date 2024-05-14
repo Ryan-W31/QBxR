@@ -5,11 +5,11 @@ const mongoose = require("mongoose");
 
 const app = require("./app");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI);
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT}`);
+  console.log(`Server is running on port: ${PORT} mongo: ${MONGODB_URI}`);
 });

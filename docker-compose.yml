@@ -1,21 +1,48 @@
-version: "3.8"
+version: "3.9"
 
 services:
   nginx:
     image: ryanw31/qbxr:nginx-latest
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
     restart: always
     depends_on:
       - client
       - server
     ports:
       - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
 
   client:
     image: ryanw31/qbxr:client-latest
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - client-node-modules:/app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
 
   server:
     image: ryanw31/qbxr:server-latest
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./server:/app
+      - api-node-modules:/app/node_modules
     environment:
       - MONGODB_URI=${MONGODB_URI}
+
+volumes:
+  api-node-modules:
+    name: "api-node-modules"
+  client-node-modules:
+    name: "client-node-modules"

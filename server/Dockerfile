@@ -1,15 +1,9 @@
-FROM node:17-alpine
-
-RUN npm install -g nodemon
+FROM node:20.11.0-alpine
 
 WORKDIR /app
 
-COPY package.json .
+COPY package*.json .
 
 RUN npm install
 
-COPY . .
-
-EXPOSE 5000
-
-CMD ["npm", "run", "dev"]
+CMD ["npm", "start"]
