@@ -8,7 +8,7 @@ const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation({
       query: (body) => ({
-        url: "/api/user/signup",
+        url: "/user/signup",
         method: "POST",
         body: { ...body },
       }),
@@ -16,7 +16,7 @@ const userApiSlice = apiSlice.injectEndpoints({
     }),
     getUsers: builder.query({
       query: () => ({
-        url: "/api/user",
+        url: "/user",
         validateStatus: (response, result) => {
           return response.status === 200 && !result.isError;
         },

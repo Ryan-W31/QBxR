@@ -12,7 +12,7 @@ app.use(express.json());
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:5000",
-  "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/",
+  "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com",
 ];
 
 const corsOptions = {

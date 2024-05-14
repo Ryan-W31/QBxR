@@ -14,7 +14,6 @@ services:
     image: ryanw31/qbxr:client-latest
     environment:
       - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
 
   server:
     image: ryanw31/qbxr:server-latest
