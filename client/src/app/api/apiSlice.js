@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setCredentials, logOut } from "../../hooks/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${process.env.REACT_APP_BACKEND_URL}`,
+  baseUrl: "http://localhost:5001/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
@@ -18,7 +18,7 @@ const baseQueryWithRefresh = async (args, api, options) => {
   let res = await baseQuery(args, api, options);
 
   if (res?.error?.originalStatus === 403) {
-    const refresh = await baseQuery("/api/auth/refresh", api, options);
+    const refresh = await baseQuery("/auth/refresh", api, options);
 
     if (refresh?.data) {
       api.dispatch(setCredentials({ ...refresh.data }));
