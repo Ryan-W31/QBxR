@@ -1,6 +1,7 @@
 version: '3'
 services:
   api:
+    image: ryanw31/qbxr:api-latest
     build:
       dockerfile: Dockerfile
       context: ./server
@@ -19,6 +20,7 @@ services:
       - mongodb
 
   client:
+    image: ryanw31/qbxr:client-latest
     build: 
       dockerfile: Dockerfile
       context: ./client

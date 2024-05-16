@@ -45,14 +45,14 @@ jobs:
       - name: Build Server Docker Image
         working-directory: ./server
         run: |
-          docker build -t ryanw31/qbxr:server-${{github.run_number}} -t ryanw31/qbxr:server-latest .
+          docker build -t ryanw31/qbxr:api-${{github.run_number}} -t ryanw31/qbxr:api-latest .
 
       - name: Push Docker Images
         run: |
           docker push ryanw31/qbxr:client-${{github.run_number}}
-          docker push ryanw31/qbxr:server-${{github.run_number}}
+          docker push ryanw31/qbxr:api-${{github.run_number}}
           docker push ryanw31/qbxr:client-latest
-          docker push ryanw31/qbxr:server-latest
+          docker push ryanw31/qbxr:api-latest
 
       - name: Generate deployment package
         run: |
