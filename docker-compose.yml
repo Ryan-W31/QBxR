@@ -1,16 +1,13 @@
-version: '3.8'
-
-# Services
+version: '3'
 services:
-  # Server service
-  server:
-    image: ryanw31/qbxr:server-latest
+  api:
     build:
-      context: ./server
       dockerfile: Dockerfile
-    container_name: server
-    ports:
-      - "5001:5001"
+      context: ./server
+    volumes:
+      - '/app/node_modules'
+      - './server:/app'
+    command: npm start
     env_file: ./.env
     environment:
       - MONGO_HOST=mongodb
@@ -22,15 +19,18 @@ services:
       - mongodb
 
   client:
-    image: ryanw31/qbxr:client-latest
-    build:
-      context: ./client
+    build: 
       dockerfile: Dockerfile
-    container_name: client
+      context: ./client
+    volumes:
+      - '/app/node_modules'
+      - './client:/app'
+    environment:
+      - WDS_SOCKET_PORT=0
     ports:
-      - "80:80"
-    depends_on:
-      - server
+      - '80:80'
+    tty: true
+    stdin_open: true
 
   mongodb:
     image: mongo:latest
