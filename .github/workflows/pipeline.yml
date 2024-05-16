@@ -27,6 +27,8 @@ jobs:
         run: |
           npm install
           export MONGODB_URI=$MONGODB_URI
+          export JWT_ACCESS_SECRET=$JWT_ACCESS_SECRET
+          export JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET
           npm run test
 
       - name: Login to Docker Hub
@@ -45,19 +47,12 @@ jobs:
         run: |
           docker build -t ryanw31/qbxr:server-${{github.run_number}} -t ryanw31/qbxr:server-latest .
 
-      - name: Build NGINX Docker Image
-        working-directory: ./nginx
-        run: |
-          docker build -t ryanw31/qbxr:nginx-${{github.run_number}} -t ryanw31/qbxr:nginx-latest .
-
       - name: Push Docker Images
         run: |
           docker push ryanw31/qbxr:client-${{github.run_number}}
           docker push ryanw31/qbxr:server-${{github.run_number}}
-          docker push ryanw31/qbxr:nginx-${{github.run_number}}
           docker push ryanw31/qbxr:client-latest
           docker push ryanw31/qbxr:server-latest
-          docker push ryanw31/qbxr:nginx-latest
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21

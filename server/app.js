@@ -11,8 +11,10 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:5001",
   "http://localhost:5000",
-  "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com",
+  "http://localhost",
+  "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/",
 ];
 
 const corsOptions = {
@@ -30,6 +32,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(errorhandler);
+
+app.get("/api/test", (req, res) => {
+  res.status(200).send("Hello World");
+});
 
 app.use("/api/user", UserRouter);
 app.use("/api/auth", AuthRouter);

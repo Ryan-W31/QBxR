@@ -1,48 +1,51 @@
-version: "3.9"
+version: '3.8'
 
+# Services
 services:
-  nginx:
-    image: ryanw31/qbxr:nginx-latest
-    build: 
-      context: ./nginx
+  # Server service
+  server:
+    image: ryanw31/qbxr:server-latest
+    build:
+      context: ./server
       dockerfile: Dockerfile
-    restart: always
-    depends_on:
-      - client
-      - server
+    container_name: server
     ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - "5001:5001"
+    env_file: ./.env
+    environment:
+      - MONGO_HOST=mongodb
+      - MONGO_USER=$MONGO_USER
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_NAME=$MONGO_NAME
+      - MONGO_PORT=$MONGO_PORT
+    depends_on:
+      - mongodb
 
   client:
     image: ryanw31/qbxr:client-latest
-    build: 
+    build:
       context: ./client
       dockerfile: Dockerfile
+    container_name: client
     ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/app
-      - client-node-modules:/app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+      - "80:80"
+    depends_on:
+      - server
 
-  server:
-    image: ryanw31/qbxr:server-latest
-    build: 
-      context: ./server
-      dockerfile: Dockerfile
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+
+    env_file: ./.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$MONGO_USER
+      - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
+
     ports:
-      - "3001:3001"
-    volumes:
-      - ./server:/app
-      - api-node-modules:/app/node_modules
-    environment:
-      - MONGODB_URI=${MONGODB_URI}
+      - "27017:27017"
 
-volumes:
-  api-node-modules:
-    name: "api-node-modules"
-  client-node-modules:
-    name: "client-node-modules"
+    volumes:
+      - mongodata:/data/db
+
+volumes: 
+  mongodata:

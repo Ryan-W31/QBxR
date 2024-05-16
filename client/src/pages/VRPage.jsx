@@ -1,21 +1,25 @@
-import React from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Unity, useUnityContext } from "react-unity-webgl";
 
 const VRPage = () => {
-  const handleClick = () => {
-    // Code or script executes from here
-  };
-  const content = (
-    <div className="h-screen bg-dark-primary flex items-center justify-center">
-      <button
-        className="bg-green-primary text-light-primary font-Audiowide font-semibold text-2xl px-4 py-2 rounded-lg hover:bg-green-secondary"
-        onClick={handleClick}
-      >
-        Click Me
-      </button>
+  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
+    loaderUrl: "/Build/vrtest2.loader.js",
+    dataUrl: "/Build/vrtest2.data",
+    frameworkUrl: "/Build/vrtest2.framework.js",
+    codeUrl: "/Build/vrtest2.wasm",
+    webglContextAttributes: {
+      preserveDrawingBuffer: true,
+    },
+  });
+
+  return (
+    <div className="h-screen flex flex-col bg-dark-primary justify-center space-y-10 md:space-x-16 items-center">
+      <Unity
+        unityProvider={unityProvider}
+        style={{ width: "960px", height: "600px" }}
+      />
     </div>
   );
-
-  return content;
 };
 
 export default VRPage;
