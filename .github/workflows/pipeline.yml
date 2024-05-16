@@ -54,6 +54,10 @@ jobs:
           docker push ryanw31/qbxr:client-latest
           docker push ryanw31/qbxr:server-latest
 
+      - name: Generate deployment package
+        run: |
+          zip -r deploy.zip *
+
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
@@ -64,4 +68,4 @@ jobs:
           region: ${{ secrets.AWS_REGION }}
           existing_bucket_name: ${{ secrets.AWS_BUCKET_NAME }}
           version_label: "version-${{ github.run_number }}"
-          deployment_package: docker-compose.yml
+          deployment_package: deploy.zip
