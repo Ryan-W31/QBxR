@@ -41,7 +41,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
             </div>
             <Link
               to="/login"
-              className="hidden py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary md:block"
+              className="hidden py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary md:block font-Audiowide"
             >
               Sign In
             </Link>
