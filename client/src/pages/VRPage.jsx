@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 const VRPage = () => {
-  const { unityProvider, isLoaded, loadingProgression } = useUnityContext({
+  const { unityProvider } = useUnityContext({
     loaderUrl: "/Build/vrtest2.loader.js",
     dataUrl: "/Build/vrtest2.data",
     frameworkUrl: "/Build/vrtest2.framework.js",

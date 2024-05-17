@@ -21,7 +21,7 @@ const ProfileDropdown = () => {
   if (isLoading) return <div>Logging out...</div>;
 
   return (
-    <Menu as="div" className="hidden relative md:inline-block text-left">
+    <Menu as="div" className="hidden relative md:inline-block text-center">
       <div>
         <Menu.Button className="hidden h-9 w-9 text-light-primary bg-green-primary border border-light-primary rounded-full baseline hover:bg-green-secondary hover:text-light-secondary hover:border-light-secondary md:block">
           <AiOutlineUser className="mx-auto h-6 w-6" />
@@ -80,7 +80,7 @@ const ProfileDropdown = () => {
                       active
                         ? "bg-red-600 text-light-primary"
                         : "text-light-secondary",
-                      "block w-full px-4 py-2 text-left rounded-b-md"
+                      "block w-full px-4 py-2 rounded-b-md text-center"
                     )}
                   >
                     Log Out
