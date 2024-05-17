@@ -26,9 +26,9 @@ function App() {
             <Route path="forgotpassword" element={<ForgotPasswordPage />} />
             <Route path="vr" element={<VRPage />} />
 
-            {/* <Route element={<ProtectedRoutes />}> */}
-            <Route path="home" element={<HomePage />} />
-            {/* </Route> */}
+            <Route element={<ProtectedRoutes />}>
+              <Route path="home" element={<HomePage />} />
+            </Route>
           </Route>
         </Routes>
       </Router>
