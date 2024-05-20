@@ -18,11 +18,13 @@ const LandingPage = () => {
         showMenu={showMenu}
         toggleMenu={toggleMenu}
         isLandingPage={true}
+        currentPage="home"
       />
       <MobileMenu
         showMenu={showMenu}
         toggleMenu={toggleMenu}
         isLandingPage={true}
+        currentPage={"home"}
       />
       <section id="hero" className={showMenu ? "blur-lg" : ""}>
         <div className="container flex items-center justify-center mx-auto mt-10 space-y-0">

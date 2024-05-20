@@ -31,11 +31,13 @@ const HomePage = () => {
         showMenu={showMenu}
         toggleMenu={toggleMenu}
         isLandingPage={false}
+        currentPage="home"
       />
       <MobileMenu
         showMenu={showMenu}
         toggleMenu={toggleMenu}
         isLandingPage={false}
+        currentPage="home"
       />
 
       <div className={showMenu ? "blur-lg" : ""}>

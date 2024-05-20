@@ -4,7 +4,14 @@ import { AiOutlineMenu } from "react-icons/ai";
 
 import ProfileDropdown from "./ProfileDropdown";
 
-const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
+const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
+  function currentPageStyle(navBarItem) {
+    if (navBarItem === currentPage) {
+      return "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]";
+    } else {
+      return "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center";
+    }
+  }
   return (
     <nav
       className={
@@ -20,22 +27,13 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
         {isLandingPage ? (
           <>
             <div className="hidden space-x-6 md:flex font-Audiowide text-md">
-              <Link
-                to="#"
-                className="relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]"
-              >
+              <Link to="#" className={currentPageStyle("home")}>
                 Home
               </Link>
-              <Link
-                to="#"
-                className="relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
-              >
+              <Link to="#" className={currentPageStyle("about")}>
                 About Us
               </Link>
-              <Link
-                to="#"
-                className="relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
-              >
+              <Link to="#" className={currentPageStyle("how")}>
                 How QBxR Works
               </Link>
             </div>
@@ -53,22 +51,16 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage }) => {
         ) : (
           <>
             <div className="hidden space-x-6 md:flex font-Audiowide">
-              <Link
-                to="#"
-                className="relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]"
-              >
+              <Link to="/home" className={currentPageStyle("home")}>
                 Home
               </Link>
               <Link
-                to="#"
-                className="relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                to="/leaderboard"
+                className={currentPageStyle("leaderboard")}
               >
                 Leaderboard
               </Link>
-              <Link
-                to="#"
-                className="relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
-              >
+              <Link to="#" className={currentPageStyle("search")}>
                 Search
               </Link>
             </div>

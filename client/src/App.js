@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import HomePage from "./pages/HomePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
 import VRPage from "./pages/VRPage";
 
 import Layout from "./components/Layout";
@@ -26,9 +27,10 @@ function App() {
             <Route path="forgotpassword" element={<ForgotPasswordPage />} />
             <Route path="vr" element={<VRPage />} />
 
-            <Route element={<ProtectedRoutes />}>
-              <Route path="home" element={<HomePage />} />
-            </Route>
+            {/* <Route element={<ProtectedRoutes />}> */}
+            <Route path="home" element={<HomePage />} />
+            <Route path="leaderboard" element={<LeaderboardPage />} />
+            {/* </Route> */}
           </Route>
         </Routes>
       </Router>

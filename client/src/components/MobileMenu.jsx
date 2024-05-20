@@ -15,9 +15,17 @@ import {
 } from "react-icons/md";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 
-const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
+const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
   const navigate = useNavigate();
+
+  function currentPageStyle(navBarItem) {
+    if (navBarItem === currentPage) {
+      return "text-green-primary";
+    } else {
+      return "text-light-primary hover:text-green-primary";
+    }
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -66,24 +74,15 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
 
             {isLandingPage ? (
               <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary"
-                >
+                <Link to="#" className={currentPageStyle("home")}>
                   <AiOutlineHome className="inline-block mb-2 mr-2" />
                   <span>Home</span>
                 </Link>
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary"
-                >
+                <Link to="#" className={currentPageStyle("about")}>
                   <AiOutlineInfoCircle className="inline-block mb-1 mr-2" />
                   <span>About Us</span>
                 </Link>
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary"
-                >
+                <Link to="#" className={currentPageStyle("how")}>
                   <MdOutlineSportsFootball className="inline-block mb-1 mr-2" />
                   <span>How QBxR Works</span>
                 </Link>
@@ -96,38 +95,26 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage }) => {
               </div>
             ) : (
               <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary "
-                >
+                <Link to="#" className={currentPageStyle("home")}>
                   <AiOutlineHome className="inline-block mb-2 mr-2" />
                   <span>Home</span>
                 </Link>
                 <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary "
+                  to="/leaderboard"
+                  className={currentPageStyle("leaderboard")}
                 >
                   <MdOutlineLeaderboard className="inline-block mb-1 mr-2" />
                   <span>Leaderboard</span>
                 </Link>
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary "
-                >
+                <Link to="#" className={currentPageStyle("search")}>
                   <AiOutlineSearch className="inline-block mb-1 mr-2" />
                   <span>Search</span>
                 </Link>
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary "
-                >
+                <Link to="#" className={currentPageStyle("profile")}>
                   <AiOutlineUser className="inline-block mb-1 mr-2" />
                   <span>My Profile</span>
                 </Link>
-                <Link
-                  to="#"
-                  className="text-light-primary hover:text-green-primary "
-                >
+                <Link to="#" className={currentPageStyle("settings")}>
                   <AiOutlineSetting className="inline-block mb-1 mr-2" />
                   <span>Settings</span>
                 </Link>
