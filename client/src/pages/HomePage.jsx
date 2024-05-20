@@ -41,7 +41,7 @@ const HomePage = () => {
       />
 
       <div className={showMenu ? "blur-lg" : ""}>
-        <div className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-8 rounded-lg justify-center">
+        <div className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center">
           <div className="text-center justify-center font-Audiowide">
             <h1 className="text-green-primary font-bold text-6xl">
               Welcome to QBxR

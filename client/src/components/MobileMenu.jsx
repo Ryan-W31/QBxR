@@ -95,7 +95,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
               </div>
             ) : (
               <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                <Link to="#" className={currentPageStyle("home")}>
+                <Link to="/home" className={currentPageStyle("home")}>
                   <AiOutlineHome className="inline-block mb-2 mr-2" />
                   <span>Home</span>
                 </Link>
@@ -110,7 +110,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                   <AiOutlineSearch className="inline-block mb-1 mr-2" />
                   <span>Search</span>
                 </Link>
-                <Link to="#" className={currentPageStyle("profile")}>
+                <Link to="/profile" className={currentPageStyle("profile")}>
                   <AiOutlineUser className="inline-block mb-1 mr-2" />
                   <span>My Profile</span>
                 </Link>

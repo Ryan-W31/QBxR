@@ -42,7 +42,7 @@ const ProfileDropdown = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="/home"
+                  href="/profile"
                   className={classNames(
                     active
                       ? "bg-green-primary text-light-primary"

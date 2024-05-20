@@ -59,7 +59,7 @@ const LeaderboardPage = () => {
           "flex flex-col bg-dark-primary justify-center items-center"
         )}
       >
-        <div className="md:w-3/4 min-w-96 bg-dark-secondary/80 py-10 px-6 rounded-lg m-8 space-y-10">
+        <div className="md:w-3/4 min-w-96 bg-dark-secondary/80 p-8 px-6 rounded-lg mt-10 space-y-10">
           <div>
             <h1 className="text-6xl font-bold font-Audiowide text-green-primary text-center mb-4">
               Leaderboard
