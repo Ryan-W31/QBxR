@@ -9,6 +9,7 @@ import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
 import VRPage from "./pages/VRPage";
+import WebTestPage from "./pages/WebTestPage";
 
 import Layout from "./components/Layout";
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="register" element={<RegisterPage />} />
             <Route path="forgotpassword" element={<ForgotPasswordPage />} />
             <Route path="vr" element={<VRPage />} />
+            <Route path="web" element={<WebTestPage />} />
 
             <Route element={<ProtectedRoutes />}>
               <Route path="home" element={<HomePage />} />

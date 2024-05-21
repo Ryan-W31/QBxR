@@ -12,7 +12,7 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="bg-dark-primary">
+    <div>
       <ScrollToTop showMenu={showMenu} />
       <NavBar
         showMenu={showMenu}
@@ -26,13 +26,16 @@ const LandingPage = () => {
         isLandingPage={true}
         currentPage={"home"}
       />
-      <section id="hero" className={showMenu ? "blur-lg" : ""}>
+      <section
+        id="hero"
+        className={showMenu ? "blur-lg pointer-events-none" : ""}
+      >
         <div className="container flex items-center justify-center mx-auto mt-10 space-y-0">
           <div className="flex flex-col mb-32 space-y-12 w-1/2">
             <h1 className=" text-4xl font-bold text-center text-green-primary md:text-5xl font-Audiowide">
               QBxR: Quarterback Evaluation Platform
             </h1>
-            <h3 className="text-md font-bold text-center text-green-primary md:text-xl">
+            <h3 className="text-md font-bold text-center text-green-primary md:text-xl font-Audiowide">
               Find your strengths and weaknesses.
             </h3>
             <p className="text-center text-light-secondary">

@@ -6,6 +6,10 @@ const ProtectedRoutes = () => {
   const token = useSelector(selectCurrentToken);
   const location = useLocation();
 
+  if (token === undefined) {
+    return null; // or loading indicator/spinner/etc
+  }
+
   return token ? (
     <Outlet />
   ) : (

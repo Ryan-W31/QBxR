@@ -3,29 +3,40 @@ import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
-import ProgressBar from "../components/ProgressBar";
+import ScoreCard from "../components/ScoreCard";
 
 const HomePage = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [hasWebData, setHasWebData] = useState(false);
-  const [hasVRData, setHasVRData] = useState(false);
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
   };
 
   function checkData() {
-    if (!hasWebData && !hasVRData) {
+    if (webData === null && vrData === null) {
       return <p className="text-xl">Take the Web and VR Tests</p>;
-    } else if (!hasWebData) {
+    } else if (webData === null) {
       return <p className="text-xl">Take the Web Test</p>;
     } else {
       return <p className="text-xl">Take the VR Test</p>;
     }
   }
 
+  const webData = [
+    { title: "Reaction Test", score: 35 },
+    { title: "Play Identification", score: 55 },
+    { title: "Defense Reading", score: 75 },
+    { title: "Critical Thinking", score: 95 },
+  ];
+  const vrData = [
+    { title: "Reaction Test", score: 35 },
+    { title: "Play Identification", score: 55 },
+    { title: "Defense Reading", score: 75 },
+    { title: "Critical Thinking", score: 95 },
+  ];
+
   const content = (
-    <div className="md:h-screen bg-dark-primary">
+    <div>
       <ScrollToTop showMenu={showMenu} />
       <NavBar
         showMenu={showMenu}
@@ -40,15 +51,15 @@ const HomePage = () => {
         currentPage="home"
       />
 
-      <div className={showMenu ? "blur-lg" : ""}>
-        <div className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center">
+      <div className={showMenu ? "blur-lg pointer-events-none" : ""}>
+        <div className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center border-t-4 border-green-primary">
           <div className="text-center justify-center font-Audiowide">
             <h1 className="text-green-primary font-bold text-6xl">
               Welcome to QBxR
             </h1>
             <div className="text-light-primary m-10 text-4xl">
               <p className="text-light-secondary">Your QBxR Score:</p>
-              {hasWebData && hasVRData ? (
+              {webData !== null && vrData !== null ? (
                 <p className="m-4 text-3xl">85</p>
               ) : (
                 <div>
@@ -58,51 +69,22 @@ const HomePage = () => {
               )}
             </div>
           </div>
-          <div className="flex md:flex-row flex-col justify-around font-Audiowide">
-            <div className="flex flex-col text-light-secondary p-10 bg-dark-secondary rounded-lg">
-              <p className="md:text-4xl sm:text-2xl mb-5 align-center text-center">
-                Your Web Test Scores
-              </p>
-              {!hasWebData ? (
-                <div className="text-center text-light-primary">
-                  <p className="text-3xl sm:text-2xl justify-center mb-4">
-                    No Data
-                  </p>
-                  <p className="text-xl sm:text-sm">
-                    Take The Web Test On Your Profile Page
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <ProgressBar title={"Reaction Test"} score={35} />
-                  <ProgressBar title={"Play Identification"} score={55} />
-                  <ProgressBar title={"Defense Reading"} score={75} />
-                  <ProgressBar title={"Critical Thinking"} score={95} />
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col text-light-secondary p-10 bg-dark-secondary rounded-lg">
-              <p className="md:text-4xl sm:text-2xl mb-5 align-center text-center">
-                Your VR Test Scores
-              </p>
-              {!hasVRData ? (
-                <div className="text-center text-light-primary">
-                  <p className="text-3xl sm:text-2xl justify-center mb-4">
-                    No Data
-                  </p>
-                  <p className="text-xl sm:text-sm">
-                    Take The VR Test On Your Profile Page
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <ProgressBar title={"Reaction Test"} score={35} />
-                  <ProgressBar title={"Play Identification"} score={55} />
-                  <ProgressBar title={"Defense Reading"} score={75} />
-                  <ProgressBar title={"Critical Thinking"} score={95} />
-                </div>
-              )}
-            </div>
+          <div className="flex md:flex-row flex-col justify-evenly md:space-x-4 font-Audiowide">
+            <ScoreCard
+              title={"Your Web Test Scores"}
+              errMessage={"Take The Web Test On Your Profile Page"}
+              size="3"
+              data={webData}
+            />
+
+            <div class="my-4 md:my-0"></div>
+
+            <ScoreCard
+              title={"Your VR Test Scores"}
+              errMessage={"Take The VR Test On Your Profile Page"}
+              size="3"
+              data={vrData}
+            />
           </div>
         </div>
       </div>

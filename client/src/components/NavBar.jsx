@@ -21,11 +21,14 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
       }
     >
       <div className="flex items-center justify-between">
-        <div className="text-3xl font-extrabold text-green-primary font-Audiowide">
-          <h1>QBxR</h1>
-        </div>
         {isLandingPage ? (
           <>
+            <Link
+              to="/"
+              className="text-3xl font-extrabold text-green-primary font-Audiowide"
+            >
+              <h1>QBxR</h1>
+            </Link>
             <div className="hidden space-x-6 md:flex font-Audiowide text-md">
               <Link to="#" className={currentPageStyle("home")}>
                 Home
@@ -50,6 +53,12 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
           </>
         ) : (
           <>
+            <Link
+              to="/home"
+              className="text-3xl font-extrabold text-green-primary font-Audiowide"
+            >
+              <h1>QBxR</h1>
+            </Link>
             <div className="hidden space-x-6 md:flex font-Audiowide">
               <Link to="/home" className={currentPageStyle("home")}>
                 Home
