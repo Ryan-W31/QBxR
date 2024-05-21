@@ -106,7 +106,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                   <MdOutlineLeaderboard className="inline-block mb-1 mr-2" />
                   <span>Leaderboard</span>
                 </Link>
-                <Link to="#" className={currentPageStyle("search")}>
+                <Link to="/search" className={currentPageStyle("search")}>
                   <AiOutlineSearch className="inline-block mb-1 mr-2" />
                   <span>Search</span>
                 </Link>

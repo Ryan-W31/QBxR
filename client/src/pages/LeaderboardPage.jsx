@@ -38,7 +38,7 @@ const LeaderboardPage = () => {
   };
 
   const content = (
-    <div className="md:h-screen bg-dark-primary">
+    <div className="h-screen bg-dark-primary">
       <ScrollToTop showMenu={showMenu} />
       <NavBar
         showMenu={showMenu}
@@ -77,7 +77,7 @@ const LeaderboardPage = () => {
             )}
           </div>
           <div>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide">
               <table className="w-full text-sm text-center text-light-primary">
                 <thead className="text-xs text-light-primary uppercase bg-dark-secondary border-b">
                   <tr>

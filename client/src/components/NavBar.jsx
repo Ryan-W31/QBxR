@@ -60,7 +60,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
               >
                 Leaderboard
               </Link>
-              <Link to="#" className={currentPageStyle("search")}>
+              <Link to="/search" className={currentPageStyle("search")}>
                 Search
               </Link>
             </div>
