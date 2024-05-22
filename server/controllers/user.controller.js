@@ -2,13 +2,6 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 require("dotenv").config();
 
-module.exports = {};
-
-const getAllPlayers = async (req, res) => {
-  const players = await User.find({ role: "Player" }).select("-password -salt");
-  res.status(200).json(players);
-};
-
 const signUp = async (req, res) => {
   const { role, firstname, lastname, email, password, school_organization } =
     req.body;
@@ -38,4 +31,39 @@ const signUp = async (req, res) => {
   res.status(201).json({ message: "User created" });
 };
 
-module.exports = { getAllPlayers, signUp };
+const getLeaderboard = async (req, res) => {
+  res.status(200).json({
+    data: [
+      {
+        _id: 1,
+        rank: 1,
+        name: "John Doe",
+        school: "Univeristy of Central Florida",
+        score: 98,
+      },
+      {
+        _id: 2,
+        rank: 2,
+        name: "John Doe",
+        school: "Univeristy of Central Florida",
+        score: 75,
+      },
+      {
+        _id: 3,
+        rank: 3,
+        name: "John Doe",
+        school: "Univeristy of Central Florida",
+        score: 60,
+      },
+      {
+        _id: 4,
+        rank: 4,
+        name: "John Doe",
+        school: "Univeristy of Central Florida",
+        score: 25,
+      },
+    ],
+  });
+};
+
+module.exports = { getLeaderboard, signUp };

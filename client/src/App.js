@@ -12,6 +12,8 @@ import VRPage from "./pages/VRPage";
 import WebTestPage from "./pages/WebTestPage";
 
 import Layout from "./components/Layout";
+import Prefetch from "./components/Prefetch";
+import PersistLogin from "./components/PersistLogin";
 
 import ProtectedRoutes from "./hooks/protectedRoutes/ProtectedRoutes";
 
@@ -31,11 +33,15 @@ function App() {
             <Route path="vr" element={<VRPage />} />
             <Route path="web" element={<WebTestPage />} />
 
-            <Route element={<ProtectedRoutes />}>
-              <Route path="home" element={<HomePage />} />
-              <Route path="leaderboard" element={<LeaderboardPage />} />
-              <Route path="profile" element={<ProfilePage />} />
-              <Route path="search" element={<SearchPage />} />
+            <Route element={<PersistLogin />}>
+              <Route element={<ProtectedRoutes />}>
+                <Route element={<Prefetch />}>
+                  <Route path="home" element={<HomePage />} />
+                  <Route path="leaderboard" element={<LeaderboardPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="search" element={<SearchPage />} />
+                </Route>
+              </Route>
             </Route>
           </Route>
         </Routes>

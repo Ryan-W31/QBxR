@@ -4,7 +4,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 const userAdapter = createEntityAdapter({});
 const initialState = userAdapter.getInitialState();
 
-const userApiSlice = apiSlice.injectEndpoints({
+export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation({
       query: (body) => ({
@@ -14,35 +14,29 @@ const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "User", id: "LIST" }],
     }),
-    getUsers: builder.query({
+    getLeaderboard: builder.query({
       query: () => ({
-        url: "/user",
+        url: "/user/leaderboard",
         validateStatus: (response, result) => {
           return response.status === 200 && !result.isError;
         },
       }),
+      keepUnusedDataFor: 10,
       transformResponse: (response) => {
-        const users = response.map((user) => {
-          user.id = user._id;
-          return users;
+        const users = response.data.map((user) => {
+          return {
+            ...user,
+            id: user._id,
+          };
         });
-      },
-      providedTags: (res, err, args) => {
-        if (res?.ids) {
-          return [
-            { type: "User", id: "LIST" },
-            ...res.ids.map((id) => ({ type: "User", id })),
-          ];
-        } else {
-          return [{ type: "User", id: "LIST" }];
-        }
+        return users;
       },
     }),
   }),
 });
 
-export const { useSignUpMutation, useGetUsersQuery } = userApiSlice;
-export const selectUsersResult = userApiSlice.endpoints.getUsers.select();
+export const { useSignUpMutation, useGetLeaderboardQuery } = userApiSlice;
+export const selectUsersResult = userApiSlice.endpoints.getLeaderboard.select();
 
 const selectUsersData = createSelector(
   selectUsersResult,

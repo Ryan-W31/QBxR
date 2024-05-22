@@ -4,6 +4,7 @@ import { useLoginMutation } from "../hooks/auth/authApiSlice";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../hooks/auth/authSlice";
 import { useNavigate } from "react-router-dom";
+import usePersist from "../hooks/auth/usePersist";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
@@ -12,6 +13,7 @@ const LoginPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [persist, setPersist] = usePersist();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,6 +26,10 @@ const LoginPage = () => {
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
+  }
+
+  function handlePersist() {
+    setPersist((prevState) => !prevState);
   }
 
   const handleLogin = async (event) => {
@@ -39,7 +45,7 @@ const LoginPage = () => {
       if (!err.status || !err.data) {
         console.log("Server Error");
       }
-      console.log(err.data.message);
+      console.log(err);
     }
   };
 
@@ -104,9 +110,18 @@ const LoginPage = () => {
           </div>
         </div>
         <div className="mt-4 flex justify-between font-semibold text-sm">
-          <label className="flex text-light-primary cursor-pointer">
-            <input className="mr-1" type="checkbox" />
-            <span>Remember Me</span>
+          <label
+            htmlFor="persist"
+            className="flex text-light-primary cursor-pointer"
+          >
+            <input
+              className="mr-1"
+              id="persist"
+              type="checkbox"
+              onChange={handlePersist}
+              checked={persist}
+            />
+            Remember Me
           </label>
           <Link
             className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4"

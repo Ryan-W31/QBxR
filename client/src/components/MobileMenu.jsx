@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   AiOutlineClose,
@@ -14,9 +14,11 @@ import {
   MdOutlineLogout,
 } from "react-icons/md";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
+import usePersist from "../hooks/auth/usePersist";
 
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
+  const [persist, setPersist] = usePersist();
   const navigate = useNavigate();
 
   function currentPageStyle(navBarItem) {
@@ -42,12 +44,18 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
     };
   }, [showMenu, toggleMenu]);
 
-  if (isSuccess) navigate("/");
+  const handleLogout = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (persist) setPersist(false);
+      logout();
 
-  const hangleLogout = (event) => {
-    event.preventDefault();
-    logout();
-  };
+      if (!isLoading) {
+        navigate("/login");
+      }
+    },
+    [logout, isLoading, setPersist, persist, navigate]
+  );
 
   if (isLoading) return <div>Logging out...</div>;
 
@@ -120,7 +128,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                 </Link>
 
                 <div className="absolute w-full bottom-0 right-0">
-                  <form onSubmit={hangleLogout}>
+                  <form onSubmit={handleLogout}>
                     <button
                       type="submit"
                       className="bg-red-600 hover:bg-red-800 text-lg text-light-primary block w-full px-4 py-2 text-center rounded-b-md"
