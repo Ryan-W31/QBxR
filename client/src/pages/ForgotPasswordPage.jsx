@@ -17,10 +17,10 @@ const ForgotPasswordPage = () => {
   }
 
   return (
-    <div className="bg-dark-primary">
+    <div>
       {show && (
         <div className={`fade-out ${show ? "fade-in" : ""}`}>
-          <section className="h-screen bg-dark-primary flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
+          <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
             <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
               <div className="mb-6 text-center font-Audiowide font-bold">
                 <label className="text-5xl text-green-primary">QBxR</label>
@@ -70,7 +70,7 @@ const ForgotPasswordPage = () => {
 
       {!show && (
         <div className="fade-in">
-          <section className="h-screen flex flex-col bg-dark-primary md:flex-row justify-center space-y-10 md:space-x-16 items-center">
+          <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
             <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-8 px-6 rounded-lg">
               <div className="mb-6 text-center font-Audiowide font-bold">
                 <label className="text-5xl text-green-primary">QBxR</label>

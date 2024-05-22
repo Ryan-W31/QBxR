@@ -1,22 +1,28 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useCallback } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { AiOutlineUser } from "react-icons/ai";
 import { classNames } from "../utils/utils";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
+import usePersist from "../hooks/auth/usePersist";
 import { useNavigate } from "react-router-dom";
 
 const ProfileDropdown = () => {
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
+  const [persist, setPersist] = usePersist();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isSuccess) navigate("/");
-  }, [isSuccess, navigate]);
+  const handleLogout = useCallback(
+    (event) => {
+      event.preventDefault();
+      if (persist) setPersist(false);
+      logout();
 
-  const handleLogout = (event) => {
-    event.preventDefault();
-    logout();
-  };
+      if (!isLoading) {
+        navigate("/login");
+      }
+    },
+    [logout, isLoading, setPersist, persist, navigate]
+  );
 
   if (isLoading) return <div>Logging out...</div>;
 
@@ -42,7 +48,7 @@ const ProfileDropdown = () => {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href="/home"
+                  href="/profile"
                   className={classNames(
                     active
                       ? "bg-green-primary text-light-primary"

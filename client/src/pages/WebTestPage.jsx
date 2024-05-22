@@ -1,6 +1,6 @@
 import { Unity, useUnityContext } from "react-unity-webgl";
 
-const VRPage = () => {
+const WebTestPage = () => {
   const { unityProvider } = useUnityContext({
     loaderUrl: "/Build/vrtest2.loader.js",
     dataUrl: "/Build/vrtest2.data",
@@ -21,4 +21,4 @@ const VRPage = () => {
   );
 };
 
-export default VRPage;
+export default WebTestPage;

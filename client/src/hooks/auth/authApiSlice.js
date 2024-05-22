@@ -17,9 +17,9 @@ const authApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
-          const { data } = await queryFulfilled;
-          const { token } = data;
-          dispatch(setCredentials({ token }));
+          const refresh = await queryFulfilled;
+          dispatch(setCredentials({ ...refresh.data }));
+          console.log("Refreshed token");
         } catch (err) {
           console.log(err);
         }
@@ -36,7 +36,7 @@ const authApiSlice = apiSlice.injectEndpoints({
           dispatch(logOut());
           dispatch(apiSlice.util.resetApiState());
         } catch (err) {
-          console.log(err);
+          console.log("Error " + err);
         }
       },
     }),
