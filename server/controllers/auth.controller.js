@@ -30,10 +30,11 @@ const login = async (req, res) => {
     expiresIn: "1d",
   });
 
+  // **CHANGE TO SECURE LATER**
   res.cookie("jwt_refresh", rToken, {
     httpOnly: true,
     sameSite: "none",
-    secure: true,
+    secure: false,
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 
@@ -78,10 +79,11 @@ const logout = (req, res) => {
     res.sendStatus(204);
   }
 
+  //** CHANGE TO SECURE LATER **
   res.clearCookie("jwt_refresh", {
     httpOnly: true,
     sameSite: "none",
-    secure: true,
+    secure: false,
   });
 
   res.json({ message: "Logged out" });
