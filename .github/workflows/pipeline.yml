@@ -5,7 +5,6 @@ on:
       - main
 
 env:
-  MONGODB_URI: ${{ secrets.MONGODB_URI }}
   JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
   JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
 
@@ -26,7 +25,6 @@ jobs:
         working-directory: ./server
         run: |
           npm install
-          export MONGODB_URI=$MONGODB_URI
           export JWT_ACCESS_SECRET=$JWT_ACCESS_SECRET
           export JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET
           npm run test

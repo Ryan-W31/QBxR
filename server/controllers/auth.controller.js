@@ -44,7 +44,7 @@ const refreshCookie = (req, res) => {
   const cookies = req.cookies;
 
   if (!cookies?.jwt_refresh) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Unauthorized 1" });
   }
 
   const rToken = cookies.jwt_refresh;
@@ -57,7 +57,7 @@ const refreshCookie = (req, res) => {
     const refreshUser = await User.findById(user.id);
 
     if (!refreshUser) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Unauthorized 2" });
     }
 
     const aToken = jwt.sign(
