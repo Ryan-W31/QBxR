@@ -30,10 +30,10 @@ const login = async (req, res) => {
     expiresIn: "1d",
   });
 
-  // **CHANGE TO SECURE LATER**
+  // **CHANGE TO SECURE LATER AND NONE**
   res.cookie("jwt_refresh", rToken, {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "lax",
     secure: false,
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
@@ -82,7 +82,7 @@ const logout = (req, res) => {
   //** CHANGE TO SECURE LATER **
   res.clearCookie("jwt_refresh", {
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "lax",
     secure: false,
   });
 
