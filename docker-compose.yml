@@ -1,14 +1,27 @@
 version: '3'
 services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - api
+      - client
+    restart: always
+    ports:
+      - '80:80'
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+
   api:
     image: ryanw31/qbxr:api-latest
     build:
       dockerfile: Dockerfile
       context: ./server
+    depends_on:
+      - mongodb
     volumes:
       - '/app/node_modules'
       - './server:/app'
-    command: npm start
     env_file: ./.env
     environment:
       - MONGO_HOST=mongodb
@@ -16,8 +29,8 @@ services:
       - MONGO_PASSWORD=${MONGO_PASSWORD}
       - MONGO_NAME=${MONGO_NAME}
       - MONGO_PORT=${MONGO_PORT}
-    depends_on:
-      - mongodb
+    expose:
+      - 5001
 
   client:
     image: ryanw31/qbxr:client-latest
@@ -29,8 +42,8 @@ services:
       - './client:/app'
     environment:
       - WDS_SOCKET_PORT=0
-    ports:
-      - '80:80'
+    expose:
+      - 80
     tty: true
     stdin_open: true
 
