@@ -2,7 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setCredentials, logOut } from "../../hooks/auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/api",
+  baseUrl: "https://qbxr.net/api",
+  //baseUrl: "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/api",
   //baseUrl: "http://localhost/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
