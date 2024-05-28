@@ -10,13 +10,12 @@ const app = express();
 app.use(express.json());
 
 const allowedOrigins = [
-  "http://localhost:3000",
-  "http://localhost:5001",
-  "http://localhost:5000",
+  "https://localhost",
   "http://localhost",
-  "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/api",
-  "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com/",
+  "https://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com",
   "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com",
+  "https://qbxr.net",
+  "http://qbxr.net",
 ];
 
 const corsOptions = {
