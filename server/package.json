@@ -4,9 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
-    "test": "cross-env NODE_ENV=test jest --testTimeout=5000",
-    "dev": "nodemon server"
+    "start": "nodemon -L server",
+    "test": "cross-env NODE_ENV=test jest --testTimeout=5000"
   },
   "keywords": [],
   "author": "",

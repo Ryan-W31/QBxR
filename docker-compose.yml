@@ -1,27 +1,32 @@
 version: '3'
 services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx
+  client:
+    image: ryanw31/qbxr:client-latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: client
+    ports:
+      - 80:80
+      - 443:443
     depends_on:
       - api
-      - client
-    restart: always
-    ports:
-      - '80:80'
+    restart: unless-stopped
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - caddy-data:/data
+      - caddy-config:/config
 
   api:
     image: ryanw31/qbxr:api-latest
+    container_name: api
     build:
-      dockerfile: Dockerfile
       context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 5001:5001
     depends_on:
       - mongodb
-    volumes:
-      - '/app/node_modules'
-      - './server:/app'
+    restart: unless-stopped
     env_file: ./.env
     environment:
       - MONGO_HOST=mongodb
@@ -29,38 +34,21 @@ services:
       - MONGO_PASSWORD=${MONGO_PASSWORD}
       - MONGO_NAME=${MONGO_NAME}
       - MONGO_PORT=${MONGO_PORT}
-    expose:
-      - 5001
-
-  client:
-    image: ryanw31/qbxr:client-latest
-    build: 
-      dockerfile: Dockerfile
-      context: ./client
-    volumes:
-      - '/app/node_modules'
-      - './client:/app'
-    environment:
-      - WDS_SOCKET_PORT=0
-    expose:
-      - 80
-    tty: true
-    stdin_open: true
 
   mongodb:
     image: mongo:latest
     container_name: mongodb
-
     env_file: ./.env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
-
     ports:
       - "27017:27017"
-
     volumes:
       - mongodata:/data/db
+    restart: unless-stopped
 
 volumes: 
   mongodata:
+  caddy-config:
+  caddy-data:
