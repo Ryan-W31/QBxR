@@ -46,18 +46,25 @@ const RegisterPage = () => {
     }
   }, [isSuccess, navigate]);
 
-  const handleRole = (event) => {
+  const handleNonplayerRole = (event) => {
     event.preventDefault();
 
+    setRole("nonplayer");
+    const pSwitch = document.getElementById("Pswitch");
+    if (pSwitch.classList.contains("left-1/2")) {
+      pSwitch.classList.remove("left-1/2");
+      pSwitch.classList.add("left-0");
+    }
+  };
+
+  const handlePlayerRole = (event) => {
+    event.preventDefault();
+
+    setRole("player");
     const pSwitch = document.getElementById("Pswitch");
     if (pSwitch.classList.contains("left-0")) {
       pSwitch.classList.remove("left-0");
       pSwitch.classList.add("left-1/2");
-      setRole("player");
-    } else {
-      pSwitch.classList.remove("left-1/2");
-      pSwitch.classList.add("left-0");
-      setRole("nonplayer");
     }
   };
 
@@ -82,13 +89,13 @@ const RegisterPage = () => {
     if (canSave) {
       if (password !== confirmPassword) {
         setIsError(true);
-        setError("Passwords do not match");
+        setError("Passwords do not match.");
         return;
       }
 
       if (!isChecked) {
         setIsError(true);
-        setError("Please agree to the terms and conditions");
+        setError("Please agree to the terms and conditions.");
         return;
       }
 
@@ -103,7 +110,7 @@ const RegisterPage = () => {
 
       await signUp(obj)
         .then((res) => {
-          console.log(res);
+          notify("Registration successful. Please check your email to verify.");
         })
         .catch((err) => {
           setIsError(true);
@@ -113,11 +120,6 @@ const RegisterPage = () => {
       setIsError(true);
       setError("Registration failed. Please try again later.");
     }
-  };
-
-  const handleNotify = () => {
-    notify("User created successfully.", "success", "top-right");
-    navigate("/login");
   };
 
   return (
@@ -160,13 +162,13 @@ const RegisterPage = () => {
               className="w-1/2 h-full bg-green-primary rounded-full transition-all absolute left-0"
             ></div>
             <button
-              onClick={handleRole}
+              onClick={handleNonplayerRole}
               className="transition w-full flex font-bold justify-center items-center text-light-primary z-10"
             >
               Not A Player
             </button>
             <button
-              onClick={handleRole}
+              onClick={handlePlayerRole}
               className="transition w-full flex font-bold items-center justify-center text-center text-light-primary z-10"
             >
               Player
@@ -250,7 +252,7 @@ const RegisterPage = () => {
         </div>
         <div className="text-center">
           <button
-            onClick={handleNotify}
+            onClick={handleSignUp}
             className="mt-4 text-lg  font-semibold font-Audiowide bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
             type="submit"
           >

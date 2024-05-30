@@ -1,11 +1,12 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 import LeaderboardCard from "../components/LeaderboardCard";
 import ProfileCard from "../components/ProfileCard";
 import { useGetLeaderboardQuery } from "../hooks/users/userApiSlice";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 const LeaderboardPage = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -14,6 +15,8 @@ const LeaderboardPage = () => {
   const [hasVRData, setHasVRData] = useState(false);
   const [hasRank, setHasRank] = useState(false);
   const [showProfile, setShowProfile] = useState(null);
+  const [visibleRows, setVisibleRows] = useState(5);
+  const [totalRows, setTotalRows] = useState(0);
 
   const {
     data: users,
@@ -21,12 +24,33 @@ const LeaderboardPage = () => {
     isSuccess,
     isError,
     error,
+    refetch,
   } = useGetLeaderboardQuery(undefined, {
-    pollingInterval: 10000,
+    pollingInterval: 60000,
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop ===
+        document.documentElement.offsetHeight
+      ) {
+        setVisibleRows((prevVisibleRows) =>
+          Math.min(prevVisibleRows + 10, totalRows)
+        );
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [totalRows]);
+
+  useEffect(() => {
+    if (users) {
+      setTotalRows(users.length);
+    }
+  }, [users]);
   const handleRowClick = (profile) => {
     setShowProfile(profile);
     toggleBlur();
@@ -70,7 +94,10 @@ const LeaderboardPage = () => {
 
   let content;
 
-  if (isLoading) content = <div className="text-light-primary">Loading...</div>;
+  if (isLoading)
+    content = (
+      <div className="text-light-primary font-Audiowide">Loading...</div>
+    );
 
   if (isError) {
     content = (
@@ -79,18 +106,22 @@ const LeaderboardPage = () => {
   }
 
   if (isSuccess) {
-    const tableContent = users?.length
-      ? users.map((user) => (
-          <LeaderboardCard
-            key={user.id}
-            rank={user.rank}
-            name={user.name}
-            school={user.school}
-            score={user.score}
-            onClick={() => handleRowClick(user)}
-          />
-        ))
-      : null;
+    console.log(users.length);
+    const tableContent =
+      users?.length !== 0
+        ? users.map((user) => (
+            <LeaderboardCard
+              key={user.id}
+              rank={user.rank}
+              name={user.name}
+              school={user.school}
+              score={user.score}
+              onClick={() => handleRowClick(user)}
+            />
+          ))
+        : [...Array(visibleRows)].map((_, index) => (
+            <LeaderboardCard key={index} skeleton={true} />
+          ));
 
     content = (
       <div>
@@ -129,25 +160,32 @@ const LeaderboardPage = () => {
               </div>
               <div>
                 <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide">
-                  <table className="table-auto w-full text-sm text-center text-light-primary">
-                    <thead className="text-xs text-light-primary uppercase bg-dark-secondary border-b">
-                      <tr>
-                        <th scope="col" className="py-3">
-                          Rank
-                        </th>
-                        <th scope="col" className="py-3">
-                          Name
-                        </th>
-                        <th scope="col" className="py-3">
-                          School/Organization
-                        </th>
-                        <th scope="col" className="py-3">
-                          Score
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>{tableContent}</tbody>
-                  </table>
+                  <SkeletonTheme
+                    baseColor="#0C0C0C"
+                    highlightColor="#AAAAAA77"
+                    borderRadius="0.5rem"
+                    duration={1.5}
+                  >
+                    <table className="table-auto w-full text-sm text-center text-light-primary">
+                      <thead className="text-xs text-light-primary uppercase bg-dark-secondary border-b">
+                        <tr>
+                          <th scope="col" className="py-3">
+                            Rank
+                          </th>
+                          <th scope="col" className="py-3">
+                            Name
+                          </th>
+                          <th scope="col" className="py-3">
+                            School/Organization
+                          </th>
+                          <th scope="col" className="py-3">
+                            Score
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>{tableContent}</tbody>
+                    </table>
+                  </SkeletonTheme>
                 </div>
               </div>
             </div>

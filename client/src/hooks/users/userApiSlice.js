@@ -21,7 +21,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
           return response.status === 200 && !result.isError;
         },
       }),
-      keepUnusedDataFor: 10,
+      keepUnusedDataFor: 60,
       transformResponse: (response) => {
         const users = response.data.map((user) => {
           return {

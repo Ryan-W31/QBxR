@@ -39,34 +39,19 @@ const LoginPage = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    // try {
-    //   const { aToken } = await login({ email, password }).unwrap();
-    //   dispatch(setCredentials({ aToken }));
-    //   setEmail("");
-    //   setPassword("");
-    //   navigate("/home");
-    // } catch (err) {
-    //   // if (!err.status || !err.data) {
-    //   //   console.log("Server Error");
-    //   // }
-    //   console.log(error);
-    // }
+    try {
+      const { aToken } = await login({ email, password }).unwrap();
+      dispatch(setCredentials({ aToken }));
+      setEmail("");
+      setPassword("");
+      navigate("/home");
+    } catch (err) {
+      setIsError(true);
 
-    login({ email, password })
-      .unwrap()
-      .then((res) => {
-        dispatch(setCredentials({ aToken: res.data.aToken }));
-        setEmail("");
-        setPassword("");
-        navigate("/home");
-      })
-      .catch((err) => {
-        setIsError(true);
-
-        if (!err.status || !err.data)
-          setError("Login failed. Please try again later.");
-        else setError(err.data.message);
-      });
+      if (!err.status || !err.data)
+        setError("Login failed. Please try again later.");
+      else setError(err.data.message);
+    }
   };
 
   const content = isLoading ? (

@@ -5,17 +5,30 @@ import ScrollToTop from "../components/ScrollToTop";
 import ScoreCard from "../components/ScoreCard";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const ProfilePage = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   function checkData() {
     if (webData === null && vrData === null) {
-      return <p className="text-xl">Take the Web and VR Tests</p>;
+      return (
+        <p className="text-xl font-Audiowide text-light-primary">
+          Take the Web and VR Tests
+        </p>
+      );
     } else if (webData === null) {
-      return <p className="text-xl">Take the Web Test</p>;
+      return (
+        <p className="text-xl font-Audiowide text-light-primary">
+          Take the Web Test
+        </p>
+      );
     } else {
-      return <p className="text-xl">Take the VR Test</p>;
+      return (
+        <p className="text-xl font-Audiowide text-light-primary">
+          Take the VR Test
+        </p>
+      );
     }
   }
 
@@ -23,21 +36,21 @@ const ProfilePage = () => {
     setShowMenu((prevState) => !prevState);
   };
 
-  const webData = [
-    { title: "Reaction Test", score: 35 },
-    { title: "Play Identification", score: 55 },
-    { title: "Defense Reading", score: 75 },
-    { title: "Critical Thinking", score: 95 },
-  ];
-  const vrData = [
-    { title: "Reaction Test", score: 35 },
-    { title: "Play Identification", score: 55 },
-    { title: "Defense Reading", score: 75 },
-    { title: "Critical Thinking", score: 95 },
-  ];
+  // const webData = [
+  //   { title: "Reaction Test", score: 35 },
+  //   { title: "Play Identification", score: 55 },
+  //   { title: "Defense Reading", score: 75 },
+  //   { title: "Critical Thinking", score: 95 },
+  // ];
+  // const vrData = [
+  //   { title: "Reaction Test", score: 35 },
+  //   { title: "Play Identification", score: 55 },
+  //   { title: "Defense Reading", score: 75 },
+  //   { title: "Critical Thinking", score: 95 },
+  // ];
 
-  // const webData = null;
-  // const vrData = null;
+  const webData = null;
+  const vrData = null;
 
   const content = (
     <div>
@@ -130,13 +143,27 @@ const ProfilePage = () => {
                   Your QBxR Score
                 </h1>
                 {webData !== null && vrData !== null ? (
-                  <p className="text-5xl font-bold text-green-primary font-Audiowide m-2">
-                    75
-                  </p>
+                  <SkeletonTheme
+                    baseColor="#0C0C0C"
+                    highlightColor="#AAAAAA"
+                    duration={1.5}
+                    borderRadius="0.5rem"
+                  >
+                    {webData?.length === 0 || vrData?.length === 0 ? (
+                      <Skeleton width={75} height={75} />
+                    ) : (
+                      <p className="mx-5 text-5xl font-Audiowide text-green-primary">
+                        85
+                      </p>
+                    )}
+                  </SkeletonTheme>
                 ) : (
-                  <p className="text-3xl font-bold text-light-primary font-Audiowide m-2">
+                  <div>
+                    <p className="m-4 text-3xl font-Audiowide text-light-primary">
+                      No Data
+                    </p>
                     {checkData()}
-                  </p>
+                  </div>
                 )}
 
                 <p className="text-light-secondary font-Audiowide">
