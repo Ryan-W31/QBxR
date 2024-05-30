@@ -5,10 +5,13 @@ import { classNames } from "../utils/utils";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "./Toast";
 
 const ProfileDropdown = () => {
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
   const [persist, setPersist] = usePersist();
+  const { notify } = useToast();
+
   const navigate = useNavigate();
 
   const handleLogout = useCallback(
@@ -18,6 +21,7 @@ const ProfileDropdown = () => {
       logout();
 
       if (!isLoading) {
+        notify("You have successfully logged out.", "success", "top-right");
         navigate("/login");
       }
     },

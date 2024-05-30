@@ -15,10 +15,13 @@ import {
 } from "react-icons/md";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
+import { useToast } from "./Toast";
 
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
   const [persist, setPersist] = usePersist();
+  const { notify } = useToast();
+
   const navigate = useNavigate();
 
   function currentPageStyle(navBarItem) {
@@ -51,6 +54,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
       logout();
 
       if (!isLoading) {
+        notify("You have successfully logged out.", "success", "top-right");
         navigate("/login");
       }
     },

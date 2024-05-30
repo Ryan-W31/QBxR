@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
 import { useSignUpMutation } from "../hooks/users/userApiSlice";
 import ErrorMessage from "../components/ErrorMessage";
+import { useToast } from "../components/Toast";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -23,6 +24,8 @@ const RegisterPage = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
+
+  const { notify } = useToast();
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
@@ -112,6 +115,11 @@ const RegisterPage = () => {
     }
   };
 
+  const handleNotify = () => {
+    notify("User created successfully.", "success", "top-right");
+    navigate("/login");
+  };
+
   return (
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
       <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
@@ -145,7 +153,7 @@ const RegisterPage = () => {
           <ErrorMessage message={error} onClose={() => setIsError(false)} />
         )}
 
-        <div className="flex h-full justify-center">
+        <div className="flex justify-center">
           <label className="w-full flex px-4 bg-dark-primary relative rounded-full">
             <div
               id="Pswitch"
@@ -242,7 +250,7 @@ const RegisterPage = () => {
         </div>
         <div className="text-center">
           <button
-            onClick={handleSignUp}
+            onClick={handleNotify}
             className="mt-4 text-lg  font-semibold font-Audiowide bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
             type="submit"
           >
