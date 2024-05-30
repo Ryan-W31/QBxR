@@ -1,7 +1,16 @@
 import React from "react";
 import { classNames } from "../utils/utils";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
-const LeaderboardCard = ({ rank, name, school, score, onClick }) => {
+const LeaderboardCard = ({
+  rank = 0,
+  name = "",
+  school = "",
+  score = 0,
+  skeleton = false,
+  onClick,
+}) => {
   function colorPodium(rank) {
     if (rank === 1) {
       return "bg-[#DBAC34]/80";
@@ -13,7 +22,22 @@ const LeaderboardCard = ({ rank, name, school, score, onClick }) => {
       return "bg-dark-secondary";
     }
   }
-  return (
+  let content = skeleton ? (
+    <tr className="border-b">
+      <th scope="row" className="py-3">
+        <Skeleton width={50} />
+      </th>
+      <td className="py-3">
+        <Skeleton width={100} />
+      </td>
+      <td className="py-3">
+        <Skeleton width={300} />
+      </td>
+      <td className="py-3">
+        <Skeleton width={50} />
+      </td>
+    </tr>
+  ) : (
     <tr
       className={classNames(
         colorPodium(rank),
@@ -38,6 +62,8 @@ const LeaderboardCard = ({ rank, name, school, score, onClick }) => {
       </td>
     </tr>
   );
+
+  return content;
 };
 
 export default LeaderboardCard;

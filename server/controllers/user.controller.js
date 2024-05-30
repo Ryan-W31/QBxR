@@ -7,7 +7,7 @@ const signUp = async (req, res) => {
     req.body;
 
   if (!firstname || !lastname || !email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res.status(400).json({ message: "All fields are required." });
   }
 
   const dup = await User.findOne({ email: email });
@@ -15,7 +15,7 @@ const signUp = async (req, res) => {
   if (dup) {
     return res
       .status(400)
-      .json({ message: "User with this email already exists." });
+      .json({ message: "A user with this email already exists." });
   }
 
   const user = new User({

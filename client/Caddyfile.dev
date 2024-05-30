@@ -2,7 +2,7 @@
     debug
 }
 
-localhost {
+http://localhost {
     handle /api* {
         reverse_proxy api:5001
     }

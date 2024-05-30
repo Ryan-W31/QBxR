@@ -7,19 +7,25 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).json({ message: "All fields are required" });
+    return res
+      .status(400)
+      .json({ message: "Invalid username and/or password." });
   }
 
   const user = await User.findOne({ email: email });
 
   if (!user) {
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res
+      .status(401)
+      .json({ message: "Invalid username and/or password." });
   }
 
   const isValid = await user.verifyPassword(password);
 
   if (!isValid) {
-    return res.status(401).json({ message: "Invalid credentials" });
+    return res
+      .status(401)
+      .json({ message: "Invalid username and/or password." });
   }
 
   const aToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
@@ -33,8 +39,8 @@ const login = async (req, res) => {
   // **CHANGE TO SECURE LATER AND NONE**
   res.cookie("jwt_refresh", rToken, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: "none",
+    secure: true,
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 
@@ -45,7 +51,7 @@ const refreshCookie = (req, res) => {
   const cookies = req.cookies;
 
   if (!cookies?.jwt_refresh) {
-    return res.status(401).json({ message: "Unauthorized 1" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const rToken = cookies.jwt_refresh;
@@ -58,7 +64,7 @@ const refreshCookie = (req, res) => {
     const refreshUser = await User.findById(user.id);
 
     if (!refreshUser) {
-      return res.status(401).json({ message: "Unauthorized 2" });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const aToken = jwt.sign(
@@ -82,8 +88,8 @@ const logout = (req, res) => {
   //** CHANGE TO SECURE LATER **
   res.clearCookie("jwt_refresh", {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: "none",
+    secure: true,
   });
 
   res.json({ message: "Logged out" });

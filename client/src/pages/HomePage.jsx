@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 import ScoreCard from "../components/ScoreCard";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const HomePage = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -13,7 +13,7 @@ const HomePage = () => {
   };
 
   function checkData() {
-    if (webData === null && vrData === null) {
+    if (webData === undefined && vrData === undefined) {
       return <p className="text-xl">Take the Web and VR Tests</p>;
     } else if (webData === null) {
       return <p className="text-xl">Take the Web Test</p>;
@@ -23,16 +23,16 @@ const HomePage = () => {
   }
 
   const webData = [
-    { title: "Reaction Test", score: 35 },
-    { title: "Play Identification", score: 55 },
-    { title: "Defense Reading", score: 75 },
-    { title: "Critical Thinking", score: 95 },
+    // { title: "Reaction Test", score: 35 },
+    // { title: "Play Identification", score: 55 },
+    // { title: "Defense Reading", score: 75 },
+    // { title: "Critical Thinking", score: 95 },
   ];
   const vrData = [
-    { title: "Reaction Test", score: 35 },
-    { title: "Play Identification", score: 55 },
-    { title: "Defense Reading", score: 75 },
-    { title: "Critical Thinking", score: 95 },
+    // { title: "Reaction Test", score: 35 },
+    // { title: "Play Identification", score: 55 },
+    // { title: "Defense Reading", score: 75 },
+    // { title: "Critical Thinking", score: 95 },
   ];
 
   const content = (
@@ -60,7 +60,18 @@ const HomePage = () => {
             <div className="text-light-primary m-10 text-4xl">
               <p className="text-light-secondary">Your QBxR Score:</p>
               {webData !== null && vrData !== null ? (
-                <p className="m-4 text-3xl">85</p>
+                <SkeletonTheme
+                  baseColor="#0C0C0C"
+                  highlightColor="#AAAAAA"
+                  duration={1.5}
+                  borderRadius="0.5rem"
+                >
+                  {webData?.length === 0 || vrData?.length === 0 ? (
+                    <Skeleton width={75} height={75} />
+                  ) : (
+                    <p className="m-4 text-3xl">85</p>
+                  )}
+                </SkeletonTheme>
               ) : (
                 <div>
                   <p className="m-4 text-3xl">No Data</p>

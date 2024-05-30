@@ -7,12 +7,16 @@ import { useNavigate } from "react-router-dom";
 import usePersist from "../hooks/auth/usePersist";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import ErrorMessage from "../components/ErrorMessage";
 
 const LoginPage = () => {
   const userRef = useRef();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
+
   const [persist, setPersist] = usePersist();
 
   const dispatch = useDispatch();
@@ -42,10 +46,11 @@ const LoginPage = () => {
       setPassword("");
       navigate("/home");
     } catch (err) {
-      if (!err.status || !err.data) {
-        console.log("Server Error");
-      }
-      console.log(err);
+      setIsError(true);
+
+      if (!err.status || !err.data)
+        setError("Login failed. Please try again later.");
+      else setError(err.data.message);
     }
   };
 
@@ -80,6 +85,9 @@ const LoginPage = () => {
           </p>
         </div>
         <div>
+          {isError && (
+            <ErrorMessage message={error} onClose={() => setIsError(false)} />
+          )}
           <div>
             <input
               className="text-sm w-full px-4 py-2 border outline-none  focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded"

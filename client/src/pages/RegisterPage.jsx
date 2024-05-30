@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
 import { useSignUpMutation } from "../hooks/users/userApiSlice";
+import ErrorMessage from "../components/ErrorMessage";
+import { useToast } from "../components/Toast";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -20,6 +22,10 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
+
+  const { notify } = useToast();
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
@@ -30,7 +36,6 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      alert("User created");
       setFirstname("");
       setLastname("");
       setEmail("");
@@ -41,18 +46,25 @@ const RegisterPage = () => {
     }
   }, [isSuccess, navigate]);
 
-  const handleRole = (event) => {
+  const handleNonplayerRole = (event) => {
     event.preventDefault();
 
+    setRole("nonplayer");
+    const pSwitch = document.getElementById("Pswitch");
+    if (pSwitch.classList.contains("left-1/2")) {
+      pSwitch.classList.remove("left-1/2");
+      pSwitch.classList.add("left-0");
+    }
+  };
+
+  const handlePlayerRole = (event) => {
+    event.preventDefault();
+
+    setRole("player");
     const pSwitch = document.getElementById("Pswitch");
     if (pSwitch.classList.contains("left-0")) {
       pSwitch.classList.remove("left-0");
       pSwitch.classList.add("left-1/2");
-      setRole("player");
-    } else {
-      pSwitch.classList.remove("left-1/2");
-      pSwitch.classList.add("left-0");
-      setRole("nonplayer");
     }
   };
 
@@ -76,12 +88,14 @@ const RegisterPage = () => {
 
     if (canSave) {
       if (password !== confirmPassword) {
-        alert("Passwords do not match");
+        setIsError(true);
+        setError("Passwords do not match.");
         return;
       }
 
       if (!isChecked) {
-        alert("Please agree to the terms and conditions");
+        setIsError(true);
+        setError("Please agree to the terms and conditions.");
         return;
       }
 
@@ -94,9 +108,17 @@ const RegisterPage = () => {
         school_organization,
       };
 
-      await signUp(obj);
+      await signUp(obj)
+        .then((res) => {
+          notify("Registration successful. Please check your email to verify.");
+        })
+        .catch((err) => {
+          setIsError(true);
+          setError(err.data.message);
+        });
     } else {
-      alert("Please fill all fields");
+      setIsError(true);
+      setError("Registration failed. Please try again later.");
     }
   };
 
@@ -128,20 +150,25 @@ const RegisterPage = () => {
             Or
           </p>
         </div>
-        <div className="flex h-full justify-center">
+
+        {isError && (
+          <ErrorMessage message={error} onClose={() => setIsError(false)} />
+        )}
+
+        <div className="flex justify-center">
           <label className="w-full flex px-4 bg-dark-primary relative rounded-full">
             <div
               id="Pswitch"
               className="w-1/2 h-full bg-green-primary rounded-full transition-all absolute left-0"
             ></div>
             <button
-              onClick={handleRole}
+              onClick={handleNonplayerRole}
               className="transition w-full flex font-bold justify-center items-center text-light-primary z-10"
             >
               Not A Player
             </button>
             <button
-              onClick={handleRole}
+              onClick={handlePlayerRole}
               className="transition w-full flex font-bold items-center justify-center text-center text-light-primary z-10"
             >
               Player

@@ -1,6 +1,7 @@
 import React from "react";
 import ProgressBar from "./ProgressBar";
 import { classNames } from "../utils/utils";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 const ScoreCard = ({ title, errMessage, size, data }) => {
   const content = (
@@ -20,11 +21,35 @@ const ScoreCard = ({ title, errMessage, size, data }) => {
         </div>
       ) : (
         <div>
-          <ul>
-            {data.map((item, index) => (
-              <ProgressBar key={index} title={item.title} score={item.score} />
-            ))}
-          </ul>
+          {data?.length === 0 ? (
+            <SkeletonTheme
+              baseColor="#0C0C0C"
+              highlightColor="#AAAAAA"
+              borderRadius="0.5rem"
+              duration={1.5}
+            >
+              <ul>
+                {[...Array(4)].map((_, index) => (
+                  <ProgressBar
+                    key={index}
+                    title={"Loading..."}
+                    score={0}
+                    skeleton={true}
+                  />
+                ))}
+              </ul>
+            </SkeletonTheme>
+          ) : (
+            <ul>
+              {data.map((item, index) => (
+                <ProgressBar
+                  key={index}
+                  title={item.title}
+                  score={item.score}
+                />
+              ))}
+            </ul>
+          )}
         </div>
       )}
     </div>
