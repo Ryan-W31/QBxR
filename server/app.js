@@ -12,8 +12,8 @@ app.use(express.json());
 const allowedOrigins = [
   "https://localhost",
   "http://localhost",
-  "http://api.localhost",
-  "https://api.localhost",
+  "http://localhost:3000",
+  "https://localhost:3000",
   "https://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com",
   "http://qbxr-env.eba-mzjrqevn.us-east-1.elasticbeanstalk.com",
   "https://qbxr.net",

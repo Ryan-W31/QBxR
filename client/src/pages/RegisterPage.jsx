@@ -3,6 +3,7 @@ import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
 import { useSignUpMutation } from "../hooks/users/userApiSlice";
+import ErrorMessage from "../components/ErrorMessage";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -20,6 +21,8 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [error, setError] = useState("");
 
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
@@ -30,7 +33,6 @@ const RegisterPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      alert("User created");
       setFirstname("");
       setLastname("");
       setEmail("");
@@ -76,12 +78,14 @@ const RegisterPage = () => {
 
     if (canSave) {
       if (password !== confirmPassword) {
-        alert("Passwords do not match");
+        setIsError(true);
+        setError("Passwords do not match");
         return;
       }
 
       if (!isChecked) {
-        alert("Please agree to the terms and conditions");
+        setIsError(true);
+        setError("Please agree to the terms and conditions");
         return;
       }
 
@@ -94,9 +98,17 @@ const RegisterPage = () => {
         school_organization,
       };
 
-      await signUp(obj);
+      await signUp(obj)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          setIsError(true);
+          setError(err.data.message);
+        });
     } else {
-      alert("Please fill all fields");
+      setIsError(true);
+      setError("Registration failed. Please try again later.");
     }
   };
 
@@ -128,6 +140,11 @@ const RegisterPage = () => {
             Or
           </p>
         </div>
+
+        {isError && (
+          <ErrorMessage message={error} onClose={() => setIsError(false)} />
+        )}
+
         <div className="flex h-full justify-center">
           <label className="w-full flex px-4 bg-dark-primary relative rounded-full">
             <div
