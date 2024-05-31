@@ -12,7 +12,6 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: { ...body },
       }),
-      invalidatesTags: [{ type: "User", id: "LIST" }],
     }),
     getLeaderboard: builder.query({
       query: () => ({
@@ -32,10 +31,51 @@ export const userApiSlice = apiSlice.injectEndpoints({
         return users;
       },
     }),
+    updateUserInfo: builder.mutation({
+      query: (body) => ({
+        url: `/user/updateinfo/${body.id}`,
+        method: "PATCH",
+        body: body,
+      }),
+    }),
+    updateUserPassword: builder.mutation({
+      query: (body) => ({
+        url: `/user/updatepassword/${body.id}`,
+        method: "PATCH",
+        body: body,
+      }),
+    }),
+    getUserById: builder.query({
+      query: (id) => `/user/${id}`,
+      validateStatus: (response, result) => {
+        return response.status === 200 && !result.isError;
+      },
+      keepUnusedDataFor: 60,
+      transformResponse: (response) => {
+        return {
+          id: response.id,
+          firstname: response.firstname,
+          lastname: response.lastname,
+          email: response.email,
+          school_organization: response.school_organization,
+          bio: response.bio,
+          birthday: response.birthday,
+          phone_number: response.phone_number,
+          status: response.status,
+        };
+      },
+    }),
   }),
 });
 
-export const { useSignUpMutation, useGetLeaderboardQuery } = userApiSlice;
+export const {
+  useSignUpMutation,
+  useGetLeaderboardQuery,
+  useUpdateUserInfoMutation,
+  useUpdateUserPasswordMutation,
+  useGetUserByIdQuery,
+} = userApiSlice;
+
 export const selectUsersResult = userApiSlice.endpoints.getLeaderboard.select();
 
 const selectUsersData = createSelector(

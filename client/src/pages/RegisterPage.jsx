@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useSignUpMutation } from "../hooks/users/userApiSlice";
 import ErrorMessage from "../components/ErrorMessage";
 import { useToast } from "../components/Toast";
+import { type } from "os";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -55,6 +56,8 @@ const RegisterPage = () => {
       pSwitch.classList.remove("left-1/2");
       pSwitch.classList.add("left-0");
     }
+
+    console.log(role);
   };
 
   const handlePlayerRole = (event) => {
@@ -66,6 +69,8 @@ const RegisterPage = () => {
       pSwitch.classList.remove("left-0");
       pSwitch.classList.add("left-1/2");
     }
+
+    console.log(role);
   };
 
   const handleCheck = () => {
@@ -110,7 +115,10 @@ const RegisterPage = () => {
 
       await signUp(obj)
         .then((res) => {
-          notify("Registration successful. Please check your email to verify.");
+          notify(
+            "Registration successful. Please check your email to verify.",
+            "success"
+          );
         })
         .catch((err) => {
           setIsError(true);

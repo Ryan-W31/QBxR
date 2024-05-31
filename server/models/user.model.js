@@ -20,6 +20,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     salt: {
       type: String,
@@ -31,6 +32,20 @@ const userSchema = new Schema(
     },
     school_organization: {
       type: String,
+    },
+    bio: {
+      type: String,
+    },
+    birthday: {
+      type: Date,
+    },
+    status: {
+      type: Boolean,
+      required: true,
+    },
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    phone_number: {
+      type: Number,
     },
   },
   { collection: "Users" }

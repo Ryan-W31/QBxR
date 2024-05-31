@@ -20,7 +20,9 @@ const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const refresh = await queryFulfilled;
-          dispatch(setCredentials({ ...refresh.data }));
+          dispatch(
+            setCredentials({ aToken: refresh.data.aToken, id: refresh.data.id })
+          );
           console.log("Refreshed token");
         } catch (err) {
           console.log(err);

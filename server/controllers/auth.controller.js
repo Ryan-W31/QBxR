@@ -44,7 +44,7 @@ const login = async (req, res) => {
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 
-  res.status(200).json({ aToken });
+  res.status(200).json({ aToken: aToken, id: user._id });
 };
 
 const refreshCookie = (req, res) => {
@@ -75,7 +75,7 @@ const refreshCookie = (req, res) => {
       }
     );
 
-    res.json({ aToken });
+    res.json({ aToken: aToken, id: refreshUser._id });
   });
 };
 
