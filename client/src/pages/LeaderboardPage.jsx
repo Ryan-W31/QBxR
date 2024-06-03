@@ -24,7 +24,6 @@ const LeaderboardPage = () => {
     isSuccess,
     isError,
     error,
-    refetch,
   } = useGetLeaderboardQuery(undefined, {
     pollingInterval: 60000,
     refetchOnFocus: true,

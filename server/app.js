@@ -5,6 +5,7 @@ const errorhandler = require("./middleware/errorhandler");
 
 const UserRouter = require("./routes/user.route");
 const AuthRouter = require("./routes/auth.route");
+const ScoreRouter = require("./routes/score.route");
 
 const app = express();
 app.use(express.json());
@@ -42,5 +43,6 @@ app.get("/api/test", (req, res) => {
 
 app.use("/api/user", UserRouter);
 app.use("/api/auth", AuthRouter);
+app.use("/api/score", ScoreRouter);
 
 module.exports = app;

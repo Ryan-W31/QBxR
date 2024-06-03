@@ -58,7 +58,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
         navigate("/login");
       }
     },
-    [logout, isLoading, setPersist, persist, navigate]
+    [logout, isLoading, setPersist, persist, navigate, notify]
   );
 
   if (isLoading) return <div>Logging out...</div>;

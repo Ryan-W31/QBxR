@@ -41,7 +41,6 @@ const LoginPage = () => {
 
     try {
       const { aToken, id } = await login({ email, password }).unwrap();
-      console.log(aToken, id);
       dispatch(setCredentials({ aToken: aToken, id: id }));
       setEmail("");
       setPassword("");

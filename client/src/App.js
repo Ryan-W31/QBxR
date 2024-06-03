@@ -36,16 +36,16 @@ function App() {
               <Route path="web" element={<WebTestPage />} />
 
               <Route element={<PersistLogin />}>
-                <Route element={<ProtectedRoutes />}>
-                  <Route element={<Prefetch />}>
-                    <Route path="home" element={<HomePage />} />
-                    <Route path="leaderboard" element={<LeaderboardPage />} />
-                    <Route path="profile" element={<ProfilePage />} />
-                    <Route path="search" element={<SearchPage />} />
-                  </Route>
+                {/* <Route element={<ProtectedRoutes />}> */}
+                <Route element={<Prefetch />}>
+                  <Route path="home" element={<HomePage />} />
+                  <Route path="leaderboard" element={<LeaderboardPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="search" element={<SearchPage />} />
                 </Route>
               </Route>
             </Route>
+            {/* </Route> */}
           </Routes>
         </ToastProvider>
       </Router>

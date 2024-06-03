@@ -1,4 +1,3 @@
-const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const Score = require("../models/score.model");
 require("dotenv").config();
@@ -11,7 +10,8 @@ const signUp = async (req, res) => {
     return res.status(400).json({ message: "All fields are required." });
   }
 
-  const dup = await User.findOne({ email: email });
+  let lowerEmail = email.toLowerCase();
+  const dup = await User.findOne({ email: lowerEmail });
 
   if (dup) {
     return res
@@ -23,7 +23,7 @@ const signUp = async (req, res) => {
     role: role,
     firstname: firstname,
     lastname: lastname,
-    email: email,
+    email: lowerEmail,
     school_organization: school_organization,
     status: true,
   });
@@ -112,8 +112,6 @@ const updateUserInfo = async (req, res) => {
     status,
   } = req.body;
 
-  console.log(req.body);
-
   const id = req.params.id;
 
   const update = {};
@@ -127,8 +125,6 @@ const updateUserInfo = async (req, res) => {
   if (phone_number !== undefined) update.phone_number = phone_number;
   if (status !== undefined) update.status = status;
 
-  console.log(update);
-
   const user = await User.findByIdAndUpdate({ _id: id }, update, { new: true });
 
   if (!user) {
@@ -136,6 +132,8 @@ const updateUserInfo = async (req, res) => {
       .status(404)
       .json({ message: "Your account was not found. Please try again." });
   }
+
+  await user.save();
 
   res.status(200).json({ message: "Your account has been updated." });
 };

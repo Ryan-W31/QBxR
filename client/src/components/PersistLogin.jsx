@@ -1,14 +1,13 @@
 import { Outlet, Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRefreshMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
 import { useSelector } from "react-redux";
-import { selectCurrentToken, selectCurrentId } from "../hooks/auth/authSlice";
+import { selectCurrentToken } from "../hooks/auth/authSlice";
 
 const PersistLogin = () => {
   const [persist] = usePersist();
   const token = useSelector(selectCurrentToken);
-  const id = useSelector(selectCurrentId);
 
   const [trueSuccess, setTrueSuccess] = useState(false);
 

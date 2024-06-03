@@ -4,7 +4,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { classNames } from "../utils/utils";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "./Toast";
 
 const ProfileDropdown = () => {
@@ -25,7 +25,7 @@ const ProfileDropdown = () => {
         navigate("/login");
       }
     },
-    [logout, isLoading, setPersist, persist, navigate]
+    [logout, isLoading, setPersist, persist, navigate, notify]
   );
 
   if (isLoading) return <div>Logging out...</div>;
@@ -51,8 +51,8 @@ const ProfileDropdown = () => {
           <div>
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="/profile"
+                <Link
+                  to="/profile"
                   className={classNames(
                     active
                       ? "bg-green-primary text-light-primary"
@@ -61,7 +61,7 @@ const ProfileDropdown = () => {
                   )}
                 >
                   My Profile
-                </a>
+                </Link>
               )}
             </Menu.Item>
             <Menu.Item>

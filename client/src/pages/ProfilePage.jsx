@@ -13,6 +13,11 @@ import {
   useUpdateUserInfoMutation,
   useGetUserByIdQuery,
 } from "../hooks/users/userApiSlice";
+import {
+  useGetVRScoreQuery,
+  useGetWebScoreQuery,
+} from "../hooks/users/scoreApiSlice";
+import { FaVrCardboard } from "react-icons/fa";
 
 const ProfilePage = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -30,14 +35,34 @@ const ProfilePage = () => {
     refetchOnFocus: true,
   });
 
+  const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(
+    useSelector(selectCurrentId),
+    {
+      pollingInterval: 60000,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    }
+  );
+  const { data: webData, isLoading: isLoadingWebScore } = useGetWebScoreQuery(
+    useSelector(selectCurrentId),
+    {
+      pollingInterval: 60000,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    }
+  );
+
   function checkData() {
-    if (webData === null && vrData === null) {
+    if (
+      (webData === undefined || webData?.length === 0) &&
+      (vrData === undefined || vrData?.length === 0)
+    ) {
       return (
         <p className="text-xl font-Audiowide text-light-primary">
           Take the Web and VR Tests
         </p>
       );
-    } else if (webData === null) {
+    } else if (webData === undefined || webData?.length === 0) {
       return (
         <p className="text-xl font-Audiowide text-light-primary">
           Take the Web Test
@@ -71,11 +96,21 @@ const ProfilePage = () => {
     return age;
   }
 
+  function getQBxRScore() {
+    var webScores = webData.filter((item) => item.score !== null);
+    var vrScores = vrData.filter((item) => item.score !== null);
+
+    var webSum = webScores.reduce((acc, item) => acc + item.score, 0);
+    var vrSum = vrScores.reduce((acc, item) => acc + item.score, 0);
+
+    return Math.round((webSum + vrSum) / (webScores.length + vrScores.length));
+  }
+
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
   };
 
-  const handleStatusChange = (e) => {
+  const handleStatusChange = async (e) => {
     e.preventDefault();
 
     var str2bool = (value) => {
@@ -87,14 +122,10 @@ const ProfilePage = () => {
     };
 
     setStatus(str2bool(e.target.value));
-    updateUserInfo({ id: user.id, status: str2bool(e.target.value) });
+    await updateUserInfo({ id: user.id, status: str2bool(e.target.value) });
   };
 
-  const webData = null;
-  const vrData = null;
   let content = null;
-
-  console.log(user);
 
   if (error) {
     content = (
@@ -235,18 +266,21 @@ const ProfilePage = () => {
                   <h1 className="text-3xl font-bold text-light-primary font-Audiowide m-2">
                     Your QBxR Score
                   </h1>
-                  {webData !== null && vrData !== null ? (
+                  {webData !== undefined &&
+                  webData?.length !== 0 &&
+                  vrData !== undefined &&
+                  vrData?.length !== 0 ? (
                     <SkeletonTheme
                       baseColor="#0C0C0C"
                       highlightColor="#AAAAAA"
                       duration={1.5}
                       borderRadius="0.5rem"
                     >
-                      {webData?.length === 0 || vrData?.length === 0 ? (
+                      {isLoadingWebScore || isLoadingVRScore ? (
                         <Skeleton width={75} height={75} />
                       ) : (
                         <p className="mx-5 text-5xl font-Audiowide text-green-primary">
-                          85
+                          {getQBxRScore()}
                         </p>
                       )}
                     </SkeletonTheme>
@@ -270,16 +304,24 @@ const ProfilePage = () => {
                       title={"Your Web Test Scores"}
                       errMessage={"Take The Web Test"}
                       size="3"
+                      isLoading={isLoadingWebScore}
                       data={webData}
                     />
-                    {webData === null ? (
+                    {webData === undefined || webData?.length === 0 ? (
                       <Link
                         to="/web"
                         className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
                       >
                         Take The Web Test
                       </Link>
-                    ) : null}
+                    ) : (
+                      <Link
+                        to="/web"
+                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
+                      >
+                        Retake The Web Test
+                      </Link>
+                    )}
                   </div>
                   <div class="my-4 md:my-0"></div>
                   <div className="flex flex-col">
@@ -287,16 +329,24 @@ const ProfilePage = () => {
                       title={"Your VR Test Scores"}
                       errMessage={"Take The VR Test"}
                       size="3"
+                      isLoading={isLoadingVRScore}
                       data={vrData}
                     />
-                    {vrData === null ? (
+                    {vrData === undefined || vrData?.length === 0 ? (
                       <Link
                         to="/vr"
                         className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
                       >
                         Take The VR Test
                       </Link>
-                    ) : null}
+                    ) : (
+                      <Link
+                        to="/vr"
+                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
+                      >
+                        Retake The VR Test
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>

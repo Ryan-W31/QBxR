@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
 import { useSignUpMutation } from "../hooks/users/userApiSlice";
 import ErrorMessage from "../components/ErrorMessage";
 import { useToast } from "../components/Toast";
-import { type } from "os";
 
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -113,17 +112,17 @@ const RegisterPage = () => {
         school_organization,
       };
 
-      await signUp(obj)
-        .then((res) => {
-          notify(
-            "Registration successful. Please check your email to verify.",
-            "success"
-          );
-        })
-        .catch((err) => {
-          setIsError(true);
-          setError(err.data.message);
-        });
+      try {
+        const res = await signUp(obj).unwrap();
+        notify(
+          "Registration successful. Please check your email to verify.",
+          "success"
+        );
+        navigate("/login");
+      } catch (err) {
+        setIsError(true);
+        setError(err.data.message);
+      }
     } else {
       setIsError(true);
       setError("Registration failed. Please try again later.");
