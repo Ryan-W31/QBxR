@@ -45,7 +45,7 @@ const userSchema = new Schema(
     },
     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     phone_number: {
-      type: Number,
+      type: String,
     },
   },
   { collection: "Users" }

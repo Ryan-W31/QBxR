@@ -88,7 +88,6 @@ const LeaderboardPage = () => {
 
   window.onload = function () {
     toggleRank();
-    console.log("loaded");
   };
 
   let content;

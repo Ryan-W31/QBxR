@@ -3,12 +3,15 @@ import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 import ScoreCard from "../components/ScoreCard";
+import EditProfileCard from "../components/EditProfileCard";
 import { classNames } from "../utils/utils";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { selectCurrentId } from "../hooks/auth/authSlice";
+import { formatPhoneNumberIntl } from "react-phone-number-input";
+import { format } from "date-fns";
 import {
   useUpdateUserInfoMutation,
   useGetUserByIdQuery,
@@ -17,10 +20,12 @@ import {
   useGetVRScoreQuery,
   useGetWebScoreQuery,
 } from "../hooks/users/scoreApiSlice";
-import { FaVrCardboard } from "react-icons/fa";
+import { FiEdit } from "react-icons/fi";
 
 const ProfilePage = () => {
+  const [showBlur, setShowBlur] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
   const [status, setStatus] = useState(true);
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
@@ -108,6 +113,21 @@ const ProfilePage = () => {
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
+    toggleBlur();
+  };
+
+  const toggleBlur = () => {
+    setShowBlur((prevState) => !prevState);
+  };
+
+  const handleEditProfile = () => {
+    setShowEditProfile((prevState) => !prevState);
+    toggleBlur();
+  };
+
+  const handleClose = () => {
+    setShowEditProfile(false);
+    toggleBlur();
   };
 
   const handleStatusChange = async (e) => {
@@ -146,13 +166,6 @@ const ProfilePage = () => {
   } else {
     content = (
       <div>
-        <ScrollToTop showMenu={showMenu} />
-        <NavBar
-          showMenu={showMenu}
-          toggleMenu={toggleMenu}
-          isLandingPage={false}
-          currentPage="profile"
-        />
         <MobileMenu
           showMenu={showMenu}
           toggleMenu={toggleMenu}
@@ -160,7 +173,14 @@ const ProfilePage = () => {
           currentPage="profile"
         />
 
-        <div className={showMenu ? "blur-lg pointer-events-none" : ""}>
+        <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+          <ScrollToTop showMenu={showMenu} />
+          <NavBar
+            showMenu={showMenu}
+            toggleMenu={toggleMenu}
+            isLandingPage={false}
+            currentPage="profile"
+          />
           <div class="mx-auto flex flex-col md:flex-row my-5 p-5">
             <div class="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-green-primary rounded-lg text-center font-Audiowide">
               <div class="image overflow-hidden p-3">
@@ -217,10 +237,16 @@ const ProfilePage = () => {
               </ul>
               <div class="my-4"></div>
             </div>
-            <div class="w-full md:w-9/12 my-4 md:my-0 md:mx-2 border-t-4 border-green-primary">
-              <div class="bg-dark-secondary/80 p-3 rounded-lg font-Audiowide">
-                <div class="flex justify-center text-center space-x-2 font-semibold text-light-primary">
-                  <span class="tracking-wide text-3xl">About</span>
+            <div class="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide">
+              <div class="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
+                <div className="w-full relative">
+                  <div class="flex justify-center text-center space-x-2 font-semibold text-light-primary">
+                    <span class="tracking-wide text-3xl">About</span>
+                  </div>
+                  <FiEdit
+                    className="cursor-pointer text-xl text-light-primary hover:text-green-primary absolute top-0 right-0"
+                    onClick={handleEditProfile}
+                  />
                 </div>
                 <div class="text-light-secondary">
                   <div class="grid md:grid-cols-2 text-lg">
@@ -242,7 +268,9 @@ const ProfilePage = () => {
                     <div class="grid grid-cols-2">
                       <div class="px-2 py-2 font-semibold">Phone No.</div>
                       {user?.phone_number !== undefined ? (
-                        <div class="px-2 py-2">{user.phone_number}</div>
+                        <div class="px-2 py-2">
+                          {formatPhoneNumberIntl(user.phone_number)}
+                        </div>
                       ) : (
                         <div class="px-2 py-2">N/A</div>
                       )}
@@ -250,7 +278,9 @@ const ProfilePage = () => {
                     <div class="grid grid-cols-2">
                       <div class="px-2 py-2 font-semibold">Birthday</div>
                       {user?.birthday !== undefined ? (
-                        <div class="px-2 py-2">{user.birthday}</div>
+                        <div class="px-2 py-2">
+                          {format(new Date(user.birthday), "PP")}
+                        </div>
                       ) : (
                         <div class="px-2 py-2">N/A</div>
                       )}
@@ -263,7 +293,7 @@ const ProfilePage = () => {
 
               <div className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
                 <div className="text-center mb-6">
-                  <h1 className="text-3xl font-bold text-light-primary font-Audiowide m-2">
+                  <h1 className="text-3xl font-bold text-light-primary e m-2">
                     Your QBxR Score
                   </h1>
                   {webData !== undefined &&
@@ -279,26 +309,24 @@ const ProfilePage = () => {
                       {isLoadingWebScore || isLoadingVRScore ? (
                         <Skeleton width={75} height={75} />
                       ) : (
-                        <p className="mx-5 text-5xl font-Audiowide text-green-primary">
+                        <p className="mx-5 text-5xl text-green-primary">
                           {getQBxRScore()}
                         </p>
                       )}
                     </SkeletonTheme>
                   ) : (
                     <div>
-                      <p className="m-4 text-3xl font-Audiowide text-light-primary">
-                        No Data
-                      </p>
+                      <p className="m-4 text-3xl text-light-primary">No Data</p>
                       {checkData()}
                     </div>
                   )}
 
-                  <p className="text-light-secondary font-Audiowide">
+                  <p className="text-light-secondary">
                     Your QBxR score is calculated by taking the average of your
                     Web and VR test scores.
                   </p>
                 </div>
-                <div className="flex md:flex-row flex-col justify-evenly md:space-x-4 font-Audiowide">
+                <div className="flex md:flex-row flex-col justify-evenly md:space-x-4">
                   <div className="flex flex-col">
                     <ScoreCard
                       title={"Your Web Test Scores"}
@@ -353,6 +381,11 @@ const ProfilePage = () => {
             </div>
           </div>
         </div>
+        <EditProfileCard
+          isVisible={showEditProfile}
+          user={user}
+          onClose={handleClose}
+        />
       </div>
     );
   }
