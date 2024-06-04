@@ -109,7 +109,6 @@ const getVRScore = async (req, res) => {
 
 const getWebScore = async (req, res) => {
   const id = req.params.id;
-  console.log(id);
 
   const score = await Score.findOne({ user: id });
 

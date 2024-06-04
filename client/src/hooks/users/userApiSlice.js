@@ -69,6 +69,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
+    getUserFavorites: builder.query({
+      query: (id) => `/user/favorites/${id}`,
+      validateStatus: (response, result) => {
+        return response.status === 200 && !result.isError;
+      },
+      keepUnusedDataFor: 60,
+      transformResponse: (response) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -78,6 +88,7 @@ export const {
   useUpdateUserInfoMutation,
   useUpdateUserPasswordMutation,
   useGetUserByIdQuery,
+  useGetUserFavoritesQuery,
 } = userApiSlice;
 
 export const selectUsersResult = userApiSlice.endpoints.getLeaderboard.select();

@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
 const Score = require("../models/score.model");
+const mongoose = require("mongoose");
 require("dotenv").config();
 
 const signUp = async (req, res) => {
@@ -59,8 +60,6 @@ const getLeaderboard = async (req, res) => {
 const getUserById = async (req, res) => {
   const id = req.params.id;
 
-  console.log(id);
-
   const user = await User.findById(id);
 
   if (!user) {
@@ -95,32 +94,63 @@ const updateUserInfo = async (req, res) => {
     birthday,
     phone_number,
     status,
+    favorite,
   } = req.body;
 
   const id = req.params.id;
 
-  const update = {};
-  if (firstname !== undefined) update.firstname = firstname;
-  if (lastname !== undefined) update.lastname = lastname;
-  if (email !== undefined) update.email = email;
+  const update = [];
+
+  if (firstname !== undefined) update.push({ $set: { firstname } });
+  if (lastname !== undefined) update.push({ $set: { lastname } });
+  if (email !== undefined) update.push({ $set: { email } });
   if (school_organization !== undefined)
-    update.school_organization = school_organization;
-  if (bio !== undefined) update.bio = bio;
-  if (birthday !== undefined) update.birthday = birthday;
-  if (phone_number !== undefined) update.phone_number = phone_number;
-  if (status !== undefined) update.status = status;
-
-  const user = await User.findByIdAndUpdate({ _id: id }, update, { new: true });
-
-  if (!user) {
-    return res
-      .status(404)
-      .json({ message: "Your account was not found. Please try again." });
+    update.push({ $set: { school_organization } });
+  if (bio !== undefined) update.push({ $set: { bio } });
+  if (birthday !== undefined) update.push({ $set: { birthday } });
+  if (phone_number !== undefined) update.push({ $set: { phone_number } });
+  if (status !== undefined) update.push({ $set: { status } });
+  if (favorite !== undefined) {
+    const favoriteObjectId = new mongoose.Types.ObjectId(favorite);
+    update.push({
+      $set: {
+        favorites: {
+          $cond: {
+            if: { $in: [favoriteObjectId, "$favorites"] },
+            then: {
+              $filter: {
+                input: "$favorites",
+                as: "fav",
+                cond: { $ne: ["$$fav", favoriteObjectId] },
+              },
+            },
+            else: { $concatArrays: ["$favorites", [favoriteObjectId]] },
+          },
+        },
+      },
+    });
   }
 
-  await user.save();
+  try {
+    const user = await User.findOneAndUpdate(
+      { _id: id },
+      update.length > 0 ? update : {},
+      { new: true, useFindAndModify: false }
+    );
 
-  res.status(200).json({ message: "Your account has been updated." });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "Your account was not found. Please try again." });
+    }
+
+    res.status(200).json({ message: "Your account has been updated.", user });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating the account." });
+  }
 };
 
 const updateUserPassword = async (req, res) => {
@@ -143,8 +173,23 @@ const updateUserPassword = async (req, res) => {
   res.status(200).json({ message: "Your password has been updated." });
 };
 
+const getUserFavorites = async (req, res) => {
+  const id = req.params.id;
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "Your account was not found. Please try again." });
+  }
+
+  return res.status(200).json({ favorites: user.favorites });
+};
+
 module.exports = {
   getLeaderboard,
+  getUserFavorites,
   signUp,
   getUserById,
   updateUserInfo,

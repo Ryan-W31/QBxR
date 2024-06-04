@@ -11,6 +11,9 @@ router
   .route("/updatepassword/:id")
   .patch(verifyToken, usersController.updateUserPassword);
 router.route("/:id").get(verifyToken, usersController.getUserById);
+router
+  .route("/favorites/:id")
+  .get(verifyToken, usersController.getUserFavorites);
 router.route("/signup").post(usersController.signUp);
 
 module.exports = router;

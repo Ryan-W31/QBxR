@@ -18,6 +18,8 @@ const LeaderboardPage = () => {
   const [visibleRows, setVisibleRows] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
 
+  const myId = useSelector(selectCurrentId);
+
   const {
     data: users,
     isLoading,
@@ -30,7 +32,7 @@ const LeaderboardPage = () => {
     refetchOnMountOrArgChange: true,
   });
   const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
-    useSelector(selectCurrentId),
+    myId,
     {
       pollingInterval: 60000,
       refetchOnFocus: true,
@@ -200,6 +202,7 @@ const LeaderboardPage = () => {
           </div>
         </div>
         <ProfileCard
+          myId={myId}
           id={showProfile?.id}
           name={showProfile?.name}
           school={showProfile?.school}

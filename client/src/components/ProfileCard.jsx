@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ScoreCard from "./ScoreCard";
 import {
   useGetWebScoreQuery,
@@ -6,14 +6,37 @@ import {
 } from "../hooks/users/scoreApiSlice";
 import { classNames } from "../utils/utils";
 import { AiOutlineClose } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import {
+  useUpdateUserInfoMutation,
+  useGetUserFavoritesQuery,
+} from "../hooks/users/userApiSlice";
+import { FaRegStar, FaStar } from "react-icons/fa";
 
-const ProfileCard = ({ id, name, school, score, isVisible, onClose }) => {
+const ProfileCard = ({ myId, id, name, school, score, isVisible, onClose }) => {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [myProfile, setMyProfile] = useState(false);
+  const [updateUserInfo] = useUpdateUserInfoMutation();
+
   const { data: webData, isLoading: isLoadingWebData } =
     useGetWebScoreQuery(id);
+
   const { data: vrData, isLoading: isLoadingVRData } = useGetVRScoreQuery(id);
 
-  const navigate = useNavigate();
+  const { data: isFavoriteData, isLoading: isLoadingFavoriteData } =
+    useGetUserFavoritesQuery(myId);
+
+  useEffect(() => {
+    if (!isLoadingFavoriteData && isFavoriteData !== undefined) {
+      if (isFavoriteData.favorites.includes(id)) {
+        setIsFavorite(true);
+      }
+    }
+
+    if (myId === id) {
+      setMyProfile(true);
+    }
+  }, [isFavoriteData, id, myId]);
 
   if (!isVisible) return null;
 
@@ -35,8 +58,10 @@ const ProfileCard = ({ id, name, school, score, isVisible, onClose }) => {
     }
   }
 
-  const handleGoToProfile = () => {
-    navigate(`/profile/${id}`);
+  const handleFavorite = async (e) => {
+    e.preventDefault();
+    setIsFavorite((prevState) => !prevState);
+    await updateUserInfo({ id: myId, favorite: id });
   };
 
   const content = (
@@ -54,6 +79,21 @@ const ProfileCard = ({ id, name, school, score, isVisible, onClose }) => {
           <AiOutlineClose className="cursor-pointer text-3xl text-green-primary hover:text-green-secondary" />
           <span className="sr-only">Close modal</span>
         </button>
+        {!myProfile ? (
+          <div class="absolute top-12 right-3">
+            {isFavorite ? (
+              <FaStar
+                className="cursor-pointer text-2xl text-[#DBAC34]/80"
+                onClick={handleFavorite}
+              />
+            ) : (
+              <FaRegStar
+                className="cursor-pointer text-2xl text-light-primary"
+                onClick={handleFavorite}
+              />
+            )}
+          </div>
+        ) : null}
         <div className="p-4 md:p-5 text-center font-Audiowide">
           <h3 className="mb-5 text-3xl font-normal text-light-primary">
             Profile Details
@@ -92,13 +132,13 @@ const ProfileCard = ({ id, name, school, score, isVisible, onClose }) => {
                 data={vrData}
               />
             </div>
-            <button
-              type="button"
+            <Link
+              reloadDocument
               className="mt-4 text-white bg-green-primary hover:bg-green-secondary font-medium font-Audiowide rounded-full text-md inline-flex items-center px-6 py-2 text-center"
-              onClick={handleGoToProfile}
+              to={`/profile/${id}`}
             >
               Go To Profile
-            </button>
+            </Link>
           </div>
         </div>
       </div>

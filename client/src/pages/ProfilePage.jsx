@@ -16,6 +16,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import {
   useUpdateUserInfoMutation,
   useGetUserByIdQuery,
+  useGetUserFavoritesQuery,
 } from "../hooks/users/userApiSlice";
 import {
   useGetVRScoreQuery,
@@ -23,14 +24,16 @@ import {
   useGetQBxRScoreQuery,
 } from "../hooks/users/scoreApiSlice";
 import { FiEdit } from "react-icons/fi";
+import { FaRegStar, FaStar } from "react-icons/fa6";
 
 const ProfilePage = () => {
   const [showBlur, setShowBlur] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [status, setStatus] = useState(true);
-  const [userId, setUserId] = useState(null);
   const [myProfile, setMyProfile] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const { id } = useParams();
   const myId = useSelector(selectCurrentId);
@@ -42,10 +45,6 @@ const ProfilePage = () => {
       setUserId(myId);
       setMyProfile(true);
     }
-
-    console.log("id: ", id);
-    console.log("myId: ", myId);
-    console.log(myProfile);
   }, [id, myId]);
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
@@ -55,36 +54,50 @@ const ProfilePage = () => {
     error,
     isLoading,
   } = useGetUserByIdQuery(userId, {
-    pollingInterval: 60000,
     refetchOnMountOrArgChange: true,
     refetchOnFocus: true,
+    skip: !userId,
   });
 
   const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(
     userId,
     {
-      pollingInterval: 60000,
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
+      skip: !userId,
     }
   );
   const { data: webData, isLoading: isLoadingWebScore } = useGetWebScoreQuery(
     userId,
     {
-      pollingInterval: 60000,
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
+      skip: !userId,
     }
   );
 
   const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
     userId,
     {
-      pollingInterval: 60000,
       refetchOnMountOrArgChange: true,
       refetchOnFocus: true,
+      skip: !userId,
     }
   );
+
+  const { data: isFavoriteData, isLoading: isLoadingFavoriteData } =
+    useGetUserFavoritesQuery(myId, {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    });
+
+  useEffect(() => {
+    if (!isLoadingFavoriteData && isFavoriteData !== undefined) {
+      if (isFavoriteData.favorites.includes(id)) {
+        setIsFavorite(true);
+      }
+    }
+  }, [isFavoriteData, id]);
 
   function checkData() {
     if (
@@ -159,6 +172,13 @@ const ProfilePage = () => {
     await updateUserInfo({ id: user.id, status: str2bool(e.target.value) });
   };
 
+  const handleFavorite = async (e) => {
+    e.preventDefault();
+    setIsFavorite((prevState) => !prevState);
+    await updateUserInfo({ id: myId, favorite: id });
+    window.location.reload();
+  };
+
   let content = null;
 
   if (error) {
@@ -175,7 +195,7 @@ const ProfilePage = () => {
         </Link>
       </div>
     );
-  } else if (isLoading) {
+  } else if (isLoading || !user) {
     content = <p className="text-light-primary font-Audiowide">Loading...</p>;
   } else {
     content = (
@@ -196,7 +216,22 @@ const ProfilePage = () => {
             currentPage="profile"
           />
           <div class="mx-auto flex flex-col md:flex-row my-5 p-5">
-            <div class="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-green-primary rounded-lg text-center font-Audiowide">
+            <div class="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-green-primary rounded-lg text-center font-Audiowide relative">
+              {!myProfile ? (
+                <div class="absolute top-3 right-3">
+                  {isFavorite ? (
+                    <FaStar
+                      className="cursor-pointer text-2xl text-[#DBAC34]/80"
+                      onClick={handleFavorite}
+                    />
+                  ) : (
+                    <FaRegStar
+                      className="cursor-pointer text-2xl text-light-primary"
+                      onClick={handleFavorite}
+                    />
+                  )}
+                </div>
+              ) : null}
               <div class="image overflow-hidden p-3">
                 <div className="h-60 w-60 text-light-primary bg-green-primary border border-light-primary rounded-full inline-flex items-center justify-center text-md md:text-4xl">
                   {getInitials(`${user?.firstname} ${user?.lastname}`)}
