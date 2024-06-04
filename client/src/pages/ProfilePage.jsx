@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
@@ -7,11 +7,12 @@ import EditProfileCard from "../components/EditProfileCard";
 import { classNames } from "../utils/utils";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { selectCurrentId } from "../hooks/auth/authSlice";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
-import { format } from "date-fns";
+import { differenceInYears } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import {
   useUpdateUserInfoMutation,
   useGetUserByIdQuery,
@@ -19,6 +20,7 @@ import {
 import {
   useGetVRScoreQuery,
   useGetWebScoreQuery,
+  useGetQBxRScoreQuery,
 } from "../hooks/users/scoreApiSlice";
 import { FiEdit } from "react-icons/fi";
 
@@ -27,6 +29,24 @@ const ProfilePage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [status, setStatus] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [myProfile, setMyProfile] = useState(false);
+
+  const { id } = useParams();
+  const myId = useSelector(selectCurrentId);
+
+  useEffect(() => {
+    if (id !== undefined && id !== myId) {
+      setUserId(id);
+    } else {
+      setUserId(myId);
+      setMyProfile(true);
+    }
+
+    console.log("id: ", id);
+    console.log("myId: ", myId);
+    console.log(myProfile);
+  }, [id, myId]);
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
 
@@ -34,14 +54,14 @@ const ProfilePage = () => {
     data: user,
     error,
     isLoading,
-  } = useGetUserByIdQuery(useSelector(selectCurrentId), {
+  } = useGetUserByIdQuery(userId, {
     pollingInterval: 60000,
     refetchOnMountOrArgChange: true,
     refetchOnFocus: true,
   });
 
   const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(
-    useSelector(selectCurrentId),
+    userId,
     {
       pollingInterval: 60000,
       refetchOnMountOrArgChange: true,
@@ -49,7 +69,16 @@ const ProfilePage = () => {
     }
   );
   const { data: webData, isLoading: isLoadingWebScore } = useGetWebScoreQuery(
-    useSelector(selectCurrentId),
+    userId,
+    {
+      pollingInterval: 60000,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    }
+  );
+
+  const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
+    userId,
     {
       pollingInterval: 60000,
       refetchOnMountOrArgChange: true,
@@ -90,25 +119,10 @@ const ProfilePage = () => {
     return initials;
   }
 
-  function getAge(birthday) {
-    const today = new Date();
-    const birthDate = new Date(birthday);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
+  function getAge(dob) {
+    const date = new Date(dob);
+    const age = differenceInYears(new Date(), date);
     return age;
-  }
-
-  function getQBxRScore() {
-    var webScores = webData.filter((item) => item.score !== null);
-    var vrScores = vrData.filter((item) => item.score !== null);
-
-    var webSum = webScores.reduce((acc, item) => acc + item.score, 0);
-    var vrSum = vrScores.reduce((acc, item) => acc + item.score, 0);
-
-    return Math.round((webSum + vrSum) / (webScores.length + vrScores.length));
   }
 
   const toggleMenu = () => {
@@ -205,23 +219,34 @@ const ProfilePage = () => {
                 <li class="flex items-center py-3">
                   <span>Status</span>
                   <span class="ml-auto">
-                    <select
-                      className={classNames(
-                        user.status && status
-                          ? "bg-green-primary"
-                          : "bg-red-600",
-                        "text-light-primary py-1 px-2 rounded text-sm"
-                      )}
-                      onChange={handleStatusChange}
-                    >
-                      {user.status && status ? (
-                        <option selected>Active</option>
-                      ) : (
-                        <option selected>Inactive</option>
-                      )}
-                      <option value={true}>Active</option>
-                      <option value={false}>Inactive</option>
-                    </select>
+                    {myProfile ? (
+                      <select
+                        className={classNames(
+                          user.status && status
+                            ? "bg-green-primary"
+                            : "bg-red-600",
+                          "text-light-primary py-1 px-2 rounded text-sm"
+                        )}
+                        onChange={handleStatusChange}
+                      >
+                        {user.status && status ? (
+                          <option selected>Active</option>
+                        ) : (
+                          <option selected>Inactive</option>
+                        )}
+                        <option value={true}>Active</option>
+                        <option value={false}>Inactive</option>
+                      </select>
+                    ) : (
+                      <div
+                        className={classNames(
+                          user.status ? "bg-green-primary" : "bg-red-600",
+                          "text-light-primary py-1 px-2 rounded text-sm"
+                        )}
+                      >
+                        {user.status ? "Active" : "Inactive"}
+                      </div>
+                    )}
                   </span>
                 </li>
                 <li class="flex items-center py-3">
@@ -243,10 +268,12 @@ const ProfilePage = () => {
                   <div class="flex justify-center text-center space-x-2 font-semibold text-light-primary">
                     <span class="tracking-wide text-3xl">About</span>
                   </div>
-                  <FiEdit
-                    className="cursor-pointer text-xl text-light-primary hover:text-green-primary absolute top-0 right-0"
-                    onClick={handleEditProfile}
-                  />
+                  {myProfile ? (
+                    <FiEdit
+                      className="cursor-pointer text-xl text-light-primary hover:text-green-primary absolute top-0 right-0"
+                      onClick={handleEditProfile}
+                    />
+                  ) : null}
                 </div>
                 <div class="text-light-secondary">
                   <div class="grid md:grid-cols-2 text-lg">
@@ -279,7 +306,11 @@ const ProfilePage = () => {
                       <div class="px-2 py-2 font-semibold">Birthday</div>
                       {user?.birthday !== undefined ? (
                         <div class="px-2 py-2">
-                          {format(new Date(user.birthday), "PP")}
+                          {formatInTimeZone(
+                            new Date(user.birthday),
+                            "UTC",
+                            "PP"
+                          )}
                         </div>
                       ) : (
                         <div class="px-2 py-2">N/A</div>
@@ -296,21 +327,18 @@ const ProfilePage = () => {
                   <h1 className="text-3xl font-bold text-light-primary e m-2">
                     Your QBxR Score
                   </h1>
-                  {webData !== undefined &&
-                  webData?.length !== 0 &&
-                  vrData !== undefined &&
-                  vrData?.length !== 0 ? (
+                  {qbxrData?.qbxr_score !== undefined ? (
                     <SkeletonTheme
                       baseColor="#0C0C0C"
                       highlightColor="#AAAAAA"
                       duration={1.5}
                       borderRadius="0.5rem"
                     >
-                      {isLoadingWebScore || isLoadingVRScore ? (
+                      {isLoadingQBxRData ? (
                         <Skeleton width={75} height={75} />
                       ) : (
                         <p className="mx-5 text-5xl text-green-primary">
-                          {getQBxRScore()}
+                          {qbxrData.qbxr_score}
                         </p>
                       )}
                     </SkeletonTheme>
@@ -335,24 +363,19 @@ const ProfilePage = () => {
                       isLoading={isLoadingWebScore}
                       data={webData}
                     />
-                    {webData === undefined || webData?.length === 0 ? (
+                    {myProfile ? (
                       <Link
                         to="/web"
                         className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
                       >
-                        Take The Web Test
+                        {webData === undefined || webData?.length === 0
+                          ? "Take The Web Test"
+                          : "Retake The Web Test"}
                       </Link>
-                    ) : (
-                      <Link
-                        to="/web"
-                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
-                      >
-                        Retake The Web Test
-                      </Link>
-                    )}
+                    ) : null}
                   </div>
                   <div class="my-4 md:my-0"></div>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col justify-center">
                     <ScoreCard
                       title={"Your VR Test Scores"}
                       errMessage={"Take The VR Test"}
@@ -360,21 +383,16 @@ const ProfilePage = () => {
                       isLoading={isLoadingVRScore}
                       data={vrData}
                     />
-                    {vrData === undefined || vrData?.length === 0 ? (
+                    {myProfile ? (
                       <Link
                         to="/vr"
-                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
+                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center w-full"
                       >
-                        Take The VR Test
+                        {vrData === undefined || vrData?.length === 0
+                          ? "Take The VR Test"
+                          : "Retake The VR Test"}
                       </Link>
-                    ) : (
-                      <Link
-                        to="/vr"
-                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
-                      >
-                        Retake The VR Test
-                      </Link>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               </div>

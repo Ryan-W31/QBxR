@@ -19,17 +19,19 @@ const EditProfileCard = ({ isVisible, user, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validator.isEmail(email) && isPossiblePhoneNumber(number)) {
-      await updateUserInfo({
-        id: user.id,
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        phone_number: number,
-        school_organization: schoolOrg,
-        birthday: new Date(birthday),
-        bio: bio,
-      });
+    if (number === undefined || isPossiblePhoneNumber(number)) {
+      if (validator.isEmail(email)) {
+        await updateUserInfo({
+          id: user.id,
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          phone_number: number,
+          school_organization: schoolOrg,
+          birthday: new Date(birthday),
+          bio: bio,
+        });
+      }
       onClose();
       window.location.reload();
     }

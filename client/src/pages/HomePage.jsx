@@ -6,6 +6,7 @@ import ScoreCard from "../components/ScoreCard";
 import {
   useGetVRScoreQuery,
   useGetWebScoreQuery,
+  useGetQBxRScoreQuery,
 } from "../hooks/users/scoreApiSlice";
 import { useSelector } from "react-redux";
 import { selectCurrentId } from "../hooks/auth/authSlice";
@@ -30,6 +31,12 @@ const HomePage = () => {
       refetchOnFocus: true,
     }
   );
+  const { data: qbxrData, isLoading: isLoadingQBxRScore } =
+    useGetQBxRScoreQuery(useSelector(selectCurrentId), {
+      pollingInterval: 60000,
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+    });
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
@@ -60,16 +67,6 @@ const HomePage = () => {
     }
   }
 
-  function getQBxRScore() {
-    var webScores = webData.filter((item) => item.score !== null);
-    var vrScores = vrData.filter((item) => item.score !== null);
-
-    var webSum = webScores.reduce((acc, item) => acc + item.score, 0);
-    var vrSum = vrScores.reduce((acc, item) => acc + item.score, 0);
-
-    return Math.round((webSum + vrSum) / (webScores.length + vrScores.length));
-  }
-
   const content = (
     <div>
       <ScrollToTop showMenu={showMenu} />
@@ -94,20 +91,17 @@ const HomePage = () => {
             </h1>
             <div className="text-light-primary m-10 text-4xl">
               <p className="text-light-secondary">Your QBxR Score:</p>
-              {webData !== undefined &&
-              webData?.length !== 0 &&
-              vrData !== undefined &&
-              vrData?.length !== 0 ? (
+              {qbxrData?.qbxr_score !== undefined ? (
                 <SkeletonTheme
                   baseColor="#0C0C0C"
                   highlightColor="#AAAAAA"
                   duration={1.5}
                   borderRadius="0.5rem"
                 >
-                  {isLoadingWebScore || isLoadingVRScore ? (
+                  {isLoadingQBxRScore ? (
                     <Skeleton width={75} height={75} />
                   ) : (
-                    <p className="m-4 text-3xl">{getQBxRScore()}</p>
+                    <p className="m-4 text-3xl">{qbxrData.qbxr_score}</p>
                   )}
                 </SkeletonTheme>
               ) : (

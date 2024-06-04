@@ -6,14 +6,14 @@ import ScrollToTop from "../components/ScrollToTop";
 import LeaderboardCard from "../components/LeaderboardCard";
 import ProfileCard from "../components/ProfileCard";
 import { useGetLeaderboardQuery } from "../hooks/users/userApiSlice";
-import { SkeletonTheme } from "react-loading-skeleton";
+import { useGetQBxRScoreQuery } from "../hooks/users/scoreApiSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "../hooks/auth/authSlice";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const LeaderboardPage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showBlur, setShowBlur] = useState(false);
-  const [hasWebData, setHasWebData] = useState(false);
-  const [hasVRData, setHasVRData] = useState(false);
-  const [hasRank, setHasRank] = useState(false);
   const [showProfile, setShowProfile] = useState(null);
   const [visibleRows, setVisibleRows] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
@@ -29,6 +29,16 @@ const LeaderboardPage = () => {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
+  const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
+    useSelector(selectCurrentId),
+    {
+      pollingInterval: 60000,
+      refetchOnFocus: true,
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  console.log("data: ", qbxrData);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,29 +63,12 @@ const LeaderboardPage = () => {
   const handleRowClick = (profile) => {
     setShowProfile(profile);
     toggleBlur();
-    console.log(profile);
   };
 
   const handleClose = () => {
     setShowProfile(null);
     toggleBlur();
   };
-
-  const toggleRank = () => {
-    if (hasWebData && hasVRData) {
-      setHasRank(true);
-    }
-  };
-
-  function checkData() {
-    if (!hasWebData && !hasVRData) {
-      return <p className="text-lg">Take the Web and VR Tests</p>;
-    } else if (!hasWebData) {
-      return <p className="text-lg">Take the Web Test</p>;
-    } else {
-      return <p className="text-lg">Take the VR Test</p>;
-    }
-  }
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
@@ -84,10 +77,6 @@ const LeaderboardPage = () => {
 
   const toggleBlur = () => {
     setShowBlur((prevState) => !prevState);
-  };
-
-  window.onload = function () {
-    toggleRank();
   };
 
   let content;
@@ -104,9 +93,8 @@ const LeaderboardPage = () => {
   }
 
   if (isSuccess) {
-    console.log(users.length);
     const tableContent =
-      users?.length !== 0
+      users !== undefined && users?.length !== 0
         ? users.map((user) => (
             <LeaderboardCard
               key={user.id}
@@ -144,52 +132,75 @@ const LeaderboardPage = () => {
                 <h1 className="text-6xl font-bold font-Audiowide text-green-primary text-center mb-4">
                   Leaderboard
                 </h1>
-                {hasRank ? (
-                  <div className="font-bold font-Audiowide text-light-primary text-center">
-                    <h2 className="text-2xl mb-2">Your Rank: 1</h2>
-                    <p className="text-lg">Your Score: 74</p>
+                <div>
+                  {qbxrData !== undefined ? (
+                    <SkeletonTheme
+                      baseColor="#0C0C0C"
+                      highlightColor="#AAAAAA"
+                      duration={1.5}
+                      borderRadius="0.5rem"
+                    >
+                      {isLoadingQBxRData ? (
+                        <div className="font-bold font-Audiowide text-light-primary text-center">
+                          <Skeleton width={100} height={50} />
+                          <Skeleton width={100} height={50} />
+                        </div>
+                      ) : (
+                        <div className="font-bold font-Audiowide text-light-primary text-center">
+                          <h2 className="text-2xl mb-2">
+                            Your Rank: {qbxrData.rank}
+                          </h2>
+                          <p className="text-lg mb-4">
+                            Your Score: {qbxrData.qbxr_score}
+                          </p>
+                        </div>
+                      )}
+                    </SkeletonTheme>
+                  ) : (
+                    <div className="font-bold font-Audiowide text-light-primary text-center">
+                      <h2 className="text-2xl mb-2">Your Rank: No Data</h2>
+                      <p className="text-lg mb-4">
+                        Take The Evalutation Tests On Your Profile
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide">
+                    <SkeletonTheme
+                      baseColor="#0C0C0C"
+                      highlightColor="#AAAAAA77"
+                      borderRadius="0.5rem"
+                      duration={1.5}
+                    >
+                      <table className="table-auto w-full text-sm text-center text-light-primary">
+                        <thead className="text-xs text-light-primary uppercase bg-dark-secondary border-b">
+                          <tr>
+                            <th scope="col" className="py-3">
+                              Rank
+                            </th>
+                            <th scope="col" className="py-3">
+                              Name
+                            </th>
+                            <th scope="col" className="py-3">
+                              School/Organization
+                            </th>
+                            <th scope="col" className="py-3">
+                              Score
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>{tableContent}</tbody>
+                      </table>
+                    </SkeletonTheme>
                   </div>
-                ) : (
-                  <div className="font-bold font-Audiowide text-light-primary text-center">
-                    <h2 className="text-2xl mb-2">Your Rank: No Data</h2>
-                    {checkData()}
-                  </div>
-                )}
-              </div>
-              <div>
-                <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide">
-                  <SkeletonTheme
-                    baseColor="#0C0C0C"
-                    highlightColor="#AAAAAA77"
-                    borderRadius="0.5rem"
-                    duration={1.5}
-                  >
-                    <table className="table-auto w-full text-sm text-center text-light-primary">
-                      <thead className="text-xs text-light-primary uppercase bg-dark-secondary border-b">
-                        <tr>
-                          <th scope="col" className="py-3">
-                            Rank
-                          </th>
-                          <th scope="col" className="py-3">
-                            Name
-                          </th>
-                          <th scope="col" className="py-3">
-                            School/Organization
-                          </th>
-                          <th scope="col" className="py-3">
-                            Score
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>{tableContent}</tbody>
-                    </table>
-                  </SkeletonTheme>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <ProfileCard
+          id={showProfile?.id}
           name={showProfile?.name}
           school={showProfile?.school}
           score={showProfile?.score}

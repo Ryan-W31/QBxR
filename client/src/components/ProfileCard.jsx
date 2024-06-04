@@ -1,9 +1,20 @@
 import React, { useState } from "react";
 import ScoreCard from "./ScoreCard";
+import {
+  useGetWebScoreQuery,
+  useGetVRScoreQuery,
+} from "../hooks/users/scoreApiSlice";
 import { classNames } from "../utils/utils";
 import { AiOutlineClose } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
-const ProfileCard = ({ name, school, score, isVisible, onClose }) => {
+const ProfileCard = ({ id, name, school, score, isVisible, onClose }) => {
+  const { data: webData, isLoading: isLoadingWebData } =
+    useGetWebScoreQuery(id);
+  const { data: vrData, isLoading: isLoadingVRData } = useGetVRScoreQuery(id);
+
+  const navigate = useNavigate();
+
   if (!isVisible) return null;
 
   function getInitials(name) {
@@ -24,12 +35,9 @@ const ProfileCard = ({ name, school, score, isVisible, onClose }) => {
     }
   }
 
-  const data = [
-    { title: "Reaction Test", score: 35 },
-    { title: "Play Identification", score: 55 },
-    { title: "Defense Reading", score: 75 },
-    { title: "Critical Thinking", score: 95 },
-  ];
+  const handleGoToProfile = () => {
+    navigate(`/profile/${id}`);
+  };
 
   const content = (
     <div
@@ -71,7 +79,8 @@ const ProfileCard = ({ name, school, score, isVisible, onClose }) => {
                 title={"Web Test Scores"}
                 errMessage={"No Web Data"}
                 size=""
-                data={data}
+                isLoading={isLoadingWebData}
+                data={webData}
               />
               <div class="my-4"></div>
 
@@ -79,13 +88,14 @@ const ProfileCard = ({ name, school, score, isVisible, onClose }) => {
                 title={"VR Test Scores"}
                 errMessage={"No VR Data"}
                 size=""
-                data={data}
+                isLoading={isLoadingVRData}
+                data={vrData}
               />
             </div>
             <button
               type="button"
               className="mt-4 text-white bg-green-primary hover:bg-green-secondary font-medium font-Audiowide rounded-full text-md inline-flex items-center px-6 py-2 text-center"
-              onClick={onClose}
+              onClick={handleGoToProfile}
             >
               Go To Profile
             </button>

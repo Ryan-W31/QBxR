@@ -37,38 +37,23 @@ const signUp = async (req, res) => {
 };
 
 const getLeaderboard = async (req, res) => {
-  res.status(200).json({
-    data: [
-      {
-        _id: 1,
-        rank: 1,
-        name: "John Doe",
-        school: "Univeristy of Central Florida",
-        score: 98,
-      },
-      {
-        _id: 2,
-        rank: 2,
-        name: "John Doe",
-        school: "Univeristy of Central Florida",
-        score: 75,
-      },
-      {
-        _id: 3,
-        rank: 3,
-        name: "John Doe",
-        school: "Univeristy of Central Florida",
-        score: 60,
-      },
-      {
-        _id: 4,
-        rank: 4,
-        name: "John Doe",
-        school: "Univeristy of Central Florida",
-        score: 25,
-      },
-    ],
+  const scores = await Score.find().sort({ score: -1 }).limit(50);
+
+  const ids = scores.map((score) => score.user);
+
+  const users = await User.find({ _id: { $in: ids } });
+
+  const data = users.map((user, index) => {
+    return {
+      _id: user._id,
+      rank: index + 1,
+      name: `${user.firstname} ${user.lastname}`,
+      school: user.school_organization,
+      score: scores.find((score) => score.user.equals(user._id)).qbxr_score,
+    };
   });
+
+  res.status(200).json({ data: data });
 };
 
 const getUserById = async (req, res) => {

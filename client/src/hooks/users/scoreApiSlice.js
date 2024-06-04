@@ -73,6 +73,16 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
         return webData;
       },
     }),
+    getQBxRScore: builder.query({
+      query: (id) => `/score/getqbxrscore/${id}`,
+      validateStatus: (response, result) => {
+        return response.status === 200 && !result.isError;
+      },
+      keepUnusedDataFor: 60,
+      transformResponse: (response) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -81,4 +91,5 @@ export const {
   useSetWebScoreMutation,
   useGetVRScoreQuery,
   useGetWebScoreQuery,
+  useGetQBxRScoreQuery,
 } = scoreApiSlice;

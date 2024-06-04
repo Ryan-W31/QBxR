@@ -22,6 +22,24 @@ const setVRScore = async (req, res) => {
     return res.status(404).json({ message: "User not found." });
   }
 
+  if (
+    newScore.web_reaction &&
+    newScore.web_playid &&
+    newScore.web_defense &&
+    newScore.web_crit
+  ) {
+    newScore.qbxr_score =
+      (newScore.web_reaction +
+        newScore.web_playid +
+        newScore.web_defense +
+        newScore.web_crit +
+        newScore.vr_reaction +
+        newScore.vr_playid +
+        newScore.vr_defense +
+        newScore.vr_crit) /
+      8;
+  }
+
   await newScore.save();
 
   res.status(200).json({ message: "VR Score set successfully." });
@@ -49,6 +67,24 @@ const setWebScore = async (req, res) => {
     return res.status(404).json({ message: "User not found." });
   }
 
+  if (
+    newScore.vr_reaction &&
+    newScore.vr_playid &&
+    newScore.vr_defense &&
+    newScore.vr_crit
+  ) {
+    newScore.qbxr_score =
+      (newScore.web_reaction +
+        newScore.web_playid +
+        newScore.web_defense +
+        newScore.web_crit +
+        newScore.vr_reaction +
+        newScore.vr_playid +
+        newScore.vr_defense +
+        newScore.vr_crit) /
+      8;
+  }
+
   await newScore.save();
 
   res.status(200).json({ message: "Web Score set successfully." });
@@ -73,6 +109,7 @@ const getVRScore = async (req, res) => {
 
 const getWebScore = async (req, res) => {
   const id = req.params.id;
+  console.log(id);
 
   const score = await Score.findOne({ user: id });
 
@@ -88,9 +125,31 @@ const getWebScore = async (req, res) => {
   });
 };
 
+const getQBxRScore = async (req, res) => {
+  const id = req.params.id;
+
+  const score = await Score.findOne({ user: id });
+  var rank = null;
+
+  if (score.qbxr_score === undefined) {
+    rank = await Score.where("qbxr_score").gt(0).countDocuments();
+  } else {
+    rank = await Score.where("qbxr_score")
+      .gt(score.qbxr_score)
+      .countDocuments();
+  }
+
+  if (!score) {
+    return res.status(404).json({ message: "User not found." });
+  }
+
+  res.status(200).json({ qbxr_score: score.qbxr_score, rank: rank + 1 });
+};
+
 module.exports = {
   setVRScore,
   setWebScore,
   getVRScore,
   getWebScore,
+  getQBxRScore,
 };

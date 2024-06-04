@@ -9,5 +9,8 @@ router
   .patch(verifyToken, scoresController.setWebScore);
 router.route("/getvrscore/:id").get(verifyToken, scoresController.getVRScore);
 router.route("/getwebscore/:id").get(verifyToken, scoresController.getWebScore);
+router
+  .route("/getqbxrscore/:id")
+  .get(verifyToken, scoresController.getQBxRScore);
 
 module.exports = router;

@@ -8,6 +8,9 @@ const scoreSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
+    qbxr_score: {
+      type: Number,
+    },
     web_reaction: {
       type: Number,
     },

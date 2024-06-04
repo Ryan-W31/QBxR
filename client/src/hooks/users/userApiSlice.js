@@ -22,6 +22,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       keepUnusedDataFor: 60,
       transformResponse: (response) => {
+        if (response.data === undefined) {
+          return [];
+        }
+
         const users = response.data.map((user) => {
           return {
             ...user,

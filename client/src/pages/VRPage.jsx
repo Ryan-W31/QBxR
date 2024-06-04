@@ -41,7 +41,6 @@ const VRPage = () => {
 
     await setVRScore(obj)
       .then((res) => {
-        console.log(res);
         navigate("/profile");
       })
       .catch((err) => {

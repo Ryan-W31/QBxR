@@ -44,7 +44,6 @@ const WebTestPage = () => {
 
     await setWebScore(obj)
       .then((res) => {
-        console.log(res);
         navigate("/profile");
       })
       .catch((err) => {
