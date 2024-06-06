@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+// scoreSchema is used to store the user's scores.
 const scoreSchema = new Schema(
   {
     user: {

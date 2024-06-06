@@ -1,6 +1,7 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { setCredentials, logOut } from "./authSlice";
 
+// Auth API slice. This slice contains the login, refresh, and logout endpoints.
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({

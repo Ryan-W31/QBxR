@@ -8,6 +8,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 const userAdapter = createEntityAdapter({});
 const initialState = userAdapter.getInitialState();
 
+// Async thunk to update the user info and refresh the token
 export const updateUserInfoAndRefresh = createAsyncThunk(
   "user/updateUserInfoAndRefresh",
   async (body, thunkAPI) => {
@@ -28,6 +29,7 @@ export const updateUserInfoAndRefresh = createAsyncThunk(
   }
 );
 
+// User API slice. This slice contains the signUp, getLeaderboard, updateUserInfo, updateUserPassword, getUserById, and getUserFavorites endpoints.
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     signUp: builder.mutation({

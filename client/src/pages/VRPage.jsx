@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateVRScoreAndRefresh } from "../hooks/scores/scoreApiSlice";
 import { selectCurrentId } from "../hooks/auth/authSlice";
 
+// VRPage component. This component displays the VR test page with the Unity WebGL build.
 const VRPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const VRPage = () => {
     },
   });
 
+  // Handle the form submit event. Update the VR test scores and refresh the user data.
   const handleSubmit = async (event) => {
     event.preventDefault();
     const vrScore1 = document.getElementById("vrscore1").value;
@@ -39,6 +41,7 @@ const VRPage = () => {
     navigate("/profile");
   };
 
+  // Return the VRPage component
   return (
     <div className="h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
       <Unity

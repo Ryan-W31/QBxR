@@ -4,6 +4,7 @@ import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 
+// LandingPage component. This component displays the landing page.
 const LandingPage = () => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -11,6 +12,7 @@ const LandingPage = () => {
     setShowMenu(!showMenu);
   };
 
+  // Landing page content
   return (
     <div>
       <ScrollToTop showMenu={showMenu} />

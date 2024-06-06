@@ -10,6 +10,7 @@ const ScoreRouter = require("./routes/score.route");
 const app = express();
 app.use(express.json());
 
+// Allow CORS
 const allowedOrigins = [
   "https://localhost",
   "http://localhost",
@@ -21,6 +22,7 @@ const allowedOrigins = [
   "http://qbxr.net",
 ];
 
+// Set up CORS options
 const corsOptions = {
   origin: function (origin, callback) {
     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
@@ -33,14 +35,17 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 
+// Use CORS
 app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(errorhandler);
 
+// Test route
 app.get("/api/test", (req, res) => {
   res.status(200).send("Hello World");
 });
 
+// Routes
 app.use("/api/user", UserRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/score", ScoreRouter);

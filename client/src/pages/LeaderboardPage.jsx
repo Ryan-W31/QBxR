@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { selectCurrentId, selectCurrentScores } from "../hooks/auth/authSlice";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
+// LeaderboardPage component. This component displays the leaderboard page with the user's rank, name, school, and score.
 const LeaderboardPage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showBlur, setShowBlur] = useState(false);
@@ -33,6 +34,7 @@ const LeaderboardPage = () => {
 
   const qbxrData = useSelector(selectCurrentScores).qbxr;
 
+  // Load more rows when the user scrolls to the bottom of the page
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -48,45 +50,54 @@ const LeaderboardPage = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [totalRows]);
 
+  // Set the total number of rows when the users data changes
   useEffect(() => {
     if (users) {
       setTotalRows(users.length);
     }
   }, [users]);
 
+  // Handle the row click event. Display the profile card for the selected user and blur the background.
   const handleRowClick = (profile) => {
     setShowProfile(profile);
     toggleBlur();
   };
 
+  // Close the profile card and remove the blur effect
   const handleClose = () => {
     setShowProfile(null);
     toggleBlur();
   };
 
+  // Toggle the visibility of the mobile menu
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
     toggleBlur();
   };
 
+  // Toggle the blur effect
   const toggleBlur = () => {
     setShowBlur((prevState) => !prevState);
   };
 
   let content;
 
+  // Display loading message while fetching data
   if (isLoading)
     content = (
       <div className="text-light-primary font-Audiowide">Loading...</div>
     );
 
+  // Display error message if there is an error fetching data
   if (isError) {
     content = (
       <p className="errmsg text-light-primary">{error?.data?.message}</p>
     );
   }
 
+  // Display leaderboard content if the data is successfully fetched
   if (isSuccess) {
+    // Display the leaderboard content
     const tableContent =
       users !== undefined && users?.length !== 0
         ? users.map((user) => (
@@ -99,10 +110,12 @@ const LeaderboardPage = () => {
               onClick={() => handleRowClick(user)}
             />
           ))
-        : [...Array(visibleRows)].map((_, index) => (
+        : // Display skeleton cards while loading data
+          [...Array(visibleRows)].map((_, index) => (
             <LeaderboardCard key={index} skeleton={true} />
           ));
 
+    // Display the leaderboard content
     content = (
       <div>
         <MobileMenu

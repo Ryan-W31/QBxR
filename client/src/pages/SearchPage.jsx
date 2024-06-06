@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { classNames } from "../utils/utils";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
@@ -7,26 +6,31 @@ import SearchCard from "../components/SearchCard";
 import ProfileCard from "../components/ProfileCard";
 import { AiOutlineSearch } from "react-icons/ai";
 
+// SearchPage component. This component displays the search page with a search form and search results.
 const SearchPage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showBlur, setShowBlur] = useState(false);
   const [showProfile, setShowProfile] = useState(null);
 
+  // Toggle the visibility of the mobile menu
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
     toggleBlur();
   };
 
+  // Toggle the blur effect on the background
   const toggleBlur = () => {
     setShowBlur((prevState) => !prevState);
   };
 
+  // Handle the row click event. Display the profile card for the selected user and blur the background.
   const handleRowClick = (profile) => {
     setShowProfile(profile);
     toggleBlur();
     console.log(profile);
   };
 
+  // Close the profile card and remove the blur effect
   const handleClose = () => {
     setShowProfile(null);
     toggleBlur();
@@ -59,6 +63,7 @@ const SearchPage = () => {
     },
   ];
 
+  // Search page content
   const content = (
     <div>
       <MobileMenu

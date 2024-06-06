@@ -12,7 +12,6 @@ import {
 } from "../hooks/auth/authSlice";
 import {
   updateUserInfoAndRefresh,
-  useUpdateUserInfoMutation,
   useGetUserByIdQuery,
 } from "../hooks/users/userApiSlice";
 import {
@@ -28,6 +27,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { FiEdit } from "react-icons/fi";
 import { FaRegStar, FaStar } from "react-icons/fa6";
 
+// ProfilePage component. This component displays the user's profile page with the user's name, school, status, bio, and test scores.
 const ProfilePage = () => {
   const [showBlur, setShowBlur] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
@@ -47,14 +47,14 @@ const ProfilePage = () => {
   const webDataP = primaryUserScores.web;
   const vrDataP = primaryUserScores.vr;
 
+  // Check if the profile is the user's profile
   useEffect(() => {
     if (id !== undefined && id !== myId) {
       setMyProfile(false);
     }
   }, [id, myId]);
 
-  const [updateUserInfo] = useUpdateUserInfoMutation();
-
+  // If not logged in user's profile, get the user data by id
   const {
     data: user,
     error,
@@ -65,6 +65,7 @@ const ProfilePage = () => {
     skip: !id,
   });
 
+  // Get the user's VR and Web test scores
   const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(id, {
     refetchOnMountOrArgChange: true,
     refetchOnFocus: true,
@@ -79,6 +80,7 @@ const ProfilePage = () => {
     }
   );
 
+  // Get the user's QBxR score
   const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
     id,
     {
@@ -88,6 +90,7 @@ const ProfilePage = () => {
     }
   );
 
+  // Check if the user is in the logged in user's favorites
   useEffect(() => {
     if (primaryUser?.favorites !== undefined) {
       if (primaryUser.favorites.includes(id)) {
@@ -96,25 +99,30 @@ const ProfilePage = () => {
     }
   }, [primaryUser, id]);
 
+  // Toggle the mobile menu
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
     toggleBlur();
   };
 
+  // Toggle the blur effect
   const toggleBlur = () => {
     setShowBlur((prevState) => !prevState);
   };
 
+  // Toggle the edit profile card
   const handleEditProfile = () => {
     setShowEditProfile((prevState) => !prevState);
     toggleBlur();
   };
 
+  // Close the edit profile card
   const handleClose = () => {
     setShowEditProfile(false);
     toggleBlur();
   };
 
+  // Handle the status change event
   const handleStatusChange = async (e) => {
     e.preventDefault();
 
@@ -132,6 +140,7 @@ const ProfilePage = () => {
     ).unwrap();
   };
 
+  // Handle the favorite event
   const handleFavorite = async (e) => {
     e.preventDefault();
     setIsFavorite((prevState) => !prevState);
@@ -142,6 +151,7 @@ const ProfilePage = () => {
 
   let content = null;
 
+  // Display the user's profile page
   if (error) {
     content = (
       <div className="flex flex-row jusitfy-center">

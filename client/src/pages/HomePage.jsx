@@ -8,6 +8,7 @@ import { checkData } from "../utils/utils";
 import { useSelector } from "react-redux";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
+// HomePage component. This component displays the home page with the user's QBxR score, web test scores, and VR test scores.
 const HomePage = () => {
   const [showMenu, setShowMenu] = useState(false);
 
@@ -16,10 +17,12 @@ const HomePage = () => {
   const webData = data.web;
   const vrData = data.vr;
 
+  // Toggle the visibility of the mobile menu
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
   };
 
+  // Home page content
   const content = (
     <div>
       <ScrollToTop showMenu={showMenu} />

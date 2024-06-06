@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Slice for authentication. Contains the token, id, user, and scores.
 const authSlice = createSlice({
   name: "auth",
   initialState: {

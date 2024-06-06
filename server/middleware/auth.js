@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
+// verifyToken is used to verify the user's access token.
+// The access token is used to authenticate the user.
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
 

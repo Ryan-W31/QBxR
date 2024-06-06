@@ -4,6 +4,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 const scoreAdapter = createEntityAdapter({});
 const initialState = scoreAdapter.getInitialState();
 
+// Async thunk to update the VR score and refresh the token
 export const updateVRScoreAndRefresh = createAsyncThunk(
   "user/updateVRScoreAndRefresh",
   async (body, thunkAPI) => {
@@ -24,6 +25,7 @@ export const updateVRScoreAndRefresh = createAsyncThunk(
   }
 );
 
+// Async thunk to update the web score and refresh the token
 export const updateWebScoreAndRefresh = createAsyncThunk(
   "user/updateWebScoreAndRefresh",
   async (body, thunkAPI) => {
@@ -44,6 +46,7 @@ export const updateWebScoreAndRefresh = createAsyncThunk(
   }
 );
 
+// Score API slice. This slice contains the getScores, setVRScore, setWebScore, getVRScore, getWebScore, and getQBxRScore endpoints.
 export const scoreApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getScores: builder.query({

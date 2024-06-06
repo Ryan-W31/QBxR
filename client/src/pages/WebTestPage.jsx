@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentId } from "../hooks/auth/authSlice";
 import { updateWebScoreAndRefresh } from "../hooks/scores/scoreApiSlice";
 
+// WebTestPage component. This component displays the web test page with the Unity WebGL build.
 const WebTestPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const WebTestPage = () => {
     },
   });
 
+  // Handle the form submit event. Update the web test scores and refresh the user data.
   const handleSubmit = async (event) => {
     event.preventDefault();
     const webScore1 = document.getElementById("webscore1").value;
@@ -39,6 +41,7 @@ const WebTestPage = () => {
     navigate("/profile");
   };
 
+  // Return the WebTestPage component
   return (
     <div className="h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
       <Unity

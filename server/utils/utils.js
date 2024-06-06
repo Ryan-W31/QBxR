@@ -1,3 +1,6 @@
+// Utility functions for formatting data
+
+// formatWebScores is used to format the web scores.
 function formatWebScores(webData) {
   web = [];
   if (webData?.web_reaction)
@@ -24,6 +27,7 @@ function formatWebScores(webData) {
   return web;
 }
 
+// formatVRScores is used to format the VR scores.
 function formatVRScores(vrData) {
   vr = [];
   if (vrData?.vr_reaction)

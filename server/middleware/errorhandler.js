@@ -1,3 +1,4 @@
+// Middleware to handle errors
 const errorhandler = (err, req, res, next) => {
   console.log(err.stack);
 
@@ -8,4 +9,4 @@ const errorhandler = (err, req, res, next) => {
   res.json({ message: err.message });
 };
 
-module.exports = errorhandler;
+module.exports = { errorhandler };

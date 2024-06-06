@@ -1,5 +1,6 @@
 import React from "react";
 
+// SearchCard component. This component displays a search card with a name, school, and score.
 const SearchCard = ({ name, school, score, onClick }) => {
   return (
     <tr

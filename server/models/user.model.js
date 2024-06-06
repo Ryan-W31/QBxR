@@ -3,6 +3,7 @@ const crypto = require("crypto");
 
 const Schema = mongoose.Schema;
 
+// userSchema is used to store the user's information.
 const userSchema = new Schema(
   {
     role: {

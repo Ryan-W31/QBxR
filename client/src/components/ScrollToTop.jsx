@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { BiArrowFromBottom } from "react-icons/bi";
 import { classNames, scrollToTop } from "../utils/utils";
 
+// ScrollToTop component. This component displays a button that scrolls to the top of the page when clicked.
 const ScrollToTop = ({ showMenu }) => {
   const [isScrollToTopVisible, setIsScrollToTopVisible] = useState(false);
 
+  // Toggle the visibility of the scroll to top button based on the scroll position
   const toggleScrollToTop = () => {
     if (window.scrollY > 300) {
       setIsScrollToTopVisible(true);
@@ -13,6 +15,7 @@ const ScrollToTop = ({ showMenu }) => {
     }
   };
 
+  // Add an event listener to the window to toggle the visibility of the scroll to top button
   useEffect(() => {
     window.addEventListener("scroll", toggleScrollToTop);
 

@@ -1,8 +1,11 @@
+// user.controller is used to handle the setting and getting of the user's information.
 const User = require("../models/user.model");
 const Score = require("../models/score.model");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+// signUp is used to create a new user account.
+// The user's information is stored in the database.
 const signUp = async (req, res) => {
   const { role, firstname, lastname, email, password, school_organization } =
     req.body;
@@ -37,6 +40,8 @@ const signUp = async (req, res) => {
   res.status(201).json({ message: "User created" });
 };
 
+// getLeaderboard is used to get the top 50 users with the highest scores.
+// The users' information is stored in the database.
 const getLeaderboard = async (req, res) => {
   const scores = await Score.find().sort({ score: -1 }).limit(50);
 
@@ -57,6 +62,8 @@ const getLeaderboard = async (req, res) => {
   res.status(200).json({ data: data });
 };
 
+// getUserById is used to get the user's information by their ID.
+// The user's information is retrieved from the database and returned to the client.
 const getUserById = async (req, res) => {
   const id = req.params.id;
 
@@ -85,6 +92,8 @@ const getUserById = async (req, res) => {
   });
 };
 
+// updateUserInfo is used to update the user's information.
+// The user's information is updated in the database.
 const updateUserInfo = async (req, res) => {
   const {
     firstname,
@@ -154,6 +163,8 @@ const updateUserInfo = async (req, res) => {
   }
 };
 
+// updateUserPassword is used to update the user's password.
+// The user's password is updated in the database.
 const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const id = req.params.id;
