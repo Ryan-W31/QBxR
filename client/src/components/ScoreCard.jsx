@@ -3,7 +3,7 @@ import ProgressBar from "./ProgressBar";
 import { classNames } from "../utils/utils";
 import { SkeletonTheme } from "react-loading-skeleton";
 
-const ScoreCard = ({ title, errMessage, size, isLoading, data }) => {
+const ScoreCard = ({ title, errMessage, size, isLoading = false, data }) => {
   const content = (
     <div className="flex flex-col text-light-secondary bg-dark-secondary rounded-lg p-4 border-2 border-green-primary">
       <p

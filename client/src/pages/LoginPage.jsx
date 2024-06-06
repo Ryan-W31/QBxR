@@ -40,8 +40,13 @@ const LoginPage = () => {
     event.preventDefault();
 
     try {
-      const { aToken, id } = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ aToken: aToken, id: id }));
+      const { aToken, id, user, scores } = await login({
+        email,
+        password,
+      }).unwrap();
+      dispatch(
+        setCredentials({ aToken: aToken, id: id, user: user, scores: scores })
+      );
       setEmail("");
       setPassword("");
       navigate("/home");

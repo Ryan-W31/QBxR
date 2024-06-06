@@ -1,8 +1,32 @@
-import { createSelector, createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  createSelector,
+  createEntityAdapter,
+  createAsyncThunk,
+} from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
 
 const userAdapter = createEntityAdapter({});
 const initialState = userAdapter.getInitialState();
+
+export const updateUserInfoAndRefresh = createAsyncThunk(
+  "user/updateUserInfoAndRefresh",
+  async (body, thunkAPI) => {
+    try {
+      const updateResult = await thunkAPI
+        .dispatch(apiSlice.endpoints.updateUserInfo.initiate(body))
+        .unwrap();
+
+      const refreshResult = await thunkAPI
+        .dispatch(apiSlice.endpoints.refresh.initiate())
+        .unwrap();
+
+      console.log("User info updated and token refreshed");
+    } catch (error) {
+      console.error("Error updating user info and refreshing token:", error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -41,6 +65,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: body,
       }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          console.log("User info updated");
+        } catch (err) {
+          console.error("Error updating user info:", err);
+        }
+      },
     }),
     updateUserPassword: builder.mutation({
       query: (body) => ({

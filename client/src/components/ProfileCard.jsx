@@ -1,34 +1,41 @@
 import React, { useState, useEffect } from "react";
 import ScoreCard from "./ScoreCard";
+import { classNames, getInitials, scoreColor } from "../utils/utils";
+import { AiOutlineClose } from "react-icons/ai";
+import { Link } from "react-router-dom";
+import { updateUserInfoAndRefresh } from "../hooks/users/userApiSlice";
+import { FaRegStar, FaStar } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { selectCurrentUser } from "../hooks/auth/authSlice";
 import {
   useGetWebScoreQuery,
   useGetVRScoreQuery,
-} from "../hooks/users/scoreApiSlice";
-import { classNames } from "../utils/utils";
-import { AiOutlineClose } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import {
-  useUpdateUserInfoMutation,
-  useGetUserFavoritesQuery,
-} from "../hooks/users/userApiSlice";
-import { FaRegStar, FaStar } from "react-icons/fa";
+} from "../hooks/scores/scoreApiSlice";
 
 const ProfileCard = ({ myId, id, name, school, score, isVisible, onClose }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [myProfile, setMyProfile] = useState(false);
-  const [updateUserInfo] = useUpdateUserInfoMutation();
+  const dispatch = useDispatch();
 
-  const { data: webData, isLoading: isLoadingWebData } =
-    useGetWebScoreQuery(id);
+  const { data: webData, isLoading: isLoadingWebData } = useGetWebScoreQuery(
+    id,
+    {
+      refetchOnMountOrArgChange: true,
+      refetchOnFocus: true,
+      skip: !id,
+    }
+  );
+  const { data: vrData, isLoading: isLoadingVRData } = useGetVRScoreQuery(id, {
+    refetchOnMountOrArgChange: true,
+    refetchOnFocus: true,
+    skip: !id,
+  });
 
-  const { data: vrData, isLoading: isLoadingVRData } = useGetVRScoreQuery(id);
-
-  const { data: isFavoriteData, isLoading: isLoadingFavoriteData } =
-    useGetUserFavoritesQuery(myId);
+  const user = useSelector(selectCurrentUser);
 
   useEffect(() => {
-    if (!isLoadingFavoriteData && isFavoriteData !== undefined) {
-      if (isFavoriteData.favorites.includes(id)) {
+    if (user?.favorites !== undefined) {
+      if (user.favorites.includes(id)) {
         setIsFavorite(true);
       }
     }
@@ -36,32 +43,16 @@ const ProfileCard = ({ myId, id, name, school, score, isVisible, onClose }) => {
     if (myId === id) {
       setMyProfile(true);
     }
-  }, [isFavoriteData, id, myId]);
+  }, [user, id, myId]);
 
   if (!isVisible) return null;
-
-  function getInitials(name) {
-    let initials = name.match(/\b\w/g) || [];
-    initials = (
-      (initials.shift() || "") + (initials.pop() || "")
-    ).toUpperCase();
-    return initials;
-  }
-
-  function scoreColor(scoreColor) {
-    if (scoreColor < 50) {
-      return "text-red-500";
-    } else if (scoreColor < 70) {
-      return "text-yellow-600";
-    } else {
-      return "text-green-primary";
-    }
-  }
 
   const handleFavorite = async (e) => {
     e.preventDefault();
     setIsFavorite((prevState) => !prevState);
-    await updateUserInfo({ id: myId, favorite: id });
+    await dispatch(
+      updateUserInfoAndRefresh({ id: myId, favorite: id })
+    ).unwrap();
   };
 
   const content = (

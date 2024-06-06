@@ -1,27 +1,8 @@
 import React from "react";
 import Skeleton from "react-loading-skeleton";
+import { scoreColor, barColor } from "../utils/utils";
 
 const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
-  function textColor(scoreColor) {
-    if (scoreColor < 50) {
-      return "text-red-500";
-    } else if (scoreColor < 70) {
-      return "text-yellow-600";
-    } else {
-      return "text-green-primary";
-    }
-  }
-
-  function barColor(scoreColor) {
-    if (scoreColor < 50) {
-      return "bg-red-500";
-    } else if (scoreColor < 70) {
-      return "bg-yellow-600";
-    } else {
-      return "bg-green-primary";
-    }
-  }
-
   let content = skeleton ? (
     <div className="mb-10">
       <div class="flex justify-between mb-1">
@@ -37,10 +18,10 @@ const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
   ) : (
     <div className="mb-10">
       <div class="flex justify-between mb-1">
-        <span className={`text-base font-medium ${textColor(score)}`}>
+        <span className={`text-base font-medium ${scoreColor(score)}`}>
           {title}
         </span>
-        <span className={`text-sm font-medium ${textColor(score)}`}>
+        <span className={`text-sm font-medium ${scoreColor(score)}`}>
           {score}
         </span>
       </div>

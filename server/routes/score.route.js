@@ -12,5 +12,6 @@ router.route("/getwebscore/:id").get(verifyToken, scoresController.getWebScore);
 router
   .route("/getqbxrscore/:id")
   .get(verifyToken, scoresController.getQBxRScore);
+router.route("/:id").get(verifyToken, scoresController.getAllScores);
 
 module.exports = router;

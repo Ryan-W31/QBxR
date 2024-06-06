@@ -1,19 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { useSelector } from "react-redux";
-import { useGetUserByIdQuery } from "../hooks/users/userApiSlice";
-import { useSetVRScoreMutation } from "../hooks/users/scoreApiSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { updateVRScoreAndRefresh } from "../hooks/scores/scoreApiSlice";
 import { selectCurrentId } from "../hooks/auth/authSlice";
 
 const VRPage = () => {
   const navigate = useNavigate();
-  const [setVRScore] = useSetVRScoreMutation();
-  const { data: user } = useGetUserByIdQuery(useSelector(selectCurrentId), {
-    pollingInterval: 60000,
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
-  });
+  const dispatch = useDispatch();
+
+  const id = useSelector(selectCurrentId);
   const { unityProvider } = useUnityContext({
     loaderUrl: "/Build/vrtest2.loader.js",
     dataUrl: "/Build/vrtest2.data",
@@ -32,20 +28,15 @@ const VRPage = () => {
     const vrScore4 = document.getElementById("vrscore4").value;
 
     var obj = {
-      id: user.id,
+      id: id,
       vrScore1: vrScore1,
       vrScore2: vrScore2,
       vrScore3: vrScore3,
       vrScore4: vrScore4,
     };
 
-    await setVRScore(obj)
-      .then((res) => {
-        navigate("/profile");
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    await dispatch(updateVRScoreAndRefresh(obj)).unwrap();
+    navigate("/profile");
   };
 
   return (

@@ -1,4 +1,5 @@
 const Score = require("../models/score.model");
+const { formatWebScores, formatVRScores } = require("../utils/utils");
 
 const setVRScore = async (req, res) => {
   const { vrScore1, vrScore2, vrScore3, vrScore4 } = req.body;
@@ -99,12 +100,9 @@ const getVRScore = async (req, res) => {
     return res.status(404).json({ message: "User not found." });
   }
 
-  res.status(200).json({
-    vr_reaction: score.vr_reaction,
-    vr_playid: score.vr_playid,
-    vr_defense: score.vr_defense,
-    vr_crit: score.vr_crit,
-  });
+  const vrData = formatVRScores(score);
+
+  res.status(200).json(vrData);
 };
 
 const getWebScore = async (req, res) => {
@@ -116,12 +114,9 @@ const getWebScore = async (req, res) => {
     return res.status(404).json({ message: "User not found." });
   }
 
-  res.status(200).json({
-    web_reaction: score.web_reaction,
-    web_playid: score.web_playid,
-    web_defense: score.web_defense,
-    web_crit: score.web_crit,
-  });
+  const webData = formatWebScores(score);
+
+  res.status(200).json(webData);
 };
 
 const getQBxRScore = async (req, res) => {
@@ -145,10 +140,42 @@ const getQBxRScore = async (req, res) => {
   res.status(200).json({ qbxr_score: score.qbxr_score, rank: rank + 1 });
 };
 
+const getAllScores = async (req, res) => {
+  const id = req.params.id;
+
+  const scores = await Score.find({ user: id });
+
+  if (!scores) {
+    return res.status(404).json({ message: "User not found." });
+  }
+  var obj = {};
+  var rank = null;
+  var qbxr_score = null;
+
+  if (scores.qbxr_score === undefined) {
+    rank = await Score.where("qbxr_score").gt(0).countDocuments();
+    qbxr_score = 0;
+  } else {
+    rank = await Score.where("qbxr_score")
+      .gt(scores.qbxr_score)
+      .countDocuments();
+    qbxr_score = scores.qbxr_score;
+  }
+
+  obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
+
+  obj.web = formatWebScores(scores);
+
+  obj.vr = formatVRScores(scores);
+
+  res.status(200).json(obj);
+};
+
 module.exports = {
   setVRScore,
   setWebScore,
   getVRScore,
   getWebScore,
   getQBxRScore,
+  getAllScores,
 };

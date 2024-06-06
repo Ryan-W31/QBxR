@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  updateUserInfoAndRefresh,
+  useUpdateUserInfoMutation,
+} from "../hooks/users/userApiSlice";
 import PhoneInput, { isPossiblePhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import validator from "validator";
 import { AiOutlineClose } from "react-icons/ai";
-import { useUpdateUserInfoMutation } from "../hooks/users/userApiSlice";
 
-const EditProfileCard = ({ isVisible, user, onClose }) => {
+const EditProfileCard = ({ isVisible, id, user, onClose }) => {
   const [firstname, setFirstname] = useState(user.firstname);
   const [lastname, setLastname] = useState(user.lastname);
   const [email, setEmail] = useState(user.email);
@@ -13,27 +17,34 @@ const EditProfileCard = ({ isVisible, user, onClose }) => {
   const [schoolOrg, setSchoolOrg] = useState(user.school_organization);
   const [birthday, setBirthday] = useState(user.birthday);
   const [bio, setBio] = useState(user.bio);
+  const dispatch = useDispatch();
 
   const [updateUserInfo] = useUpdateUserInfoMutation();
   if (!isVisible) return null;
+
+  const formatBirthday = (date) => {
+    const d = date.substring(0, 10);
+    return d;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (number === undefined || isPossiblePhoneNumber(number)) {
       if (validator.isEmail(email)) {
-        await updateUserInfo({
-          id: user.id,
-          firstname: firstname,
-          lastname: lastname,
-          email: email,
-          phone_number: number,
-          school_organization: schoolOrg,
-          birthday: new Date(birthday),
-          bio: bio,
-        });
+        await dispatch(
+          updateUserInfoAndRefresh({
+            id: id,
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phone_number: number,
+            school_organization: schoolOrg,
+            birthday: new Date(birthday),
+            bio: bio,
+          })
+        ).unwrap();
       }
       onClose();
-      window.location.reload();
     }
   };
 
@@ -154,7 +165,7 @@ const EditProfileCard = ({ isVisible, user, onClose }) => {
                 </label>
                 <input
                   type="date"
-                  value={birthday}
+                  value={formatBirthday(birthday)}
                   name="birthday"
                   id="birthday"
                   className="bg-light-primary border text-sm rounded-lg block w-full p-2.5"
@@ -183,7 +194,7 @@ const EditProfileCard = ({ isVisible, user, onClose }) => {
               <button
                 type="button"
                 className="text-light-primary bg-green-primary hover:bg-green-secondary font-medium rounded-lg text-sm px-4 py-2 text-center"
-                onClick={handleSubmit}
+                onClick={(e) => handleSubmit(e)}
               >
                 Update Profile
               </button>

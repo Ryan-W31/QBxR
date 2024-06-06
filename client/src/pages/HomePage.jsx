@@ -1,71 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 import ScoreCard from "../components/ScoreCard";
-import {
-  useGetVRScoreQuery,
-  useGetWebScoreQuery,
-  useGetQBxRScoreQuery,
-} from "../hooks/users/scoreApiSlice";
+import { selectCurrentScores } from "../hooks/auth/authSlice";
+import { checkData } from "../utils/utils";
 import { useSelector } from "react-redux";
-import { selectCurrentId } from "../hooks/auth/authSlice";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const HomePage = () => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(
-    useSelector(selectCurrentId),
-    {
-      pollingInterval: 60000,
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
-    }
-  );
-  const { data: webData, isLoading: isLoadingWebScore } = useGetWebScoreQuery(
-    useSelector(selectCurrentId),
-    {
-      pollingInterval: 60000,
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
-    }
-  );
-  const { data: qbxrData, isLoading: isLoadingQBxRScore } =
-    useGetQBxRScoreQuery(useSelector(selectCurrentId), {
-      pollingInterval: 60000,
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
-    });
+  const data = useSelector(selectCurrentScores);
+  const qbxrData = data.qbxr;
+  const webData = data.web;
+  const vrData = data.vr;
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
   };
-
-  function checkData() {
-    if (
-      (webData === undefined || webData?.length === 0) &&
-      (vrData === undefined || vrData?.length === 0)
-    ) {
-      return (
-        <p className="text-xl font-Audiowide text-light-primary">
-          Take the Web and VR Tests
-        </p>
-      );
-    } else if (webData === undefined || webData?.length === 0) {
-      return (
-        <p className="text-xl font-Audiowide text-light-primary">
-          Take the Web Test
-        </p>
-      );
-    } else {
-      return (
-        <p className="text-xl font-Audiowide text-light-primary">
-          Take the VR Test
-        </p>
-      );
-    }
-  }
 
   const content = (
     <div>
@@ -91,23 +44,23 @@ const HomePage = () => {
             </h1>
             <div className="text-light-primary m-10 text-4xl">
               <p className="text-light-secondary">Your QBxR Score:</p>
-              {qbxrData?.qbxr_score !== undefined ? (
+              {qbxrData.qbxr_score ? (
                 <SkeletonTheme
                   baseColor="#0C0C0C"
                   highlightColor="#AAAAAA"
                   duration={1.5}
                   borderRadius="0.5rem"
                 >
-                  {isLoadingQBxRScore ? (
-                    <Skeleton width={75} height={75} />
-                  ) : (
+                  {qbxrData.qbxr_score ? (
                     <p className="m-4 text-3xl">{qbxrData.qbxr_score}</p>
+                  ) : (
+                    <Skeleton width={75} height={75} />
                   )}
                 </SkeletonTheme>
               ) : (
                 <div>
                   <p className="m-4 text-3xl">No Data</p>
-                  {checkData()}
+                  {checkData(webData, vrData)}
                 </div>
               )}
             </div>
@@ -117,7 +70,7 @@ const HomePage = () => {
               title={"Your Web Test Scores"}
               errMessage={"Take The Web Test On Your Profile Page"}
               size="3"
-              isLoading={isLoadingWebScore}
+              isLoading={false}
               data={webData}
             />
 
@@ -127,7 +80,7 @@ const HomePage = () => {
               title={"Your VR Test Scores"}
               errMessage={"Take The VR Test On Your Profile Page"}
               size="3"
-              isLoading={isLoadingVRScore}
+              isLoading={false}
               data={vrData}
             />
           </div>

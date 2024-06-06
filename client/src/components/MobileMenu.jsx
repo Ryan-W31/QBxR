@@ -1,5 +1,9 @@
 import React, { useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "../hooks/auth/authApiSlice";
+import { currentPageStyle } from "../utils/utils";
+import usePersist from "../hooks/auth/usePersist";
+import { useToast } from "./Toast";
 import {
   AiOutlineClose,
   AiOutlineHome,
@@ -13,24 +17,13 @@ import {
   MdOutlineSportsFootball,
   MdOutlineLogout,
 } from "react-icons/md";
-import { useLogoutMutation } from "../hooks/auth/authApiSlice";
-import usePersist from "../hooks/auth/usePersist";
-import { useToast } from "./Toast";
 
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
-  const [logout, { isLoading, isSuccess }] = useLogoutMutation();
+  const [logout, { isLoading }] = useLogoutMutation();
   const [persist, setPersist] = usePersist();
   const { notify } = useToast();
 
   const navigate = useNavigate();
-
-  function currentPageStyle(navBarItem) {
-    if (navBarItem === currentPage) {
-      return "text-green-primary";
-    } else {
-      return "text-light-primary hover:text-green-primary";
-    }
-  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,15 +79,39 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
 
             {isLandingPage ? (
               <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                <Link to="#" className={currentPageStyle("home")}>
+                <Link
+                  to="#"
+                  className={currentPageStyle(
+                    "home",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <AiOutlineHome className="inline-block mb-2 mr-2" />
                   <span>Home</span>
                 </Link>
-                <Link to="#" className={currentPageStyle("about")}>
+                <Link
+                  to="#"
+                  className={currentPageStyle(
+                    "about",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <AiOutlineInfoCircle className="inline-block mb-1 mr-2" />
                   <span>About Us</span>
                 </Link>
-                <Link to="#" className={currentPageStyle("how")}>
+                <Link
+                  to="#"
+                  className={currentPageStyle(
+                    "how",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <MdOutlineSportsFootball className="inline-block mb-1 mr-2" />
                   <span>How QBxR Works</span>
                 </Link>
@@ -107,26 +124,63 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
               </div>
             ) : (
               <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                <Link to="/home" className={currentPageStyle("home")}>
+                <Link
+                  to="/home"
+                  className={currentPageStyle(
+                    "home",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <AiOutlineHome className="inline-block mb-2 mr-2" />
                   <span>Home</span>
                 </Link>
                 <Link
                   to="/leaderboard"
-                  className={currentPageStyle("leaderboard")}
+                  className={currentPageStyle(
+                    "leaderboard",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
                 >
                   <MdOutlineLeaderboard className="inline-block mb-1 mr-2" />
                   <span>Leaderboard</span>
                 </Link>
-                <Link to="/search" className={currentPageStyle("search")}>
+                <Link
+                  to="/search"
+                  className={currentPageStyle(
+                    "search",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <AiOutlineSearch className="inline-block mb-1 mr-2" />
                   <span>Search</span>
                 </Link>
-                <Link to="/profile" className={currentPageStyle("profile")}>
+                <Link
+                  to="/profile"
+                  className={currentPageStyle(
+                    "profile",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <AiOutlineUser className="inline-block mb-1 mr-2" />
                   <span>My Profile</span>
                 </Link>
-                <Link to="#" className={currentPageStyle("settings")}>
+                <Link
+                  to="#"
+                  className={currentPageStyle(
+                    "settings",
+                    currentPage,
+                    "text-green-primary",
+                    "text-light-primary hover:text-green-primary"
+                  )}
+                >
                   <AiOutlineSetting className="inline-block mb-1 mr-2" />
                   <span>Settings</span>
                 </Link>

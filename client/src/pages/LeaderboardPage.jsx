@@ -6,9 +6,8 @@ import ScrollToTop from "../components/ScrollToTop";
 import LeaderboardCard from "../components/LeaderboardCard";
 import ProfileCard from "../components/ProfileCard";
 import { useGetLeaderboardQuery } from "../hooks/users/userApiSlice";
-import { useGetQBxRScoreQuery } from "../hooks/users/scoreApiSlice";
 import { useSelector } from "react-redux";
-import { selectCurrentId } from "../hooks/auth/authSlice";
+import { selectCurrentId, selectCurrentScores } from "../hooks/auth/authSlice";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
 const LeaderboardPage = () => {
@@ -31,16 +30,8 @@ const LeaderboardPage = () => {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
   });
-  const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
-    myId,
-    {
-      pollingInterval: 60000,
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-    }
-  );
 
-  console.log("data: ", qbxrData);
+  const qbxrData = useSelector(selectCurrentScores).qbxr;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,6 +53,7 @@ const LeaderboardPage = () => {
       setTotalRows(users.length);
     }
   }, [users]);
+
   const handleRowClick = (profile) => {
     setShowProfile(profile);
     toggleBlur();
@@ -142,7 +134,7 @@ const LeaderboardPage = () => {
                       duration={1.5}
                       borderRadius="0.5rem"
                     >
-                      {isLoadingQBxRData ? (
+                      {isLoading ? (
                         <div className="font-bold font-Audiowide text-light-primary text-center">
                           <Skeleton width={100} height={50} />
                           <Skeleton width={100} height={50} />

@@ -81,6 +81,7 @@ const getUserById = async (req, res) => {
     birthday: user.birthday,
     phone_number: user.phone_number,
     status: user.status,
+    favorites: user.favorites,
   });
 };
 

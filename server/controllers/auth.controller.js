@@ -1,4 +1,6 @@
+const utils = require("../utils/utils");
 const User = require("../models/user.model");
+const Score = require("../models/score.model");
 const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
@@ -28,6 +30,25 @@ const login = async (req, res) => {
       .json({ message: "Invalid username and/or password." });
   }
 
+  const scores = await Score.findOne({ user: user._id });
+  var obj = {};
+  var rank = null;
+  var qbxr_score = null;
+
+  if (scores.qbxr_score === undefined) {
+    rank = await Score.where("qbxr_score").gt(0).countDocuments();
+    qbxr_score = 0;
+  } else {
+    rank = await Score.where("qbxr_score")
+      .gt(scores.qbxr_score)
+      .countDocuments();
+    qbxr_score = scores.qbxr_score;
+  }
+
+  obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
+  obj.web = utils.formatWebScores(scores);
+  obj.vr = utils.formatVRScores(scores);
+
   const aToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
     expiresIn: "15m",
   });
@@ -44,7 +65,9 @@ const login = async (req, res) => {
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 
-  res.status(200).json({ aToken: aToken, id: user._id });
+  res
+    .status(200)
+    .json({ aToken: aToken, id: user._id, user: user, scores: obj });
 };
 
 const refreshCookie = (req, res) => {
@@ -67,6 +90,25 @@ const refreshCookie = (req, res) => {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
+    const scores = await Score.findOne({ user: refreshUser._id });
+    var obj = {};
+    var rank = null;
+    var qbxr_score = null;
+
+    if (scores.qbxr_score === undefined) {
+      rank = await Score.where("qbxr_score").gt(0).countDocuments();
+      qbxr_score = 0;
+    } else {
+      rank = await Score.where("qbxr_score")
+        .gt(scores.qbxr_score)
+        .countDocuments();
+      qbxr_score = scores.qbxr_score;
+    }
+
+    obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
+    obj.web = utils.formatWebScores(scores);
+    obj.vr = utils.formatVRScores(scores);
+
     const aToken = jwt.sign(
       { id: refreshUser._id },
       process.env.JWT_ACCESS_SECRET,
@@ -75,7 +117,12 @@ const refreshCookie = (req, res) => {
       }
     );
 
-    res.json({ aToken: aToken, id: refreshUser._id });
+    res.json({
+      aToken: aToken,
+      id: refreshUser._id,
+      user: refreshUser,
+      scores: obj,
+    });
   });
 };
 

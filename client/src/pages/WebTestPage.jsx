@@ -1,21 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCurrentId } from "../hooks/auth/authSlice";
-import { useGetUserByIdQuery } from "../hooks/users/userApiSlice";
-import { useSetWebScoreMutation } from "../hooks/users/scoreApiSlice";
+import { updateWebScoreAndRefresh } from "../hooks/scores/scoreApiSlice";
 
 const WebTestPage = () => {
   const navigate = useNavigate();
-
-  const { data: user } = useGetUserByIdQuery(useSelector(selectCurrentId), {
-    pollingInterval: 60000,
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
-  });
-
-  const [setWebScore] = useSetWebScoreMutation();
+  const dispatch = useDispatch();
+  const id = useSelector(selectCurrentId);
 
   const { unityProvider } = useUnityContext({
     loaderUrl: "/Build/vrtest2.loader.js",
@@ -35,20 +28,15 @@ const WebTestPage = () => {
     const webScore4 = document.getElementById("webscore4").value;
 
     var obj = {
-      id: user.id,
+      id: id,
       webScore1: webScore1,
       webScore2: webScore2,
       webScore3: webScore3,
       webScore4: webScore4,
     };
 
-    await setWebScore(obj)
-      .then((res) => {
-        navigate("/profile");
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    await dispatch(updateWebScoreAndRefresh(obj)).unwrap();
+    navigate("/profile");
   };
 
   return (

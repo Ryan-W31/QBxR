@@ -1,17 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { currentPageStyle } from "../utils/utils";
 import { AiOutlineMenu } from "react-icons/ai";
-
 import ProfileDropdown from "./ProfileDropdown";
 
 const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
-  function currentPageStyle(navBarItem) {
-    if (navBarItem === currentPage) {
-      return "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]";
-    } else {
-      return "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center";
-    }
-  }
   return (
     <nav
       className={
@@ -30,13 +23,37 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
               <h1>QBxR</h1>
             </Link>
             <div className="hidden space-x-6 md:flex font-Audiowide text-md">
-              <Link to="#" className={currentPageStyle("home")}>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "home",
+                  currentPage,
+                  "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]",
+                  "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                )}
+              >
                 Home
               </Link>
-              <Link to="#" className={currentPageStyle("about")}>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "about",
+                  currentPage,
+                  "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]",
+                  "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                )}
+              >
                 About Us
               </Link>
-              <Link to="#" className={currentPageStyle("how")}>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "how",
+                  currentPage,
+                  "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]",
+                  "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                )}
+              >
                 How QBxR Works
               </Link>
             </div>
@@ -60,16 +77,37 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
               <h1>QBxR</h1>
             </Link>
             <div className="hidden space-x-6 md:flex font-Audiowide">
-              <Link to="/home" className={currentPageStyle("home")}>
+              <Link
+                to="/home"
+                className={currentPageStyle(
+                  "home",
+                  currentPage,
+                  "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]",
+                  "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                )}
+              >
                 Home
               </Link>
               <Link
                 to="/leaderboard"
-                className={currentPageStyle("leaderboard")}
+                className={currentPageStyle(
+                  "leaderboard",
+                  currentPage,
+                  "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]",
+                  "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                )}
               >
                 Leaderboard
               </Link>
-              <Link to="/search" className={currentPageStyle("search")}>
+              <Link
+                to="/search"
+                className={currentPageStyle(
+                  "search",
+                  currentPage,
+                  "relative w-fit block text-green-primary underline underline-offset-[6.27px] decoration-[3px]",
+                  "relative w-fit block text-light-primary after:block after:content-[''] after:absolute after:h-[3px] after:bg-green-primary hover:text-green-primary after:w-full after:scale-x-0 after:hover:scale-x-100 after:transition after:duration-300 after:origin-center"
+                )}
+              >
                 Search
               </Link>
             </div>
