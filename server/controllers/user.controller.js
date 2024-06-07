@@ -201,27 +201,56 @@ const getUserFavorites = async (req, res) => {
 
 const search = async (req, res) => {
   const search = req.params.search;
-  console.log(search);
+  const filters = req.query;
 
-  const users = await User.find({
-    $or: [
+  let regexFilters = [];
+  let searchFilters = [];
+
+  if (filters.player === "true" || filters.nonplayer === "true") {
+    let roleFilters = [];
+    if (filters.player === "true") roleFilters.push({ role: "player" });
+    if (filters.nonplayer === "true") roleFilters.push({ role: "nonplayer" });
+    searchFilters.push({ $or: roleFilters });
+  }
+
+  if (filters.active === "true" || filters.inactive === "true") {
+    let statusFilters = [];
+    if (filters.active === "true") statusFilters.push({ status: true });
+    if (filters.inactive === "true") statusFilters.push({ status: false });
+    searchFilters.push({ $or: statusFilters });
+  }
+
+  if (filters.name === "true") {
+    regexFilters.push(
       { firstname: { $regex: search, $options: "i" } },
-      { lastname: { $regex: search, $options: "i" } },
-      { school_organization: { $regex: search, $options: "i" } },
-    ],
-  });
-
-  var searchedUsers = [];
-
-  users.forEach((user) => {
-    searchedUsers.push({
-      id: user._id,
-      role: user.role,
-      name: `${user.firstname} ${user.lastname}`,
-      school: user.school_organization,
-      score: user.score ? user.score : 0,
+      { lastname: { $regex: search, $options: "i" } }
+    );
+  }
+  if (filters.schoolOrg === "true") {
+    regexFilters.push({
+      school_organization: { $regex: search, $options: "i" },
     });
-  });
+  }
+
+  let query = {};
+
+  if (searchFilters.length > 0 && regexFilters.length > 0) {
+    query = { $and: [{ $or: regexFilters }, ...searchFilters] };
+  } else if (searchFilters.length > 0) {
+    query = { $and: searchFilters };
+  } else if (regexFilters.length > 0) {
+    query = { $or: regexFilters };
+  }
+
+  const users = await User.find(query);
+
+  const searchedUsers = users.map((user) => ({
+    id: user._id,
+    role: user.role,
+    name: `${user.firstname} ${user.lastname}`,
+    school: user.school_organization,
+    score: user.score ? user.score : 0,
+  }));
 
   res.status(200).json(searchedUsers);
 };

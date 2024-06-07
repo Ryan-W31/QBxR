@@ -114,7 +114,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
       },
     }),
     search: builder.query({
-      query: (search) => `/user/search/${search}`,
+      query: ({ search, filters }) => {
+        const filterParams = new URLSearchParams(filters).toString();
+        return `/user/search/${search}?${filterParams}`;
+      },
       validateStatus: (response, result) => {
         return response.status === 200 && !result.isError;
       },
