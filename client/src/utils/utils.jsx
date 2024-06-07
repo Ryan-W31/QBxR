@@ -1,6 +1,6 @@
 // Utility functions for the app
 import { differenceInYears } from "date-fns";
-
+import { useCallback, useEffect } from "react";
 // Function to combine multiple classes into one
 const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");
@@ -105,6 +105,15 @@ function checkData(webData, vrData) {
   }
 }
 
+function useDebounce(effect, dependencies, delay) {
+  const callback = useCallback(effect, dependencies);
+
+  useEffect(() => {
+    const timeout = setTimeout(callback, delay);
+    return () => clearTimeout(timeout);
+  }, [callback, delay]);
+}
+
 export {
   classNames,
   scrollToTop,
@@ -116,4 +125,5 @@ export {
   barColor,
   colorPodium,
   checkData,
+  useDebounce,
 };
