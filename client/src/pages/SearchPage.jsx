@@ -8,9 +8,10 @@ import { useSearchQuery } from "../hooks/users/userApiSlice";
 import { selectCurrentId } from "../hooks/auth/authSlice";
 import { useSelector } from "react-redux";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { useDebounce } from "@uidotdev/usehooks";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
+
+const useDebounce = require("@uidotdev/usehooks");
 
 // SearchPage component. This component displays the search page with a search form and search results.
 const SearchPage = () => {
