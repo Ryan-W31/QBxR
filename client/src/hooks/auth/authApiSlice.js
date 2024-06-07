@@ -1,6 +1,7 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { setCredentials, logOut } from "./authSlice";
 
+// Auth API slice. This slice contains the login, refresh, and logout endpoints.
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
@@ -20,8 +21,17 @@ const authApiSlice = apiSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const refresh = await queryFulfilled;
-          dispatch(setCredentials({ ...refresh.data }));
+          dispatch(
+            setCredentials({
+              aToken: refresh.data.aToken,
+              id: refresh.data.id,
+              user: refresh.data.user,
+              scores: refresh.data.scores,
+            })
+          );
+
           console.log("Refreshed token");
+          return refresh;
         } catch (err) {
           console.log(err);
         }

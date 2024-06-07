@@ -9,6 +9,7 @@ import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ErrorMessage from "../components/ErrorMessage";
 
+// LoginPage component. This component displays the login form.
 const LoginPage = () => {
   const userRef = useRef();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -24,24 +25,33 @@ const LoginPage = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
+  // Focus on the email input when the component mounts
   useEffect(() => {
     userRef.current.focus();
   }, []);
 
+  // Toggle the password visibility
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
   }
 
+  // Handle the remember me event
   function handlePersist() {
     setPersist((prevState) => !prevState);
   }
 
+  // Handle the login event
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      const { aToken } = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ aToken }));
+      const { aToken, id, user, scores } = await login({
+        email,
+        password,
+      }).unwrap();
+      dispatch(
+        setCredentials({ aToken: aToken, id: id, user: user, scores: scores })
+      );
       setEmail("");
       setPassword("");
       navigate("/home");
@@ -54,6 +64,7 @@ const LoginPage = () => {
     }
   };
 
+  // Display the loading message while the user is logging in or the login form
   const content = isLoading ? (
     <div>Loading...</div>
   ) : (

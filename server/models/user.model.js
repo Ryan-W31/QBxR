@@ -3,6 +3,7 @@ const crypto = require("crypto");
 
 const Schema = mongoose.Schema;
 
+// userSchema is used to store the user's information.
 const userSchema = new Schema(
   {
     role: {
@@ -20,6 +21,7 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     salt: {
       type: String,
@@ -31,6 +33,23 @@ const userSchema = new Schema(
     },
     school_organization: {
       type: String,
+    },
+    bio: {
+      type: String,
+    },
+    birthday: {
+      type: Date,
+    },
+    status: {
+      type: Boolean,
+      required: true,
+    },
+    favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    phone_number: {
+      type: String,
+    },
+    score: {
+      type: Number,
     },
   },
   { collection: "Users" }

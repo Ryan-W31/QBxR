@@ -4,9 +4,10 @@ import { AiOutlineUser } from "react-icons/ai";
 import { classNames } from "../utils/utils";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "./Toast";
 
+// ProfileDropdown component. This component displays the profile dropdown for the application.
 const ProfileDropdown = () => {
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
   const [persist, setPersist] = usePersist();
@@ -14,6 +15,7 @@ const ProfileDropdown = () => {
 
   const navigate = useNavigate();
 
+  // Handle the logout event. If the user is logged out, display a success message and navigate to the login page.
   const handleLogout = useCallback(
     (event) => {
       event.preventDefault();
@@ -25,19 +27,24 @@ const ProfileDropdown = () => {
         navigate("/login");
       }
     },
-    [logout, isLoading, setPersist, persist, navigate]
+    [logout, isLoading, setPersist, persist, navigate, notify]
   );
 
+  // If the user is logging out, display a loading message
   if (isLoading) return <div>Logging out...</div>;
 
+  // Return the profile dropdown menu
   return (
     <Menu as="div" className="hidden relative md:inline-block text-center">
+      {/* Profile button */}
       <div>
         <Menu.Button className="hidden h-9 w-9 text-light-primary bg-green-primary border border-light-primary rounded-full baseline hover:bg-green-secondary hover:text-light-secondary hover:border-light-secondary md:block">
           <AiOutlineUser className="mx-auto h-6 w-6" />
         </Menu.Button>
       </div>
+      {/* End Profile button */}
 
+      {/* Profile dropdown menu */}
       <Transition
         as={Fragment}
         enter="transition ease-out duration-100"
@@ -49,10 +56,11 @@ const ProfileDropdown = () => {
       >
         <Menu.Items className="absolute top-16 right-0 z-10 w-56 origin-top-right divide-y divide-light-secondary/80 rounded-md bg-dark-secondary/80 font-Audiowide text-md">
           <div>
+            {/* Profile Link */}
             <Menu.Item>
               {({ active }) => (
-                <a
-                  href="/profile"
+                <Link
+                  to="/profile"
                   className={classNames(
                     active
                       ? "bg-green-primary text-light-primary"
@@ -61,9 +69,12 @@ const ProfileDropdown = () => {
                   )}
                 >
                   My Profile
-                </a>
+                </Link>
               )}
             </Menu.Item>
+            {/* End Profile Link */}
+
+            {/* Settings Link */}
             <Menu.Item>
               {({ active }) => (
                 <a
@@ -79,7 +90,10 @@ const ProfileDropdown = () => {
                 </a>
               )}
             </Menu.Item>
+            {/* End Settings Link */}
           </div>
+
+          {/* Log Out Link */}
           <div>
             <form onSubmit={handleLogout}>
               <Menu.Item>
@@ -99,8 +113,10 @@ const ProfileDropdown = () => {
               </Menu.Item>
             </form>
           </div>
+          {/* End Log Out Link */}
         </Menu.Items>
       </Transition>
+      {/* End Profile dropdown menu */}
     </Menu>
   );
 };

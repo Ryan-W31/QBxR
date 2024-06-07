@@ -1,8 +1,9 @@
 import React from "react";
-import { classNames } from "../utils/utils";
+import { classNames, colorPodium } from "../utils/utils";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
+// LeaderboardCard component. This component displays a leaderboard card with the user's rank, name, school, and score.
 const LeaderboardCard = ({
   rank = 0,
   name = "",
@@ -11,19 +12,10 @@ const LeaderboardCard = ({
   skeleton = false,
   onClick,
 }) => {
-  function colorPodium(rank) {
-    if (rank === 1) {
-      return "bg-[#DBAC34]/80";
-    } else if (rank === 2) {
-      return "bg-[#A5A9B4]/80";
-    } else if (rank === 3) {
-      return "bg-[#CD7F32]/80";
-    } else {
-      return "bg-dark-secondary";
-    }
-  }
+  // If the skeleton prop is true, display a skeleton card. Otherwise, display the leaderboard card.
   let content = skeleton ? (
     <tr className="border-b">
+      {/* Display a skeleton card with a rank, name, school, and score */}
       <th scope="row" className="py-3">
         <Skeleton width={50} />
       </th>
@@ -36,6 +28,7 @@ const LeaderboardCard = ({
       <td className="py-3">
         <Skeleton width={50} />
       </td>
+      {/* End Display a skeleton card with a rank, name, school, and score */}
     </tr>
   ) : (
     <tr
@@ -45,6 +38,7 @@ const LeaderboardCard = ({
       )}
       onClick={onClick}
     >
+      {/* Display the user's rank, name, school, and score */}
       <th
         scope="row"
         className="py-3 font-medium text-light-primary whitespace-nowrap"
@@ -60,6 +54,7 @@ const LeaderboardCard = ({
       <td className="py-3 font-medium text-light-primary whitespace-nowrap">
         {score}
       </td>
+      {/* End Display the user's rank, name, school, and score */}
     </tr>
   );
 

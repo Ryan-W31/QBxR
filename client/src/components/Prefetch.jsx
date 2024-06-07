@@ -5,14 +5,14 @@ import { Outlet } from "react-router-dom";
 
 import React from "react";
 
+// Prefetch component. This component prefetches the leaderboard data.
 const Prefetch = () => {
+  // Prefetch the leaderboard data when the component mounts
   useEffect(() => {
-    // console.log("Prefetching leaderboard data");
     const users = store.dispatch(
       userApiSlice.endpoints.getLeaderboard.initiate()
     );
     return () => {
-      // console.log("Unsubscribing from leaderboard data");
       users.unsubscribe();
     };
   }, []);

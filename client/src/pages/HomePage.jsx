@@ -1,40 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 import ScoreCard from "../components/ScoreCard";
+import { selectCurrentScores } from "../hooks/auth/authSlice";
+import { checkData } from "../utils/utils";
+import { useSelector } from "react-redux";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 
+// HomePage component. This component displays the home page with the user's QBxR score, web test scores, and VR test scores.
 const HomePage = () => {
   const [showMenu, setShowMenu] = useState(false);
 
+  const data = useSelector(selectCurrentScores);
+  const qbxrData = data.qbxr;
+  const webData = data.web;
+  const vrData = data.vr;
+
+  // Toggle the visibility of the mobile menu
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
   };
 
-  function checkData() {
-    if (webData === undefined && vrData === undefined) {
-      return <p className="text-xl">Take the Web and VR Tests</p>;
-    } else if (webData === null) {
-      return <p className="text-xl">Take the Web Test</p>;
-    } else {
-      return <p className="text-xl">Take the VR Test</p>;
-    }
-  }
-
-  const webData = [
-    // { title: "Reaction Test", score: 35 },
-    // { title: "Play Identification", score: 55 },
-    // { title: "Defense Reading", score: 75 },
-    // { title: "Critical Thinking", score: 95 },
-  ];
-  const vrData = [
-    // { title: "Reaction Test", score: 35 },
-    // { title: "Play Identification", score: 55 },
-    // { title: "Defense Reading", score: 75 },
-    // { title: "Critical Thinking", score: 95 },
-  ];
-
+  // Home page content
   const content = (
     <div>
       <ScrollToTop showMenu={showMenu} />
@@ -59,23 +47,23 @@ const HomePage = () => {
             </h1>
             <div className="text-light-primary m-10 text-4xl">
               <p className="text-light-secondary">Your QBxR Score:</p>
-              {webData !== null && vrData !== null ? (
+              {qbxrData.qbxr_score ? (
                 <SkeletonTheme
                   baseColor="#0C0C0C"
                   highlightColor="#AAAAAA"
                   duration={1.5}
                   borderRadius="0.5rem"
                 >
-                  {webData?.length === 0 || vrData?.length === 0 ? (
-                    <Skeleton width={75} height={75} />
+                  {qbxrData.qbxr_score ? (
+                    <p className="m-4 text-3xl">{qbxrData.qbxr_score}</p>
                   ) : (
-                    <p className="m-4 text-3xl">85</p>
+                    <Skeleton width={75} height={75} />
                   )}
                 </SkeletonTheme>
               ) : (
                 <div>
                   <p className="m-4 text-3xl">No Data</p>
-                  {checkData()}
+                  {checkData(webData, vrData)}
                 </div>
               )}
             </div>
@@ -85,6 +73,7 @@ const HomePage = () => {
               title={"Your Web Test Scores"}
               errMessage={"Take The Web Test On Your Profile Page"}
               size="3"
+              isLoading={false}
               data={webData}
             />
 
@@ -94,6 +83,7 @@ const HomePage = () => {
               title={"Your VR Test Scores"}
               errMessage={"Take The VR Test On Your Profile Page"}
               size="3"
+              isLoading={false}
               data={vrData}
             />
           </div>

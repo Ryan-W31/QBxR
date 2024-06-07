@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useSignUpMutation } from "../hooks/users/userApiSlice";
 import ErrorMessage from "../components/ErrorMessage";
 import { useToast } from "../components/Toast";
 
+// RegisterPage component. This component displays the registration form.
 const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
@@ -27,13 +28,17 @@ const RegisterPage = () => {
 
   const { notify } = useToast();
 
+  // Toggle the password visibility
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
   }
+
+  // Toggle the confirm password visibility
   function toggleConfirmPasswordVisibility() {
     setIsConfirmPasswordVisible((prevState) => !prevState);
   }
 
+  // Reset the form fields when the registration is successful
   useEffect(() => {
     if (isSuccess) {
       setFirstname("");
@@ -46,6 +51,7 @@ const RegisterPage = () => {
     }
   }, [isSuccess, navigate]);
 
+  // Handle the nonplayer role event
   const handleNonplayerRole = (event) => {
     event.preventDefault();
 
@@ -55,8 +61,11 @@ const RegisterPage = () => {
       pSwitch.classList.remove("left-1/2");
       pSwitch.classList.add("left-0");
     }
+
+    console.log(role);
   };
 
+  // Handle the player role event
   const handlePlayerRole = (event) => {
     event.preventDefault();
 
@@ -66,12 +75,16 @@ const RegisterPage = () => {
       pSwitch.classList.remove("left-0");
       pSwitch.classList.add("left-1/2");
     }
+
+    console.log(role);
   };
 
+  // Handle the checkbox event
   const handleCheck = () => {
     setIsChecked(!isChecked);
   };
 
+  // Check if the form fields are valid
   const canSave =
     [
       role,
@@ -83,6 +96,7 @@ const RegisterPage = () => {
       school_organization,
     ].every(Boolean) && !isLoading;
 
+  // Handle the sign up event
   const handleSignUp = async (event) => {
     event.preventDefault();
 
@@ -108,20 +122,24 @@ const RegisterPage = () => {
         school_organization,
       };
 
-      await signUp(obj)
-        .then((res) => {
-          notify("Registration successful. Please check your email to verify.");
-        })
-        .catch((err) => {
-          setIsError(true);
-          setError(err.data.message);
-        });
+      try {
+        const res = await signUp(obj).unwrap();
+        notify(
+          "Registration successful. Please check your email to verify.",
+          "success"
+        );
+        navigate("/login");
+      } catch (err) {
+        setIsError(true);
+        setError(err.data.message);
+      }
     } else {
       setIsError(true);
       setError("Registration failed. Please try again later.");
     }
   };
 
+  // Return the registration form
   return (
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
       <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">

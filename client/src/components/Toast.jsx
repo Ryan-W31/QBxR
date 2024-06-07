@@ -2,14 +2,18 @@ import React, { createContext, useContext, useRef } from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// ToastContext and useToast hook
 const ToastContext = createContext();
 
 export const useToast = () => {
   return useContext(ToastContext);
 };
 
+// ToastProvider component
 export const ToastProvider = ({ children }) => {
   const toastRef = useRef();
+
+  // notify function to display a toast notification
   const notify = (message, type = "info", position = "top-right") => {
     const toastTypes = {
       info: { type: toast.info, className: "#3182CE" },
@@ -36,6 +40,7 @@ export const ToastProvider = ({ children }) => {
     });
   };
 
+  // Return the ToastContext.Provider with the notify function and the ToastContainer
   return (
     <ToastContext.Provider value={{ notify }}>
       {children}

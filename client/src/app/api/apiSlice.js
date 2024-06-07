@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { setCredentials, logOut } from "../../hooks/auth/authSlice";
 
+// Create a base query with the base URL of the API
 const baseQuery = fetchBaseQuery({
   baseUrl: "https://qbxr.net/api",
   //baseUrl: "http://localhost/api",
@@ -15,6 +16,7 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// Middleware for API calls. Checks if the token is expired and refreshes it.
 const baseQueryWithRefresh = async (args, api, options) => {
   let res = await baseQuery(args, api, options);
 
@@ -32,6 +34,7 @@ const baseQueryWithRefresh = async (args, api, options) => {
   return res;
 };
 
+// Create an API slice with the base query
 export const apiSlice = createApi({
   baseQuery: baseQueryWithRefresh,
   endpoints: (builder) => ({}),

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
+// ForgotPasswordPage component. This component displays the forgot password form.
 const ForgotPasswordPage = () => {
   const [show, setShow] = useState(true);
 
@@ -16,6 +17,7 @@ const ForgotPasswordPage = () => {
     setIsConfirmNewPasswordVisible((prevState) => !prevState);
   }
 
+  // Return the forgot password form
   return (
     <div>
       {show && (
