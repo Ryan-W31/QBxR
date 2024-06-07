@@ -3,8 +3,8 @@ import { setCredentials, logOut } from "../../hooks/auth/authSlice";
 
 // Create a base query with the base URL of the API
 const baseQuery = fetchBaseQuery({
-  //baseUrl: "https://qbxr.net/api",
-  baseUrl: "http://localhost/api",
+  baseUrl: "https://qbxr.net/api",
+  //baseUrl: "http://localhost/api",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
