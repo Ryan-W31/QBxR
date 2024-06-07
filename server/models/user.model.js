@@ -48,6 +48,9 @@ const userSchema = new Schema(
     phone_number: {
       type: String,
     },
+    score: {
+      type: Number,
+    },
   },
   { collection: "Users" }
 );

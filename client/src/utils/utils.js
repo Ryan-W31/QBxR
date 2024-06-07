@@ -39,6 +39,7 @@ function getAge(dob) {
 
 // Function to format the birthday date
 const formatBirthday = (date) => {
+  if (!date) return "";
   const d = date.substring(0, 10);
   return d;
 };

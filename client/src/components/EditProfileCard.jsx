@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { updateUserInfoAndRefresh } from "../hooks/users/userApiSlice";
-import { formatBirthday } from "../utils/formatBirthday";
-import { useToast } from "react-toastify";
+import { formatBirthday } from "../utils/utils";
+import { useToast } from "./Toast";
 import PhoneInput, { isPossiblePhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import validator from "validator";
@@ -30,16 +30,16 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (firstname === "" || firstname === undefined) {
-      notify("First name is required.", "error");
+      notify("First name is required.", "error", "top-right");
       return;
     } else if (lastname === "" || lastname === undefined) {
-      notify("Last name is required.", "error");
+      notify("Last name is required.", "error", "top-right");
       return;
     } else if (email === "" || email === undefined) {
-      notify("Email is required.", "error");
+      notify("Email is required.", "error", "top-right");
       return;
     } else if (schoolOrg === "" || schoolOrg === undefined) {
-      notify("School/Organization is required.", "error");
+      notify("School/Organization is required.", "error", "top-right");
       return;
     }
 

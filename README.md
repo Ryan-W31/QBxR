@@ -1,7 +1,5 @@
 # QBxR: NFL Quarterback Rating System
 
----
-
 To run this app locally, follow these steps:
 
 1. Install Docker

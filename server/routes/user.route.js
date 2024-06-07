@@ -18,9 +18,6 @@ router
   .route("/updatepassword/:id")
   .patch(verifyToken, usersController.updateUserPassword);
 
-// Get User By ID: GET request to /:id
-router.route("/:id").get(verifyToken, usersController.getUserById);
-
 // Get User Favorites: GET request to /favorites/:id
 router
   .route("/favorites/:id")
@@ -28,5 +25,11 @@ router
 
 // Sign Up: POST request to /signup
 router.route("/signup").post(usersController.signUp);
+
+// Search: GET request to /search
+router.route("/search/:search").get(verifyToken, usersController.search);
+
+// Get User By ID: GET request to /:id
+router.route("/:id").get(verifyToken, usersController.getUserById);
 
 module.exports = router;

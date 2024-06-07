@@ -113,6 +113,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
         return response;
       },
     }),
+    search: builder.query({
+      query: (search) => `/user/search/${search}`,
+      validateStatus: (response, result) => {
+        return response.status === 200 && !result.isError;
+      },
+      keepUnusedDataFor: 60,
+      transformResponse: (response) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -123,6 +133,7 @@ export const {
   useUpdateUserPasswordMutation,
   useGetUserByIdQuery,
   useGetUserFavoritesQuery,
+  useSearchQuery,
 } = userApiSlice;
 
 export const selectUsersResult = userApiSlice.endpoints.getLeaderboard.select();

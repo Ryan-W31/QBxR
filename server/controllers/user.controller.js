@@ -199,6 +199,33 @@ const getUserFavorites = async (req, res) => {
   return res.status(200).json({ favorites: user.favorites });
 };
 
+const search = async (req, res) => {
+  const search = req.params.search;
+  console.log(search);
+
+  const users = await User.find({
+    $or: [
+      { firstname: { $regex: search, $options: "i" } },
+      { lastname: { $regex: search, $options: "i" } },
+      { school_organization: { $regex: search, $options: "i" } },
+    ],
+  });
+
+  var searchedUsers = [];
+
+  users.forEach((user) => {
+    searchedUsers.push({
+      id: user._id,
+      role: user.role,
+      name: `${user.firstname} ${user.lastname}`,
+      school: user.school_organization,
+      score: user.score ? user.score : 0,
+    });
+  });
+
+  res.status(200).json(searchedUsers);
+};
+
 module.exports = {
   getLeaderboard,
   getUserFavorites,
@@ -206,4 +233,5 @@ module.exports = {
   getUserById,
   updateUserInfo,
   updateUserPassword,
+  search,
 };

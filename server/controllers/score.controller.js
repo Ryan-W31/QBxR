@@ -1,5 +1,6 @@
 // score.controller is used to handle the setting and getting of the user's scores.
 const Score = require("../models/score.model");
+const User = require("../models/user.model");
 const { formatWebScores, formatVRScores } = require("../utils/utils");
 
 // setVRScore is used to set the user's VR scores.
@@ -32,7 +33,7 @@ const setVRScore = async (req, res) => {
     newScore.web_defense &&
     newScore.web_crit
   ) {
-    newScore.qbxr_score =
+    const total =
       (newScore.web_reaction +
         newScore.web_playid +
         newScore.web_defense +
@@ -42,6 +43,10 @@ const setVRScore = async (req, res) => {
         newScore.vr_defense +
         newScore.vr_crit) /
       8;
+
+    newScore.qbxr_score = total;
+    const user = await User.findOneAndUpdate({ _id: id }, { score: total });
+    await user.save();
   }
 
   await newScore.save();
@@ -79,7 +84,7 @@ const setWebScore = async (req, res) => {
     newScore.vr_defense &&
     newScore.vr_crit
   ) {
-    newScore.qbxr_score =
+    const total =
       (newScore.web_reaction +
         newScore.web_playid +
         newScore.web_defense +
@@ -89,6 +94,10 @@ const setWebScore = async (req, res) => {
         newScore.vr_defense +
         newScore.vr_crit) /
       8;
+
+    newScore.qbxr_score = total;
+    const user = await User.findOneAndUpdate({ _id: id }, { score: total });
+    await user.save();
   }
 
   await newScore.save();
