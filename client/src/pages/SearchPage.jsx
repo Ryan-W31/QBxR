@@ -163,19 +163,19 @@ const SearchPage = () => {
         <div className="flex flex-col justify-center items-center font-Audiowide">
           <div className="w-3/4 p-8 px-6 bg-dark-secondary/80 rounded-lg mt-10 space-y-10 border-t-4 border-green-primary min-w-96">
             <label
-              for="search"
-              class="mb-2 text-sm font-medium text-light-secondary sr-only"
+              htmlFor="search"
+              className="mb-2 text-sm font-medium text-light-secondary sr-only"
             >
               Search
             </label>
-            <div class="relative">
-              <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <AiOutlineSearch class="h-5 w-5 text-light-secondary" />
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <AiOutlineSearch className="h-5 w-5 text-light-secondary" />
               </div>
               <input
                 type="search"
                 id="default-search"
-                class="block w-full p-4 ps-10 md:text-sm text-xs text-light-secondary border border-light-primary rounded-full bg-dark-secondary/80"
+                className="block w-full p-4 ps-10 md:text-sm text-xs text-light-secondary border border-light-primary rounded-full bg-dark-secondary/80"
                 placeholder="Search Players, Schools..."
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autoComplete="nope"
