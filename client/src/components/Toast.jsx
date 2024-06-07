@@ -11,8 +11,6 @@ export const useToast = () => {
 
 // ToastProvider component
 export const ToastProvider = ({ children }) => {
-  const toastRef = useRef();
-
   // notify function to display a toast notification
   const notify = (message, type = "info", position = "top-right") => {
     const toastTypes = {
@@ -45,7 +43,6 @@ export const ToastProvider = ({ children }) => {
     <ToastContext.Provider value={{ notify }}>
       {children}
       <ToastContainer
-        ref={toastRef}
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
