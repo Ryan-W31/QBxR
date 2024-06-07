@@ -125,10 +125,18 @@ const ProfileCard = ({ myId, id, name, school, score, isVisible, onClose }) => {
 
             <hr class="border-light-primary border-1 w-1/2 mx-auto" />
             {/* Profile Score */}
-            <p class="text-3xl text-light-primary m-4">
-              QBxR Score:{" "}
-              <span className={classNames(scoreColor(score))}>{score}</span>
-            </p>
+            {webData === undefined ||
+            vrData === undefined ||
+            webData.length === 0 ||
+            vrData.length === 0 ? (
+              <p class="text-3xl text-light-primary m-4">QBxR Score: No Data</p>
+            ) : (
+              <p class="text-3xl text-light-primary m-4">
+                QBxR Score:{" "}
+                <span className={classNames(scoreColor(score))}>{score}</span>
+              </p>
+            )}
+
             {/* End Profile Score */}
 
             {/* Profile Test Scores */}

@@ -101,7 +101,6 @@ const SearchPage = () => {
   const handleRowClick = (profile) => {
     setShowProfile(profile);
     toggleBlur();
-    console.log(profile);
   };
 
   // Close the profile card and remove the blur effect
