@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BiArrowFromBottom } from "react-icons/bi";
 import { classNames, scrollToTop } from "../utils/utils";
+import { IconButton } from "@material-tailwind/react";
 
 // ScrollToTop component. This component displays a button that scrolls to the top of the page when clicked.
 const ScrollToTop = ({ showMenu }) => {
@@ -30,8 +31,7 @@ const ScrollToTop = ({ showMenu }) => {
         showMenu ? "hidden fixed bottom-2 left-2" : "fixed bottom-2 left-2"
       }
     >
-      <button
-        type="button"
+      <IconButton
         onClick={scrollToTop}
         className={classNames(
           isScrollToTopVisible ? "opacity-100" : "opacity-0",
@@ -39,7 +39,7 @@ const ScrollToTop = ({ showMenu }) => {
         )}
       >
         <BiArrowFromBottom className="h-6 w-6" aria-hidden="true" />
-      </button>
+      </IconButton>
     </div>
   );
 };

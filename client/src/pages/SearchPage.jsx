@@ -12,6 +12,13 @@ import { useSelector } from "react-redux";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaSort } from "react-icons/fa";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Input,
+} from "@material-tailwind/react";
 
 // SearchPage component. This component displays the search page with a search form and search results.
 const SearchPage = () => {
@@ -176,57 +183,65 @@ const SearchPage = () => {
           isLandingPage={false}
           currentPage="search"
         />
-        <div className="flex flex-col justify-center items-center font-Audiowide">
-          <div className="w-3/4 p-8 px-6 bg-dark-secondary/80 rounded-lg mt-10 space-y-10 border-t-4 border-green-primary min-w-96">
+        <Card className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center border-t-4 border-green-primary">
+          <CardHeader className="mt-2 bg-transparent shadow-none">
             <h1 className="text-6xl font-bold font-Audiowide text-green-primary text-center mb-4">
               Search
             </h1>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+          </CardHeader>
+          <CardBody>
+            <Input
+              label="Search Players, Coaches, Schools..."
+              className="!font-Audiowide !text-light-secondary border-light-secondary focus:border-light-secondary"
+              labelProps={{
+                className:
+                  "!font-Audiowide !text-light-secondary peer-focus:text-light-secondary before:border-light-secondary peer-focus:before:!border-light-secondary after:border-light-secondary peer-focus:after:!border-light-secondary",
+              }}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoComplete="nope"
+              icon={
                 <AiOutlineSearch className="h-5 w-5 text-light-secondary" />
-              </div>
-              <input
-                type="search"
-                id="default-search"
-                className="block w-full p-4 ps-10 md:text-sm text-xs text-light-secondary border border-light-primary rounded-full bg-dark-secondary/80"
-                placeholder="Search Players, Schools..."
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoComplete="nope"
-              />
-            </div>
+              }
+            />
+            <div className="my-4" />
             <SearchPageFilterMenu getFilters={handleFilters} />
-            <div className="relative overflow-x-auto border-2 rounded-lg overflow-hidden border-green-primary font-Audiowide">
-              <SkeletonTheme
-                baseColor="#0C0C0C"
-                highlightColor="#AAAAAA77"
-                borderRadius="0.5rem"
-                duration={1.5}
-              >
-                <table className="table-auto w-full text-sm text-center text-light-primary divide-y divide-green-primary">
-                  <thead className="text-xs text-light-primary uppercase bg-dark-secondary">
-                    <tr>
-                      {cols.map((col) => (
-                        <th
-                          className="py-3 cursor-pointer"
-                          key={col.key}
-                          onClick={() => handleSort(col.key)}
-                        >
-                          <div className="flex justify-center items-center">
-                            <p>{col.title}</p>
-                            <FaSort className="ml-1" />
-                          </div>
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-green-primary">
-                    {tableContent}
-                  </tbody>
-                </table>
-              </SkeletonTheme>
-            </div>
-          </div>
-        </div>
+          </CardBody>
+          <CardBody className="relative overflow-x-auto border-2 rounded-lg overflow-hidden border-green-primary font-Audiowide p-0">
+            <SkeletonTheme
+              baseColor="#0C0C0C"
+              highlightColor="#AAAAAA77"
+              borderRadius="0.5rem"
+              duration={1.5}
+            >
+              <table className="table-auto w-full text-sm text-center text-light-primary divide-y divide-green-primary overflow-x-auto">
+                <thead className="text-xs text-light-primary bg-dark-secondary">
+                  <tr>
+                    {cols.map((col) => (
+                      <th
+                        className="py-3 cursor-pointer"
+                        key={col.key}
+                        onClick={() => handleSort(col.key)}
+                      >
+                        <div className="flex justify-center">
+                          <Button
+                            variant="text"
+                            className="flex justify-center items-center gap-2 font-Audiowide text-light-primary p-0"
+                          >
+                            {col.title}
+                            <FaSort />
+                          </Button>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-green-primary">
+                  {tableContent}
+                </tbody>
+              </table>
+            </SkeletonTheme>
+          </CardBody>
+        </Card>
       </div>
       <ProfileCard
         myId={myId}

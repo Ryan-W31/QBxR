@@ -138,7 +138,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
               </Link>
               <Link className="mt-4" to="/login">
                 <Button className="py-2 px-6 text-light-primary bg-green-primary rounded-full w-full hover:bg-green-secondary text-center text-lg font-Audiowide">
-                  Sign In
+                  Log In
                 </Button>
               </Link>
             </>

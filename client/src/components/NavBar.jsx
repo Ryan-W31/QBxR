@@ -108,28 +108,26 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
       {/* Display the navigation bar (Depending on Landing Page) */}
       <div className="flex items-center justify-between">
         {/* QBxR Logo */}
-        <Typography
-          as="a"
-          href="/home"
-          className="text-3xl font-extrabold text-green-primary font-Audiowide"
-        >
-          QBxR
-        </Typography>
+        <div className="flex items-center justify-center h-[60px] w-[105.6px]">
+          <a
+            href="/home"
+            className="text-3xl font-extrabold text-green-primary font-Audiowide text-center"
+          >
+            QBxR
+          </a>
+        </div>
         {/* End QBxR Logo */}
 
         <div className="flex items-center gap-6 font-Audiowide text-md">
-          <div className="mr-4 hidden lg:block">{navList}</div>
+          <div className="hidden lg:block">{navList}</div>
         </div>
 
         {/* Sign In Link */}
         {isLandingPage ? (
           <div className="flex items-center">
             <Link to="/login">
-              <Button
-                variant="text"
-                className="hidden py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary lg:inline-block font-Audiowide text-md"
-              >
-                <span>Sign In</span>
+              <Button className="hidden py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary lg:inline-block font-Audiowide text-md">
+                <span>Log In</span>
               </Button>
             </Link>
           </div>

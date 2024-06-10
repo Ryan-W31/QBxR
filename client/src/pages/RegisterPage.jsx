@@ -5,6 +5,18 @@ import { useNavigate, Link } from "react-router-dom";
 import { useSignUpMutation } from "../hooks/users/userApiSlice";
 import ErrorMessage from "../components/ErrorMessage";
 import { useToast } from "../components/Toast";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardBody,
+  Checkbox,
+  IconButton,
+  Tab,
+  Tabs,
+  TabsHeader,
+  Input,
+} from "@material-tailwind/react";
 
 // RegisterPage component. This component displays the registration form.
 const RegisterPage = () => {
@@ -50,34 +62,6 @@ const RegisterPage = () => {
       navigate("/login");
     }
   }, [isSuccess, navigate]);
-
-  // Handle the nonplayer role event
-  const handleNonplayerRole = (event) => {
-    event.preventDefault();
-
-    setRole("nonplayer");
-    const pSwitch = document.getElementById("Pswitch");
-    if (pSwitch.classList.contains("left-1/2")) {
-      pSwitch.classList.remove("left-1/2");
-      pSwitch.classList.add("left-0");
-    }
-
-    console.log(role);
-  };
-
-  // Handle the player role event
-  const handlePlayerRole = (event) => {
-    event.preventDefault();
-
-    setRole("player");
-    const pSwitch = document.getElementById("Pswitch");
-    if (pSwitch.classList.contains("left-0")) {
-      pSwitch.classList.remove("left-0");
-      pSwitch.classList.add("left-1/2");
-    }
-
-    console.log(role);
-  };
 
   // Handle the checkbox event
   const handleCheck = () => {
@@ -142,151 +126,191 @@ const RegisterPage = () => {
   // Return the registration form
   return (
     <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
-      <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
-        <div className="mb-6 text-center font-Audiowide font-bold">
+      <Card className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 pt-10 pb-4 px-6 rounded-lg">
+        <CardHeader className="text-center font-Audiowide font-bold bg-transparent shadow-none">
           <label className="text-5xl text-green-primary">QBxR</label>
-        </div>
-        <div className="text-center">
-          <label className="mr-1 font-Audiowide font-semibold text-light-primary ">
+        </CardHeader>
+        <CardBody className="bg-transparent text-center">
+          <label className="mr-1 font-Audiowide font-semibold text-light-primary">
             Register with
           </label>
-          <button
-            type="button"
-            className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary"
-          >
-            <FaFacebook className="mx-auto h-3.5 w-3.5 " />
-          </button>
-          <button
-            type="button"
-            className="inlne-block mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary uppercase leading-normal text-light-primary"
-          >
-            <FaGoogle className="mx-auto h-3.5 w-3.5 " />
-          </button>
-        </div>
-        <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-light-secondary after:mt-0.5 after:flex-1 after:border-t after:border-light-secondary">
-          <p className="mx-4 text-center font-Audiowide font-semibold text-green-primary">
+          <IconButton className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary overflow-hidden">
+            <FaFacebook className="h-5 w-5" />
+          </IconButton>
+          <IconButton className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary overflow-hidden">
+            <FaGoogle className="h-5 w-5" />
+          </IconButton>
+        </CardBody>
+        <div className="mb-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-light-secondary after:mt-0.5 after:flex-1 after:border-t after:border-light-secondary">
+          <p className="mx-4 mb-0 text-center font-Audiowide font-semibold text-green-primary">
             Or
           </p>
         </div>
-
         {isError && (
           <ErrorMessage message={error} onClose={() => setIsError(false)} />
         )}
-
-        <div className="flex justify-center">
-          <label className="w-full flex px-4 bg-dark-primary relative rounded-full">
-            <div
-              id="Pswitch"
-              className="w-1/2 h-full bg-green-primary rounded-full transition-all absolute left-0"
-            ></div>
-            <button
-              onClick={handleNonplayerRole}
-              className="transition w-full flex font-bold justify-center items-center text-light-primary z-10"
+        <CardBody className="flex flex-col justify-center w-full p-0">
+          <Tabs value="nonplayer" id="tab">
+            <TabsHeader
+              className="bg-dark-primary rounded-full"
+              indicatorProps={{ className: "bg-green-primary rounded-full" }}
             >
-              Not A Player
-            </button>
-            <button
-              onClick={handlePlayerRole}
-              className="transition w-full flex font-bold items-center justify-center text-center text-light-primary z-10"
-            >
-              Player
-            </button>
-          </label>
-        </div>
-        <input
-          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
-          type="text"
-          placeholder="First Name"
-          onChange={(c) => setFirstname(c.target.value)}
-        />
-        <input
-          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
-          type="text"
-          placeholder="Last Name"
-          onChange={(c) => setLastname(c.target.value)}
-        />
-        <input
-          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
-          type="text"
-          placeholder="School or Organization"
-          onChange={(c) => setSchool_Organization(c.target.value)}
-        />
-        <input
-          className="text-sm w-full px-4 py-2 border outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded mt-4"
-          type="text"
-          placeholder="Email Address"
-          onChange={(c) => setEmail(c.target.value)}
-        />
-        <div className="relative container mt-4">
-          <input
-            type={isPasswordVisible ? "text" : "password"}
-            placeholder="Password"
-            className="w-full px-4 py-2 text-sm border rounded outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1"
-            onChange={(c) => setPassword(c.target.value)}
-          />
-          <button
-            className="absolute outline-none inset-y-0 right-0 flex items-center px-4 text-green-primary"
-            onClick={togglePasswordVisibility}
-          >
-            {isPasswordVisible ? (
-              <AiFillEye className="w-5 h-5 text-light-secondary" />
-            ) : (
-              <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
-            )}
-          </button>
-        </div>
-        <div className="relative container mt-4">
-          <input
-            type={isConfirmPasswordVisible ? "text" : "password"}
-            placeholder="Confirm Password"
-            className="w-full px-4 py-2 text-sm border rounded outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1"
-            onChange={(c) => setConfirmPassword(c.target.value)}
-          />
-          <button
-            className="absolute outline-none inset-y-0 right-0 flex items-center px-4 text-green-primary"
-            onClick={toggleConfirmPasswordVisibility}
-          >
-            {isConfirmPasswordVisible ? (
-              <AiFillEye className="w-5 h-5 text-light-secondary" />
-            ) : (
-              <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
-            )}
-          </button>
-        </div>
-        <div className="mt-4 flex justify-left font-semibold text-sm">
-          <label className="flex text-light-primary cursor-pointer">
-            <input
-              id="TnC"
-              className="mr-1"
-              type="checkbox"
-              checked={isChecked}
-              onChange={handleCheck}
+              <Tab
+                value={"nonplayer"}
+                className="text-light-primary font-Audiowide"
+                onClick={() => setRole("nonplayer")}
+              >
+                Non-Player
+              </Tab>
+              <Tab
+                value={"player"}
+                className="text-light-primary font-Audiowide"
+                onClick={() => setRole("player")}
+              >
+                Player
+              </Tab>
+            </TabsHeader>
+          </Tabs>
+          <div className="flex flex-col mt-4">
+            <Input
+              type="text"
+              placeholder="First Name"
+              className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 w-full !font-Audiowide"
+              labelProps={{
+                className: "hidden",
+              }}
+              onChange={(c) => setFirstname(c.target.value)}
+              required
             />
-            <span>
-              <span className="font-bold text-green-primary">I agree </span>to
-              the terms & conditions and privacy policy
-            </span>
-          </label>
-        </div>
-        <div className="text-center">
-          <button
-            onClick={handleSignUp}
-            className="mt-4 text-lg  font-semibold font-Audiowide bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
-            type="submit"
-          >
-            Register
-          </button>
-        </div>
-        <div className="mt-4 font-semibold text-sm text-light-primary text-center">
-          Have an account already?{" "}
-          <Link
-            className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4"
-            to="/login"
-          >
-            Sign In
-          </Link>
-        </div>
-      </div>
+            <div className="my-2" />
+            <Input
+              type="text"
+              placeholder="Last Name"
+              className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 w-full !font-Audiowide"
+              labelProps={{
+                className: "hidden",
+              }}
+              onChange={(c) => setLastname(c.target.value)}
+              required
+            />
+            <div className="my-2" />
+
+            <Input
+              type="text"
+              placeholder="School or Organization"
+              className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 w-full !font-Audiowide "
+              labelProps={{
+                className: "hidden",
+              }}
+              onChange={(c) => setSchool_Organization(c.target.value)}
+              required
+            />
+            <div className="my-2" />
+
+            <Input
+              type="email"
+              placeholder="Email"
+              className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 w-full !font-Audiowide "
+              labelProps={{
+                className: "hidden",
+              }}
+              onChange={(c) => setEmail(c.target.value)}
+              required
+            />
+            <div className="my-2" />
+
+            <div className="relative w-full">
+              <Input
+                type={isPasswordVisible ? "text" : "password"}
+                placeholder="Password"
+                className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 !font-Audiowide"
+                labelProps={{
+                  className: "hidden",
+                }}
+                onChange={(c) => setPassword(c.target.value)}
+                required
+              />
+              <IconButton
+                type="text"
+                ripple={false}
+                className="!absolute top-0 right-0 shadow-none bg-transparent hover:shadow-none"
+                onClick={togglePasswordVisibility}
+              >
+                {isPasswordVisible ? (
+                  <AiFillEye className="w-5 h-5 text-light-secondary" />
+                ) : (
+                  <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
+                )}
+              </IconButton>
+            </div>
+            <div className="my-2" />
+
+            <div className="relative w-full">
+              <Input
+                type={isConfirmPasswordVisible ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 !font-Audiowide"
+                labelProps={{
+                  className: "hidden",
+                }}
+                onChange={(c) => setConfirmPassword(c.target.value)}
+                required
+              />
+              <IconButton
+                type="text"
+                ripple={false}
+                className="!absolute top-0 right-0 shadow-none bg-transparent hover:shadow-none"
+                onClick={toggleConfirmPasswordVisibility}
+              >
+                {isConfirmPasswordVisible ? (
+                  <AiFillEye className="w-5 h-5 text-light-secondary" />
+                ) : (
+                  <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
+                )}
+              </IconButton>
+            </div>
+          </div>
+          <Checkbox
+            id="TnC"
+            ripple={false}
+            label={
+              <p>
+                <span className="text-green-primary font-bold">I agree</span> to
+                the terms & conditions and privacy policy
+              </p>
+            }
+            labelProps={{
+              className: "text-xs font-Audiowide text-light-primary",
+            }}
+            containerProps={{ className: "-ml-3" }}
+            className="before:bg-dark-secondary checked:bg-green-primary checked:before:bg-green-primary checked:border-green-primary hover:before:opacity-0 border-light-primary before:border-light-primary"
+            onChange={handleCheck}
+            checked={isChecked}
+          />
+          <div className="text-center font-bold">
+            <Button
+              size="lg"
+              className="text-md font-Audiowide bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
+              onClick={handleSignUp}
+            >
+              Register
+            </Button>
+          </div>
+          <div className="inline-flex items-center font-semibold text-sm text-light-primary justify-center font-Audiowide">
+            Have an account already?{" "}
+            <Link to="/login">
+              <Button
+                type="text"
+                ripple={false}
+                size="lg"
+                className="pl-1 text-green-primary hover:underline hover:text-green-secondary hover:underline-offset-4 normal-case font-Audiowide"
+              >
+                Log In
+              </Button>
+            </Link>
+          </div>
+        </CardBody>
+      </Card>
     </section>
   );
 };
