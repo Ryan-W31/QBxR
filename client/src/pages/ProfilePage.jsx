@@ -26,56 +26,45 @@ import { formatPhoneNumberIntl } from "react-phone-number-input";
 import { formatInTimeZone } from "date-fns-tz";
 import { FiEdit } from "react-icons/fi";
 import { FaRegStar, FaStar } from "react-icons/fa6";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  IconButton,
+} from "@material-tailwind/react";
 
 // ProfilePage component. This component displays the user's profile page with the user's name, school, status, bio, and test scores.
 const ProfilePage = () => {
   const [showBlur, setShowBlur] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
-  const [status, setStatus] = useState(true);
-  const [myProfile, setMyProfile] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [profileData, setProfileData] = useState(null);
+  const [profileScores, setProfileScores] = useState(null);
   const dispatch = useDispatch();
 
   const { id } = useParams();
   const myId = useSelector(selectCurrentId);
+  const isMyProfile = !id || myId === id;
 
   const primaryUser = useSelector(selectCurrentUser);
-
   const primaryUserScores = useSelector(selectCurrentScores);
-  const qbxrDataP = primaryUserScores.qbxr;
-  const webDataP = primaryUserScores.web;
-  const vrDataP = primaryUserScores.vr;
 
-  // Check if the profile is the user's profile
-  useEffect(() => {
-    if (id !== undefined && id !== myId) {
-      setMyProfile(false);
-    }
-  }, [id, myId]);
-
-  // If not logged in user's profile, get the user data by id
   const {
     data: user,
     error,
-    isLoading,
-  } = useGetUserByIdQuery(id, {
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
-    skip: !id,
-  });
+    isLoadingUser,
+  } = useGetUserByIdQuery(id, { skip: !id });
 
   // Get the user's VR and Web test scores
   const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(id, {
-    refetchOnMountOrArgChange: true,
-    refetchOnFocus: true,
     skip: !id,
   });
   const { data: webData, isLoading: isLoadingWebScore } = useGetWebScoreQuery(
     id,
     {
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
       skip: !id,
     }
   );
@@ -84,11 +73,38 @@ const ProfilePage = () => {
   const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
     id,
     {
-      refetchOnMountOrArgChange: true,
-      refetchOnFocus: true,
       skip: !id,
     }
   );
+  // Check if the profile is the user's profile
+  useEffect(() => {
+    if (isMyProfile) {
+      setProfileData(primaryUser);
+      setProfileScores(primaryUserScores);
+    } else {
+      setProfileData(user);
+      setProfileScores({ qbxr: qbxrData, web: webData, vr: vrData });
+    }
+
+    if (
+      !isLoadingUser &&
+      !isLoadingQBxRData &&
+      !isLoadingVRScore &&
+      !isLoadingWebScore
+    )
+      setIsLoading(false);
+  }, [
+    isMyProfile,
+    primaryUser,
+    primaryUserScores,
+    user,
+    qbxrData,
+    webData,
+    vrData,
+    profileData,
+  ]);
+
+  // If not logged in user's profile, get the user data by id
 
   // Check if the user is in the logged in user's favorites
   useEffect(() => {
@@ -134,7 +150,6 @@ const ProfilePage = () => {
       return value;
     };
 
-    setStatus(str2bool(e.target.value));
     await dispatch(
       updateUserInfoAndRefresh({ id: myId, status: str2bool(e.target.value) })
     ).unwrap();
@@ -186,357 +201,245 @@ const ProfilePage = () => {
             isLandingPage={false}
             currentPage="profile"
           />
-          <div class="mx-auto flex flex-col md:flex-row my-5 p-5">
-            <div class="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-green-primary rounded-lg text-center font-Audiowide relative">
-              {!myProfile ? (
-                <div class="absolute top-3 right-3">
+          <div className="mx-auto flex flex-col md:flex-row my-5 p-5">
+            <Card className="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-green-primary rounded-lg text-center font-Audiowide relative">
+              {!isMyProfile && (
+                <IconButton
+                  variant="text"
+                  ripple={false}
+                  className="absolute top-3 right-3 rounded-lg text-sm w-8 h-8 ml-auto inline-flex items-center justify-center"
+                  onClick={handleFavorite}
+                >
                   {isFavorite ? (
-                    <FaStar
-                      className="cursor-pointer text-2xl text-[#DBAC34]/80"
-                      onClick={handleFavorite}
-                    />
+                    <FaStar className="text-2xl text-[#DBAC34]/80" />
                   ) : (
-                    <FaRegStar
-                      className="cursor-pointer text-2xl text-light-primary"
-                      onClick={handleFavorite}
-                    />
+                    <FaRegStar className="text-2xl text-light-primary" />
+                  )}
+                </IconButton>
+              )}
+              <div className="image overflow-hidden p-3">
+                <div className="h-60 w-60 text-light-primary bg-green-primary border border-light-primary rounded-full inline-flex items-center justify-center text-md md:text-4xl">
+                  {getInitials(
+                    `${profileData?.firstname} ${profileData?.lastname}`
                   )}
                 </div>
-              ) : null}
-              <div class="image overflow-hidden p-3">
-                {myProfile ? (
-                  <div className="h-60 w-60 text-light-primary bg-green-primary border border-light-primary rounded-full inline-flex items-center justify-center text-md md:text-4xl">
-                    {getInitials(
-                      `${primaryUser?.firstname} ${primaryUser?.lastname}`
-                    )}
-                  </div>
-                ) : (
-                  <div className="h-60 w-60 text-light-primary bg-green-primary border border-light-primary rounded-full inline-flex items-center justify-center text-md md:text-4xl">
-                    {getInitials(`${user?.firstname} ${user?.lastname}`)}
-                  </div>
-                )}
               </div>
-              <h1 class="text-light-primary font-bold text-xl leading-8 my-1">
-                {myProfile
-                  ? `${primaryUser?.firstname} ${primaryUser?.lastname}`
-                  : `${user?.firstname} ${user?.lastname}`}
-              </h1>
-              <h3 class="text-light-secondary font-lg text-semibold leading-6">
-                {myProfile
-                  ? `${primaryUser?.school_organization}`
-                  : `${user?.school_organization}`}
-              </h3>
-              {myProfile ? (
+              <CardHeader className="mt-2 bg-transparent shadow-none">
+                <h1 className="text-light-primary font-bold text-xl leading-8 my-1">
+                  {profileData?.firstname + " " + profileData?.lastname}
+                </h1>
+              </CardHeader>
+              <CardBody className="p-2">
+                <h3 className="text-light-secondary font-lg text-semibold leading-6">
+                  {profileData?.school_organization}
+                </h3>
                 <div>
-                  {primaryUser?.bio !== undefined ? (
-                    <p class="text-sm text-light-secondary leading-6">
-                      {primaryUser?.bio}
+                  {profileData?.bio !== undefined && (
+                    <p className="text-sm text-light-secondary leading-6">
+                      {profileData?.bio}
                     </p>
-                  ) : null}
+                  )}
                 </div>
-              ) : (
-                <div>
-                  {user?.bio !== undefined ? (
-                    <p class="text-sm text-light-secondary leading-6">
-                      {user?.bio}
-                    </p>
-                  ) : null}
-                </div>
-              )}
-              <ul class="bg-dark-secondary text-light-secondary py-2 px-3 mt-3 divide-y rounded border-2 border-green-primary">
-                <li class="flex items-center py-3">
-                  <span>Status</span>
-                  <span class="ml-auto">
-                    {myProfile ? (
-                      <select
-                        className={classNames(
-                          primaryUser.status
-                            ? "bg-green-primary"
-                            : "bg-red-600",
-                          "text-light-primary py-1 px-2 rounded text-sm"
-                        )}
-                        onChange={handleStatusChange}
-                      >
-                        {primaryUser.status ? (
-                          <option selected>Active</option>
-                        ) : (
-                          <option selected>Inactive</option>
-                        )}
-                        <option value={true}>Active</option>
-                        <option value={false}>Inactive</option>
-                      </select>
-                    ) : (
-                      <div
-                        className={classNames(
-                          user.status ? "bg-green-primary" : "bg-red-600",
-                          "text-light-primary py-1 px-2 rounded text-sm"
-                        )}
-                      >
-                        {user.status ? "Active" : "Inactive"}
-                      </div>
-                    )}
-                  </span>
-                </li>
-                {myProfile ? (
-                  <li class="flex items-center py-3">
+                <ul className="bg-dark-secondary text-light-secondary py-2 px-3 mt-3 divide-y rounded border-2 border-green-primary">
+                  <li className="flex items-center py-3">
+                    <span>Status</span>
+                    <span className="ml-auto">
+                      {isMyProfile ? (
+                        <select
+                          className={classNames(
+                            profileData?.status
+                              ? "bg-green-primary"
+                              : "bg-red-600",
+                            "text-light-primary py-1 px-2 rounded text-sm"
+                          )}
+                          onChange={handleStatusChange}
+                        >
+                          {profileData.status ? (
+                            <option selected>Active</option>
+                          ) : (
+                            <option selected>Inactive</option>
+                          )}
+                          <option value={true}>Active</option>
+                          <option value={false}>Inactive</option>
+                        </select>
+                      ) : (
+                        <div
+                          className={classNames(
+                            profileData?.status
+                              ? "bg-green-primary"
+                              : "bg-red-600",
+                            "text-light-primary py-1 px-2 rounded text-sm"
+                          )}
+                        >
+                          {profileData?.status ? "Active" : "Inactive"}
+                        </div>
+                      )}
+                    </span>
+                  </li>
+                  <li className="flex items-center py-3">
                     <span>Age</span>
-                    {primaryUser?.birthday !== undefined ? (
-                      <span class="ml-auto">
-                        {getAge(primaryUser.birthday)} years old
+                    {profileData?.birthday !== undefined ? (
+                      <span className="ml-auto">
+                        {getAge(profileData?.birthday)} years old
                       </span>
                     ) : (
-                      <span class="ml-auto">N/A</span>
+                      <span className="ml-auto">N/A</span>
                     )}
                   </li>
-                ) : (
-                  <li class="flex items-center py-3">
-                    <span>Age</span>
-                    {user?.birthday !== undefined ? (
-                      <span class="ml-auto">
-                        {getAge(user.birthday)} years old
-                      </span>
-                    ) : (
-                      <span class="ml-auto">N/A</span>
-                    )}
-                  </li>
-                )}
-              </ul>
-              <div class="my-4"></div>
-            </div>
-            <div class="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide">
-              <div class="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
-                <div className="w-full relative">
-                  <div class="flex justify-center text-center space-x-2 font-semibold text-light-primary">
-                    <span class="tracking-wide text-3xl">About</span>
+                </ul>
+              </CardBody>
+            </Card>
+            <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide">
+              <Card className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
+                <CardHeader className="w-full flex items-center justify-center bg-transparent shadow-none mt-0 relative overflow-visible">
+                  <div className="font-semibold text-light-primary">
+                    <span className="tracking-wide text-3xl">About</span>
                   </div>
-                  {myProfile ? (
-                    <FiEdit
-                      className="cursor-pointer text-xl text-light-primary hover:text-green-primary absolute top-0 right-0"
+                  {isMyProfile && (
+                    <IconButton
+                      variant="text"
+                      ripple={false}
+                      className="absolute -top-4 right-0 text-xl text-light-primary hover:text-green-primary"
                       onClick={handleEditProfile}
-                    />
-                  ) : null}
-                </div>
-                <div class="text-light-secondary">
-                  <div class="grid md:grid-cols-2 text-lg">
-                    <div class="grid grid-cols-2">
-                      <div class="px-2 py-2 font-semibold">Name</div>
-                      <div class="px-2 py-2">
-                        {myProfile
-                          ? `${primaryUser?.firstname} ${primaryUser?.lastname}`
-                          : `${user?.firstname} ${user?.lastname}`}
+                    >
+                      <FiEdit />
+                    </IconButton>
+                  )}
+                </CardHeader>
+                <CardBody className="text-light-secondary">
+                  <div className="grid md:grid-cols-2 text-lg">
+                    <div className="grid grid-cols-2">
+                      <div className="px-2 py-2 font-semibold">Name</div>
+                      <div className="px-2 py-2">
+                        {profileData?.firstname + " " + profileData?.lastname}
                       </div>
                     </div>
-                    <div class="grid grid-cols-2">
-                      <div class="px-2 py-2 font-semibold">Email</div>
+                    <div className="grid grid-cols-2">
+                      <div className="px-2 py-2 font-semibold">Email</div>
                       <a
-                        class=" px-2 py-2 text-light-primary hover:text-green-primary"
-                        href={
-                          myProfile
-                            ? "mailto:" + primaryUser?.email
-                            : "mailto:" + primaryUser?.email
-                        }
+                        className=" px-2 py-2 text-light-primary hover:text-green-primary"
+                        href={"mailto:" + profileData?.email}
                       >
-                        {myProfile ? `${primaryUser?.email}` : `${user?.email}`}
+                        {profileData?.email}
                       </a>
                     </div>
-                    {myProfile ? (
-                      <div class="grid grid-cols-2">
-                        <div class="px-2 py-2 font-semibold">Phone No.</div>
-                        {primaryUser?.phone_number !== undefined ? (
-                          <div class="px-2 py-2">
-                            {formatPhoneNumberIntl(primaryUser.phone_number)}
-                          </div>
-                        ) : (
-                          <div class="px-2 py-2">N/A</div>
-                        )}
-                      </div>
-                    ) : (
-                      <div class="grid grid-cols-2">
-                        <div class="px-2 py-2 font-semibold">Phone No.</div>
-                        {user?.phone_number !== undefined ? (
-                          <div class="px-2 py-2">
-                            {formatPhoneNumberIntl(user.phone_number)}
-                          </div>
-                        ) : (
-                          <div class="px-2 py-2">N/A</div>
-                        )}
-                      </div>
-                    )}
-                    {myProfile ? (
-                      <div class="grid grid-cols-2">
-                        <div class="px-2 py-2 font-semibold">Birthday</div>
-                        {primaryUser?.birthday !== undefined ? (
-                          <div class="px-2 py-2">
-                            {formatInTimeZone(
-                              new Date(primaryUser.birthday),
-                              "UTC",
-                              "PP"
-                            )}
-                          </div>
-                        ) : (
-                          <div class="px-2 py-2">N/A</div>
-                        )}
-                      </div>
-                    ) : (
-                      <div class="grid grid-cols-2">
-                        <div class="px-2 py-2 font-semibold">Birthday</div>
-                        {user?.birthday !== undefined ? (
-                          <div class="px-2 py-2">
-                            {formatInTimeZone(
-                              new Date(user.birthday),
-                              "UTC",
-                              "PP"
-                            )}
-                          </div>
-                        ) : (
-                          <div class="px-2 py-2">N/A</div>
-                        )}
-                      </div>
-                    )}
+                    <div className="grid grid-cols-2">
+                      <div className="px-2 py-2 font-semibold">Phone No.</div>
+                      {profileData?.phone_number !== undefined ? (
+                        <div className="px-2 py-2">
+                          {formatPhoneNumberIntl(profileData?.phone_number)}
+                        </div>
+                      ) : (
+                        <div className="px-2 py-2">N/A</div>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2">
+                      <div className="px-2 py-2 font-semibold">Birthday</div>
+                      {profileData?.birthday !== undefined ? (
+                        <div className="px-2 py-2">
+                          {formatInTimeZone(
+                            new Date(profileData?.birthday),
+                            "UTC",
+                            "PP"
+                          )}
+                        </div>
+                      ) : (
+                        <div className="px-2 py-2">N/A</div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              </div>
+                </CardBody>
+              </Card>
 
-              <div class="my-4"></div>
+              <div className="my-4"></div>
 
-              {myProfile ? (
-                <div className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
-                  <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-light-primary e m-2">
-                      Your QBxR Score
-                    </h1>
-                    {qbxrDataP.qbxr_score ? (
+              <Card className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
+                <div className="text-center mb-6">
+                  <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary e m-2">
+                    Your QBxR Score
+                  </CardHeader>
+                  <CardBody className="p-2">
+                    {!isLoadingQBxRData ? (
+                      <>
+                        {profileScores?.qbxr?.qbxr_score ? (
+                          <p className="mx-5 text-5xl text-green-primary">
+                            {profileScores?.qbxr?.qbxr_score}
+                          </p>
+                        ) : (
+                          <div>
+                            <p className="m-4 text-3xl text-light-primary">
+                              No Data
+                            </p>
+                            {checkData(profileScores?.web, profileScores?.vr)}
+                          </div>
+                        )}
+                      </>
+                    ) : (
                       <SkeletonTheme
                         baseColor="#0C0C0C"
                         highlightColor="#AAAAAA"
                         duration={1.5}
                         borderRadius="0.5rem"
                       >
-                        {qbxrDataP.qbxr_score ? (
-                          <p className="mx-5 text-5xl text-green-primary">
-                            {qbxrDataP.qbxr_score}
-                          </p>
-                        ) : (
-                          <Skeleton width={75} height={75} />
-                        )}
+                        <Skeleton width={75} height={75} />
                       </SkeletonTheme>
-                    ) : (
-                      <div>
-                        <p className="m-4 text-3xl text-light-primary">
-                          No Data
-                        </p>
-                        {checkData(webDataP, vrDataP)}
-                      </div>
                     )}
 
                     <p className="text-light-secondary">
                       Your QBxR score is calculated by taking the average of
                       your Web and VR test scores.
                     </p>
-                  </div>
-                  <div className="flex md:flex-row flex-col justify-evenly md:space-x-4">
-                    <div className="flex flex-col">
-                      <ScoreCard
-                        title={"Your Web Test Scores"}
-                        errMessage={"Take The Web Test"}
-                        size="3"
-                        isLoading={false}
-                        data={webDataP}
-                      />
-                      <Link
-                        to="/web"
-                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center"
-                      >
-                        {webDataP === undefined || webDataP?.length === 0
-                          ? "Take The Web Test"
-                          : "Retake The Web Test"}
-                      </Link>
-                    </div>
-                    <div class="my-4 md:my-0"></div>
-                    <div className="flex flex-col justify-center">
-                      <ScoreCard
-                        title={"Your VR Test Scores"}
-                        errMessage={"Take The VR Test"}
-                        size="3"
-                        isLoading={false}
-                        data={vrDataP}
-                      />
-                      <Link
-                        to="/vr"
-                        className="py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center w-full"
-                      >
-                        {vrDataP === undefined || vrDataP?.length === 0
-                          ? "Take The VR Test"
-                          : "Retake The VR Test"}
-                      </Link>
-                    </div>
-                  </div>
+                  </CardBody>
                 </div>
-              ) : (
-                <div className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
-                  <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-light-primary e m-2">
-                      Your QBxR Score
-                    </h1>
-                    {qbxrData !== undefined ? (
-                      <SkeletonTheme
-                        baseColor="#0C0C0C"
-                        highlightColor="#AAAAAA"
-                        duration={1.5}
-                        borderRadius="0.5rem"
-                      >
-                        {isLoadingQBxRData ? (
-                          <Skeleton width={75} height={75} />
-                        ) : (
-                          <p className="mx-5 text-5xl text-green-primary">
-                            {qbxrData.qbxr_score}
-                          </p>
-                        )}
-                      </SkeletonTheme>
-                    ) : (
-                      <div>
-                        <p className="m-4 text-3xl text-light-primary">
-                          No Data
-                        </p>
-                        {checkData(webData, vrData)}
-                      </div>
+                <CardBody className="flex md:flex-row flex-col justify-evenly md:space-x-4 p-2">
+                  <div className="flex flex-col">
+                    <ScoreCard
+                      title={"Your Web Test Scores"}
+                      errMessage={"Take The Web Test"}
+                      size="3"
+                      isLoading={false}
+                      data={profileScores?.web}
+                    />
+                    {isMyProfile && (
+                      <Link to="/web">
+                        <Button className="w-full py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
+                          {profileScores?.web === undefined ||
+                          profileScores?.web?.length === 0
+                            ? "Take The Web Test"
+                            : "Retake The Web Test"}
+                        </Button>
+                      </Link>
                     )}
-
-                    <p className="text-light-secondary">
-                      Your QBxR score is calculated by taking the average of
-                      your Web and VR test scores.
-                    </p>
                   </div>
-                  <div className="flex md:flex-row flex-col justify-evenly md:space-x-4">
-                    <div className="flex flex-col">
-                      <ScoreCard
-                        title={"Your Web Test Scores"}
-                        errMessage={"Take The Web Test"}
-                        size="3"
-                        isLoadingB={isLoadingWebScore}
-                        data={webData}
-                      />
-                    </div>
-                    <div class="my-4 md:my-0"></div>
-                    <div className="flex flex-col justify-center">
-                      <ScoreCard
-                        title={"Your VR Test Scores"}
-                        errMessage={"Take The VR Test"}
-                        size="3"
-                        isLoadingB={isLoadingVRScore}
-                        data={vrData}
-                      />
-                    </div>
+                  <div className="my-4 md:my-0"></div>
+                  <div className="flex flex-col justify-center">
+                    <ScoreCard
+                      title={"Your VR Test Scores"}
+                      errMessage={"Take The VR Test"}
+                      size="3"
+                      isLoading={false}
+                      data={profileScores?.vr}
+                    />
+                    {isMyProfile && (
+                      <Link to="/vr">
+                        <Button className="w-full py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
+                          {profileScores?.vr === undefined ||
+                          profileScores?.vr?.length === 0
+                            ? "Take The VR Test"
+                            : "Retake The VR Test"}
+                        </Button>
+                      </Link>
+                    )}
                   </div>
-                </div>
-              )}
+                </CardBody>
+              </Card>
             </div>
           </div>
         </div>
         <EditProfileCard
           isVisible={showEditProfile}
           id={myId}
-          user={primaryUser}
+          user={profileData}
           onClose={handleClose}
         />
       </div>

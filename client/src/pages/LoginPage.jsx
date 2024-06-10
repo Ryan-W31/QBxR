@@ -8,6 +8,15 @@ import usePersist from "../hooks/auth/usePersist";
 import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import ErrorMessage from "../components/ErrorMessage";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Checkbox,
+  IconButton,
+  Input,
+} from "@material-tailwind/react";
 
 // LoginPage component. This component displays the login form.
 const LoginPage = () => {
@@ -69,55 +78,57 @@ const LoginPage = () => {
     <div>Loading...</div>
   ) : (
     <section className="h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
-      <div className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 py-10 px-6 rounded-lg">
-        <div className="mb-6 text-center font-Audiowide font-bold">
+      <Card className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 pt-10 pb-4 px-6 rounded-lg">
+        <CardHeader className="bg-transparent text-center font-Audiowide font-bold shadow-none">
           <label className="text-5xl text-green-primary">QBxR</label>
-        </div>
-        <div className="text-center">
+        </CardHeader>
+        <CardBody className="bg-transparent text-center">
           <label className="mr-1 font-Audiowide font-semibold text-light-primary">
             Log in with
           </label>
-          <button
-            type="button"
-            className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary"
-          >
-            <FaFacebook className="mx-auto h-3.5 w-3.5 " />
-          </button>
-          <button
-            type="button"
-            className="inlne-block mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary uppercase leading-normal text-light-primary"
-          >
-            <FaGoogle className="mx-auto h-3.5 w-3.5 " />
-          </button>
-        </div>
-        <div className="my-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-light-secondary after:mt-0.5 after:flex-1 after:border-t after:border-light-secondary">
+          <IconButton className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary overflow-hidden">
+            <FaFacebook className="h-5 w-5" />
+          </IconButton>
+          <IconButton className="mx-1 h-9 w-9 rounded-full bg-green-primary hover:bg-green-secondary text-light-primary overflow-hidden">
+            <FaGoogle className="h-5 w-5" />
+          </IconButton>
+        </CardBody>
+        <div className="mb-5 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-light-secondary after:mt-0.5 after:flex-1 after:border-t after:border-light-secondary">
           <p className="mx-4 mb-0 text-center font-Audiowide font-semibold text-green-primary">
             Or
           </p>
         </div>
-        <div>
-          {isError && (
-            <ErrorMessage message={error} onClose={() => setIsError(false)} />
-          )}
-          <div>
-            <input
-              className="text-sm w-full px-4 py-2 border outline-none  focus:ring-green-primary focus:border-green-primary focus:ring-1 rounded"
-              required
-              ref={userRef}
-              placeholder="Email Address"
-              onChange={(c) => setEmail(c.target.value)}
-            />
-          </div>
-          <div className="relative container mt-4">
-            <input
+        {isError && (
+          <ErrorMessage message={error} onClose={() => setIsError(false)} />
+        )}
+        <CardBody className="flex flex-col justify-center w-full p-0">
+          <Input
+            type="email"
+            placeholder="Email Address"
+            className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 w-full !font-Audiowide"
+            labelProps={{
+              className: "hidden",
+            }}
+            onChange={(c) => setEmail(c.target.value)}
+            inputRef={userRef}
+            required
+          />
+          <div className="my-2" />
+          <div className="relative w-full">
+            <Input
               type={isPasswordVisible ? "text" : "password"}
               placeholder="Password"
-              required
-              className="w-full px-4 py-2 text-sm border rounded outline-none focus:ring-green-primary focus:border-green-primary focus:ring-1"
+              className="!border !border-light-secondary !bg-light-primary ring-4 ring-transparent placeholder:text-light-secondary placeholder:opacity-100 focus:!border-green-primary focus:!border-2 !font-Audiowide"
+              labelProps={{
+                className: "hidden",
+              }}
               onChange={(c) => setPassword(c.target.value)}
+              required
             />
-            <button
-              className="absolute outline-none inset-y-0 right-0 flex items-center px-4 text-green-primary"
+            <IconButton
+              type="text"
+              ripple={false}
+              className="!absolute top-0 right-0 shadow-none bg-transparent hover:shadow-none"
               onClick={togglePasswordVisibility}
             >
               {isPasswordVisible ? (
@@ -125,48 +136,54 @@ const LoginPage = () => {
               ) : (
                 <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
               )}
-            </button>
+            </IconButton>
           </div>
-        </div>
-        <div className="mt-4 flex justify-between font-semibold text-sm">
-          <label
-            htmlFor="persist"
-            className="flex text-light-primary cursor-pointer"
-          >
-            <input
-              className="mr-1"
+          <div className="w-full flex justify-between font-semibold text-xs px-0">
+            <Checkbox
               id="persist"
-              type="checkbox"
+              ripple={false}
+              label="Remember me"
+              labelProps={{
+                className: "font-Audiowide text-light-primary",
+              }}
+              containerProps={{ className: "-ml-3" }}
+              className="before:bg-dark-secondary checked:bg-green-primary checked:before:bg-green-primary checked:border-green-primary hover:before:opacity-0 border-light-primary before:border-light-primary"
               onChange={handlePersist}
               checked={persist}
             />
-            Remember Me
-          </label>
-          <Link
-            className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4"
-            to="/forgotpassword"
-          >
-            Forgot Password?
-          </Link>
-        </div>
-        <div className="text-center font-bold">
-          <button
-            className="mt-4 font-Audiowide font-md bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
-            onClick={handleLogin}
-          >
-            Login
-          </button>
-        </div>
-        <div className="mt-4 font-semibold text-sm text-light-primary text-center">
-          Don't have an account?{" "}
-          <Link
-            className="text-green-primary hover:underline hover:text-green-secondary hover:underline-offset-4"
-            to="/register"
-          >
-            Register
-          </Link>
-        </div>
-      </div>
+            <Link to="/forgotpassword">
+              <Button
+                type="text"
+                className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4 font-Audiowide normal-case pr-0"
+              >
+                Forgot Password?
+              </Button>
+            </Link>
+          </div>
+          <div className="text-center font-bold">
+            <Button
+              size="lg"
+              className="mt-4 text-md font-Audiowide bg-green-primary hover:bg-green-secondary px-6 py-2 text-light-primary rounded-full tracking-wider"
+              onClick={handleLogin}
+            >
+              Log In
+            </Button>
+          </div>
+          <div className="inline-flex items-center mt-4 font-semibold text-sm text-light-primary justify-center font-Audiowide">
+            Don't have an account?{" "}
+            <Link to="/register">
+              <Button
+                type="text"
+                ripple={false}
+                size="lg"
+                className="pl-1 text-green-primary hover:underline hover:text-green-secondary hover:underline-offset-4 normal-case font-Audiowide"
+              >
+                Register
+              </Button>
+            </Link>
+          </div>
+        </CardBody>
+      </Card>
     </section>
   );
 

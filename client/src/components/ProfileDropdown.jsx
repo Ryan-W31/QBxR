@@ -1,21 +1,56 @@
-import React, { Fragment, useCallback } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { AiOutlineUser } from "react-icons/ai";
+import React, { useState, useCallback } from "react";
+import {
+  AiOutlineProfile,
+  AiOutlineSetting,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { classNames } from "../utils/utils";
+import { selectCurrentUser } from "../hooks/auth/authSlice";
+import { useSelector } from "react-redux";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "./Toast";
+import {
+  Button,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+} from "@material-tailwind/react";
+import { MdOutlineLogout } from "react-icons/md";
 
 // ProfileDropdown component. This component displays the profile dropdown for the application.
 const ProfileDropdown = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const [logout, { isLoading, isSuccess }] = useLogoutMutation();
   const [persist, setPersist] = usePersist();
   const { notify } = useToast();
 
   const navigate = useNavigate();
+  const user = useSelector(selectCurrentUser);
 
-  // Handle the logout event. If the user is logged out, display a success message and navigate to the login page.
+  const menuItems = [
+    { label: "My Profile", link: "/profile", icon: AiOutlineUser },
+    { label: "Settings", link: "/home", icon: AiOutlineSetting },
+    { label: "Log Out", link: "", icon: MdOutlineLogout },
+  ];
+
+  const toggleProfileMenu = () => {
+    setIsOpen((prevState) => !prevState);
+  };
+
+  const handleProfileClick = (event) => {
+    event.preventDefault();
+    navigate("/profile");
+  };
+
+  const handleSettingsClick = (event) => {
+    event.preventDefault();
+    navigate("/home");
+  };
+
+  // Handle the logout event. If the user is logged out, display a success message and navigate to the login page
   const handleLogout = useCallback(
     (event) => {
       event.preventDefault();
@@ -35,88 +70,54 @@ const ProfileDropdown = () => {
 
   // Return the profile dropdown menu
   return (
-    <Menu as="div" className="hidden relative md:inline-block text-center">
-      {/* Profile button */}
-      <div>
-        <Menu.Button className="hidden h-9 w-9 text-light-primary bg-green-primary border border-light-primary rounded-full baseline hover:bg-green-secondary hover:text-light-secondary hover:border-light-secondary md:block">
-          <AiOutlineUser className="mx-auto h-6 w-6" />
-        </Menu.Button>
-      </div>
-      {/* End Profile button */}
-
-      {/* Profile dropdown menu */}
-      <Transition
-        as={Fragment}
-        enter="transition ease-out duration-100"
-        enterFrom="transform opacity-0 scale-95"
-        enterTo="transform opacity-100 scale-100"
-        leave="transition ease-in duration-75"
-        leaveFrom="transform opacity-100 scale-100"
-        leaveTo="transform opacity-0 scale-95"
-      >
-        <Menu.Items className="absolute top-16 right-0 z-10 w-56 origin-top-right divide-y divide-light-secondary/80 rounded-md bg-dark-secondary/80 font-Audiowide text-md">
-          <div>
-            {/* Profile Link */}
-            <Menu.Item>
-              {({ active }) => (
-                <Link
-                  to="/profile"
-                  className={classNames(
-                    active
-                      ? "bg-green-primary text-light-primary"
-                      : "text-light-secondary",
-                    "block px-4 py-2 rounded-t-md"
-                  )}
-                >
-                  My Profile
-                </Link>
-              )}
-            </Menu.Item>
-            {/* End Profile Link */}
-
-            {/* Settings Link */}
-            <Menu.Item>
-              {({ active }) => (
-                <a
-                  href="/home"
-                  className={classNames(
-                    active
-                      ? "bg-green-primary text-light-primary"
-                      : "text-light-secondary",
-                    "block px-4 py-2"
-                  )}
-                >
-                  Settings
-                </a>
-              )}
-            </Menu.Item>
-            {/* End Settings Link */}
+    <Menu open={isOpen} handler={toggleProfileMenu} placement="bottom-end">
+      <MenuHandler>
+        <Button
+          ripple={false}
+          className="flex bg-transparent items-center gap-4 px-0"
+        >
+          <div className="flex items-center justify-center h-9 w-9 bg-green-primary rounded-full border-2 border-light-primary hover:bg-green-secondary">
+            <AiOutlineUser className="h-6 w-6" />
           </div>
-
-          {/* Log Out Link */}
           <div>
-            <form onSubmit={handleLogout}>
-              <Menu.Item>
-                {({ active }) => (
-                  <button
-                    type="submit"
-                    className={classNames(
-                      active
-                        ? "bg-red-600 text-light-primary"
-                        : "text-light-secondary",
-                      "block w-full px-4 py-2 rounded-b-md text-center"
-                    )}
-                  >
-                    Log Out
-                  </button>
-                )}
-              </Menu.Item>
-            </form>
+            <p className="font-Audiowide text-[0.5rem] text-light-primary text-left">{`${user?.firstname}`}</p>
+            <p className="font-Audiowide text-[0.5rem] text-light-primary text-left">{`${user?.lastname}`}</p>
           </div>
-          {/* End Log Out Link */}
-        </Menu.Items>
-      </Transition>
-      {/* End Profile dropdown menu */}
+        </Button>
+      </MenuHandler>
+      <MenuList className="p-0 bg-dark-secondary gap-y-2">
+        <MenuItem
+          onClick={handleProfileClick}
+          className="flex items-center gap-2 rounded-b-none hover:!bg-green-primary w-full"
+        >
+          <AiOutlineUser className="h-4 w-4 text-light-primary" />
+
+          <span className="text-light-primary font-Audiowide text-md">
+            My Profile
+          </span>
+        </MenuItem>
+        <MenuItem
+          onClick={handleSettingsClick}
+          className="flex items-center gap-2 rounded-none hover:!bg-green-primary w-full"
+        >
+          <AiOutlineSetting className="h-4 w-4 text-light-primary" />
+
+          <span className="text-light-primary font-Audiowide text-md">
+            Settings
+          </span>
+        </MenuItem>
+        <hr className="border-light-primary" />
+        <MenuItem
+          onClick={handleLogout}
+          className="flex items-center gap-2 rounded-t-none hover:!bg-red-600 w-full"
+        >
+          <MdOutlineLogout className="h-4 w-4 text-light-primary" />
+
+          <span className="text-light-primary font-Audiowide text-md">
+            Log Out
+          </span>
+        </MenuItem>
+      </MenuList>
     </Menu>
   );
 };

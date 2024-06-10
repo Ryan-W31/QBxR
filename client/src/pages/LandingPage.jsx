@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
-
+import { Button, Input } from "@material-tailwind/react";
 // LandingPage component. This component displays the landing page.
 const LandingPage = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -45,11 +45,10 @@ const LandingPage = () => {
               they need and vice versa.
             </p>
             <div className="flex justify-center">
-              <Link
-                to="/login"
-                className="py-2 px-6 text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary"
-              >
-                Get Started
+              <Link to="/login">
+                <Button className="py-2 px-6 text-md text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary">
+                  Get Started
+                </Button>
               </Link>
             </div>
           </div>
@@ -192,11 +191,10 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="my-16">
-            <Link
-              to="/login"
-              className="py-2 px-6 text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary"
-            >
-              Get Started
+            <Link to="/login">
+              <Button className="py-2 px-6 text-md text-light-primary font-Audiowide bg-green-primary rounded-full baseline hover:bg-green-secondary">
+                Get Started
+              </Button>
             </Link>
           </div>
         </div>
@@ -210,11 +208,10 @@ const LandingPage = () => {
             Find your future quarterback today!
           </h2>
           <div>
-            <Link
-              to="/login"
-              className="py-2 px-6 text-green-primary font-Audiowide bg-light-primary rounded-full shadow-2xl baseline hover:bg-dark-primary"
-            >
-              Get Started
+            <Link to="/login">
+              <Button className="py-2 px-6 text-md text-green-primary font-Audiowide bg-light-primary rounded-full baseline hover:bg-dark-primary">
+                Get Started
+              </Button>
             </Link>
           </div>
         </div>
@@ -222,33 +219,35 @@ const LandingPage = () => {
       <div className={showMenu ? "blur-lg bg-dark-primary" : "bg-dark-primary"}>
         <div className="container flex flex-col-reverse justify-between px-6 py-10 mx-auto space-y-8 md:flex-row md:space-y-0">
           <div className="flex flex-row justify-center py-2 space-x-8">
-            <Link
-              to="#"
-              className="flex flex-col items-center text-light-primary hover:text-green-primary"
-            >
-              Home
+            <Link to="/">
+              <Button
+                variant="text"
+                className="text-md text-light-primary font-Audiowide hover:text-green-primary"
+              >
+                Home
+              </Button>
             </Link>
-            <Link
-              to="#"
-              className="flex flex-col items-center text-light-primary hover:text-green-primary"
-            >
-              Products
+            <Link to="/">
+              <Button
+                variant="text"
+                className="text-md text-light-primary font-Audiowide rounded-full hover:text-green-primary"
+              >
+                About
+              </Button>
             </Link>
-            <Link
-              to="#"
-              className="flex flex-col items-center text-light-primary hover:text-green-primary"
-            >
-              About
+            <Link to="/">
+              <Button
+                variant="text"
+                className="text-md text-light-primary font-Audiowide rounded-full hover:text-green-primary"
+              >
+                How it works
+              </Button>
             </Link>
           </div>
-          <div className="flex flex-col justify-between">
+          <div className="w-full md:w-1/2">
             <form>
-              <div className="flex space-x-3">
-                <input
-                  type="text"
-                  className="flex-1 px-4 rounded-full focus:outline-none"
-                  placeholder="Updated in your inbox"
-                />
+              <div className="flex flex-row space-x-3 md:py-2">
+                <Input size="lg" color="white" label="Search" />
                 <button className="px-6 py-2 text-light-primary font-Audiowide rounded-full bg-green-primary hover:bg-green-scondary focus:outline-none">
                   Go
                 </button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
@@ -7,6 +7,7 @@ import { selectCurrentScores } from "../hooks/auth/authSlice";
 import { checkData } from "../utils/utils";
 import { useSelector } from "react-redux";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { Card, CardBody, CardHeader } from "@material-tailwind/react";
 
 // HomePage component. This component displays the home page with the user's QBxR score, web test scores, and VR test scores.
 const HomePage = () => {
@@ -25,13 +26,6 @@ const HomePage = () => {
   // Home page content
   const content = (
     <div>
-      <ScrollToTop showMenu={showMenu} />
-      <NavBar
-        showMenu={showMenu}
-        toggleMenu={toggleMenu}
-        isLandingPage={false}
-        currentPage="home"
-      />
       <MobileMenu
         showMenu={showMenu}
         toggleMenu={toggleMenu}
@@ -40,12 +34,21 @@ const HomePage = () => {
       />
 
       <div className={showMenu ? "blur-lg pointer-events-none" : ""}>
-        <div className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center border-t-4 border-green-primary">
+        <ScrollToTop showMenu={showMenu} />
+        <NavBar
+          showMenu={showMenu}
+          toggleMenu={toggleMenu}
+          isLandingPage={false}
+          currentPage="home"
+        />
+        <Card className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center border-t-4 border-green-primary">
           <div className="text-center justify-center font-Audiowide">
-            <h1 className="text-green-primary font-bold text-6xl">
-              Welcome to QBxR
-            </h1>
-            <div className="text-light-primary m-10 text-4xl">
+            <CardHeader className="mt-2 bg-transparent shadow-none">
+              <h1 className="text-green-primary font-bold text-6xl">
+                Welcome to QBxR
+              </h1>
+            </CardHeader>
+            <CardBody className="text-light-primary text-4xl">
               <p className="text-light-secondary">Your QBxR Score:</p>
               {qbxrData.qbxr_score ? (
                 <SkeletonTheme
@@ -66,9 +69,9 @@ const HomePage = () => {
                   {checkData(webData, vrData)}
                 </div>
               )}
-            </div>
+            </CardBody>
           </div>
-          <div className="flex md:flex-row flex-col justify-evenly md:space-x-4 font-Audiowide">
+          <CardBody className="flex md:flex-row flex-col justify-evenly md:space-x-4 font-Audiowide">
             <ScoreCard
               title={"Your Web Test Scores"}
               errMessage={"Take The Web Test On Your Profile Page"}
@@ -77,7 +80,7 @@ const HomePage = () => {
               data={webData}
             />
 
-            <div class="my-4 md:my-0"></div>
+            <div className="my-4 md:my-0"></div>
 
             <ScoreCard
               title={"Your VR Test Scores"}
@@ -86,8 +89,8 @@ const HomePage = () => {
               isLoading={false}
               data={vrData}
             />
-          </div>
-        </div>
+          </CardBody>
+        </Card>
       </div>
     </div>
   );

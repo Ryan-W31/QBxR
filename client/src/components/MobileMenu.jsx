@@ -17,6 +17,13 @@ import {
   MdOutlineSportsFootball,
   MdOutlineLogout,
 } from "react-icons/md";
+import {
+  Button,
+  Drawer,
+  List,
+  ListItem,
+  ListItemPrefix,
+} from "@material-tailwind/react";
 
 // MobileMenu component. This component displays the mobile menu for the application.
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
@@ -63,182 +70,179 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
   // Return the mobile menu
   return (
     <div>
-      {/* Display the mobile menu */}
-      <div className="md:hidden">
-        <div
-          className={
-            showMenu
-              ? "fixed top-0 right-0 w-[300px] h-screen bg-dark-secondary/80 z-10 duration-300"
-              : "fixed top-0 right-[-100%] w-[300px] h-screen bg-dark-secondary/80 z-10 duration-300"
-          }
-        >
-          <div className="flex flex-col justify-between px-4 py-4">
-            {/* Display the QBxR logo and close button */}
-            <div className="flex items-center justify-between w-full">
-              <h2 className="text-3xl font-extrabold text-green-primary font-Audiowide">
-                QBxR
-              </h2>
-              <AiOutlineClose
-                onClick={toggleMenu}
-                className="cursor-pointer text-3xl text-green-primary"
-              />
-            </div>
-            {/* End Display the QBxR logo and close button */}
-
-            {/* Display the mobile menu items (Depending on Landing Page) */}
-            {isLandingPage ? (
-              <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                {/* Home Link */}
-                <Link
-                  to="#"
-                  className={currentPageStyle(
-                    "home",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <AiOutlineHome className="inline-block mb-2 mr-2" />
-                  <span>Home</span>
-                </Link>
-                {/* End Home Link */}
-
-                {/* About Us Link */}
-                <Link
-                  to="#"
-                  className={currentPageStyle(
-                    "about",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <AiOutlineInfoCircle className="inline-block mb-1 mr-2" />
-                  <span>About Us</span>
-                </Link>
-                {/* End About Us Link */}
-
-                {/* How QBxR Works Link */}
-                <Link
-                  to="#"
-                  className={currentPageStyle(
-                    "how",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <MdOutlineSportsFootball className="inline-block mb-1 mr-2" />
-                  <span>How QBxR Works</span>
-                </Link>
-                {/* End How QBxR Works Link */}
-
-                {/* Sign In Link */}
-                <Link
-                  to="/login"
-                  className="py-2 px-6 text-light-primary bg-green-primary rounded-full baseline hover:bg-green-secondary text-center"
-                >
-                  Sign In
-                </Link>
-                {/* End Sign In Link */}
-              </div>
-            ) : (
-              <div className="flex flex-col mt-6 space-y-6 text-lg font-Audiowide font-medium">
-                {/* Home Link */}
-                <Link
-                  to="/home"
-                  className={currentPageStyle(
-                    "home",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <AiOutlineHome className="inline-block mb-2 mr-2" />
-                  <span>Home</span>
-                </Link>
-                {/* End Home Link */}
-
-                {/* Leaderboard Link */}
-                <Link
-                  to="/leaderboard"
-                  className={currentPageStyle(
-                    "leaderboard",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <MdOutlineLeaderboard className="inline-block mb-1 mr-2" />
-                  <span>Leaderboard</span>
-                </Link>
-                {/* End Leaderboard Link */}
-
-                {/* Search Link */}
-                <Link
-                  to="/search"
-                  className={currentPageStyle(
-                    "search",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <AiOutlineSearch className="inline-block mb-1 mr-2" />
-                  <span>Search</span>
-                </Link>
-                {/* End Search Link */}
-
-                {/* Profile Link */}
-                <Link
-                  to="/profile"
-                  className={currentPageStyle(
-                    "profile",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <AiOutlineUser className="inline-block mb-1 mr-2" />
-                  <span>My Profile</span>
-                </Link>
-                {/* End Profile Link */}
-
-                {/* Settings Link */}
-                <Link
-                  to="#"
-                  className={currentPageStyle(
-                    "settings",
-                    currentPage,
-                    "text-green-primary",
-                    "text-light-primary hover:text-green-primary"
-                  )}
-                >
-                  <AiOutlineSetting className="inline-block mb-1 mr-2" />
-                  <span>Settings</span>
-                </Link>
-                {/* End Settings Link */}
-
-                {/* Log Out Button */}
-                <div className="absolute w-full bottom-0 right-0">
-                  <form onSubmit={handleLogout}>
-                    <button
-                      type="submit"
-                      className="bg-red-600 hover:bg-red-800 text-lg text-light-primary block w-full px-4 py-2 text-center rounded-b-md"
-                    >
-                      <MdOutlineLogout className="inline-block mb-1 mr-2" />
-                      <span>Log Out</span>
-                    </button>
-                  </form>
-                </div>
-                {/* End Log Out Button */}
-              </div>
-            )}
-            {/* End Display the mobile menu items (Depending on Landing Page) */}
+      <Drawer
+        placement="right"
+        open={showMenu}
+        onClose={toggleMenu}
+        className="bg-dark-secondary/80"
+      >
+        <List>
+          <div className="flex items-center justify-between w-full mt-4 mb-4">
+            <h2 className="ml-1 text-3xl font-extrabold text-green-primary font-Audiowide">
+              QBxR
+            </h2>
+            <AiOutlineClose
+              onClick={toggleMenu}
+              className="mr-1 cursor-pointer text-3xl text-green-primary"
+            />
           </div>
-        </div>
-      </div>
-      {/* End Display the mobile menu */}
+          {isLandingPage ? (
+            <>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "home",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <AiOutlineHome />
+                  </ListItemPrefix>
+                  Home
+                </ListItem>
+              </Link>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "about",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <AiOutlineInfoCircle />
+                  </ListItemPrefix>
+                  About Us
+                </ListItem>
+              </Link>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "how",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <MdOutlineSportsFootball />
+                  </ListItemPrefix>
+                  How QBxR Works
+                </ListItem>
+              </Link>
+              <Link className="mt-4" to="/login">
+                <Button className="py-2 px-6 text-light-primary bg-green-primary rounded-full w-full hover:bg-green-secondary text-center text-lg font-Audiowide">
+                  Log In
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "home",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <AiOutlineHome />
+                  </ListItemPrefix>
+                  Home
+                </ListItem>
+              </Link>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "leaderboard",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <MdOutlineLeaderboard />
+                  </ListItemPrefix>
+                  Leaderboard
+                </ListItem>
+              </Link>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "search",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <AiOutlineSearch />
+                  </ListItemPrefix>
+                  Search
+                </ListItem>
+              </Link>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "settings",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <AiOutlineSetting />
+                  </ListItemPrefix>
+                  Settings
+                </ListItem>
+              </Link>
+              <Link
+                to="#"
+                className={currentPageStyle(
+                  "profile",
+                  currentPage,
+                  "text-green-primary",
+                  "text-light-primary hover:text-green-primary"
+                )}
+              >
+                <ListItem className="text-lg font-Audiowide hover:text-green-primary hover:bg-transparent">
+                  <ListItemPrefix>
+                    <AiOutlineUser />
+                  </ListItemPrefix>
+                  Profile
+                </ListItem>
+              </Link>
+            </>
+          )}
+        </List>
+        {!isLandingPage ? (
+          <div className="absolute w-full bottom-0 right-0">
+            <List className="w-full p-0">
+              <Link className="mt-4" to="/login">
+                <Button
+                  onClick={handleLogout}
+                  className="py-2 px-6 text-light-primary bg-red-600 hover:bg-red-800 rounded-none w-full text-center text-lg font-Audiowide"
+                >
+                  <MdOutlineLogout className="inline-block mb-1 mr-2" />
+                  Log Out
+                </Button>
+              </Link>
+            </List>
+          </div>
+        ) : null}
+      </Drawer>
     </div>
   );
 };
