@@ -34,7 +34,10 @@ const LandingPage = () => {
       >
         <div className="container flex items-center justify-center mx-auto mt-10 space-y-0">
           <div className="flex flex-col mb-32 space-y-12 w-1/2">
-            <h1 className=" text-4xl font-bold text-center text-green-primary md:text-5xl font-Audiowide">
+            <h1
+              id="title"
+              className="text-4xl font-bold text-center text-green-primary md:text-5xl font-Audiowide"
+            >
               QBxR: Quarterback Evaluation Platform
             </h1>
             <h3 className="text-md font-bold text-center text-green-primary md:text-xl font-Audiowide">

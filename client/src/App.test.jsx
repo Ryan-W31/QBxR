@@ -1,9 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import App from "./App";
 
 describe("App", () => {
   it("renders the App component", () => {
-    render(<App />);
-    expect(screen.getByRole("button", { name: "Go" })).toBeInTheDocument();
+    const { asFragment, getByText } = render(<App />);
+    expect(
+      getByText("QBxR: Quarterback Evaluation Platform")
+    ).toBeInTheDocument();
   });
 });
