@@ -19,6 +19,7 @@ import Prefetch from "./components/Prefetch";
 import PersistLogin from "./components/PersistLogin";
 
 import ProtectedRoutes from "./hooks/protectedRoutes/ProtectedRoutes";
+import RoleAuth from "./hooks/protectedRoutes/RoleAuth";
 
 // Import the ToastProvider and Redux Provider components
 import { ToastProvider } from "./components/Toast";
@@ -37,8 +38,6 @@ function App() {
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="forgotpassword" element={<ForgotPasswordPage />} />
-              <Route path="vr" element={<VRPage />} />
-              <Route path="web" element={<WebTestPage />} />
 
               {/*Begin Protected Routes*/}
               <Route element={<PersistLogin />}>
@@ -48,6 +47,10 @@ function App() {
                   <Route path="leaderboard" element={<LeaderboardPage />} />
                   <Route path="profile/:id?" element={<ProfilePage />} />
                   <Route path="search" element={<SearchPage />} />
+                  <Route element={<RoleAuth />}>
+                    <Route path="vr" element={<VRPage />} />
+                    <Route path="web" element={<WebTestPage />} />
+                  </Route>
                 </Route>
               </Route>
               {/*End Protected Routes*/}

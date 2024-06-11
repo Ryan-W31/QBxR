@@ -6,6 +6,12 @@ services:
       context: ./client
       dockerfile: Dockerfile
     container_name: client
+    develop:
+      watch:
+        - action: rebuild
+          path: ./client
+          ignore:
+            - node_modules
     ports:
       - 80:80
       - 443:443
@@ -22,6 +28,17 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
+    develop:
+      watch:
+        - action: sync
+          path: ./server
+          target: /app
+          ignore:
+            - node_modules
+        - action: rebuild
+          path: ./server/package.json
+          ignore:
+            - node_modules
     ports:
       - 5001:5001
     depends_on:

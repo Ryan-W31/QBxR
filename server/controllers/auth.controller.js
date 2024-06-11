@@ -71,7 +71,12 @@ const login = async (req, res) => {
 
   res
     .status(200)
-    .json({ aToken: aToken, id: user._id, user: user, scores: obj });
+    .json({
+      aToken: aToken,
+      id: user._id,
+      user: { ...user, id: user._id },
+      scores: obj,
+    });
 };
 
 // refreshCookie is used to refresh the access token.

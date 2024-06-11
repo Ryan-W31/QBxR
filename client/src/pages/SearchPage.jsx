@@ -218,14 +218,14 @@ const SearchPage = () => {
                   <tr>
                     {cols.map((col) => (
                       <th
-                        className="py-3 cursor-pointer"
+                        className="py-3 cursor-pointer hover:bg-green-primary"
                         key={col.key}
                         onClick={() => handleSort(col.key)}
                       >
                         <div className="flex justify-center">
                           <Button
                             variant="text"
-                            className="flex justify-center items-center gap-2 font-Audiowide text-light-primary p-0"
+                            className="flex justify-center items-center gap-2 font-Audiowide text-light-primary py-0 !bg-transparent"
                           >
                             {col.title}
                             <FaSort />

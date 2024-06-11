@@ -35,7 +35,7 @@ const signUp = async (req, res) => {
   await user.createHash(password);
   await user.save();
 
-  await new Score({ user: user._id }).save();
+  if (role === "player") await new Score({ user: user._id }).save();
 
   res.status(201).json({ message: "User created" });
 };
@@ -196,7 +196,10 @@ const getUserFavorites = async (req, res) => {
       .json({ message: "Your account was not found. Please try again." });
   }
 
-  return res.status(200).json({ favorites: user.favorites });
+  const favorites = await User.find({ _id: { $in: user.favorites } });
+  console.log("favorites: ", favorites);
+
+  return res.status(200).json({ favorites: favorites });
 };
 
 const search = async (req, res) => {

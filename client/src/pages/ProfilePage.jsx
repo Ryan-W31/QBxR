@@ -13,6 +13,7 @@ import {
 import {
   updateUserInfoAndRefresh,
   useGetUserByIdQuery,
+  useGetUserFavoritesQuery,
 } from "../hooks/users/userApiSlice";
 import {
   useGetVRScoreQuery,
@@ -33,6 +34,7 @@ import {
   CardHeader,
   IconButton,
 } from "@material-tailwind/react";
+import FavoritesCard from "../components/FavoritesCard";
 
 // ProfilePage component. This component displays the user's profile page with the user's name, school, status, bio, and test scores.
 const ProfilePage = () => {
@@ -43,8 +45,9 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
   const [profileScores, setProfileScores] = useState(null);
-  const dispatch = useDispatch();
+  const [userId, setUserId] = useState(null);
 
+  const dispatch = useDispatch();
   const { id } = useParams();
   const myId = useSelector(selectCurrentId);
   const isMyProfile = !id || myId === id;
@@ -57,6 +60,13 @@ const ProfilePage = () => {
     error,
     isLoadingUser,
   } = useGetUserByIdQuery(id, { skip: !id });
+  const {
+    data: userFavorites,
+    isLoading: isLoadingFavorites,
+    isSuccess: isSuccessFavorites,
+  } = useGetUserFavoritesQuery(userId, {
+    skip: !userId,
+  });
 
   // Get the user's VR and Web test scores
   const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(id, {
@@ -68,14 +78,13 @@ const ProfilePage = () => {
       skip: !id,
     }
   );
-
-  // Get the user's QBxR score
   const { data: qbxrData, isLoading: isLoadingQBxRData } = useGetQBxRScoreQuery(
     id,
     {
       skip: !id,
     }
   );
+
   // Check if the profile is the user's profile
   useEffect(() => {
     if (isMyProfile) {
@@ -91,8 +100,10 @@ const ProfilePage = () => {
       !isLoadingQBxRData &&
       !isLoadingVRScore &&
       !isLoadingWebScore
-    )
+    ) {
       setIsLoading(false);
+      setUserId(profileData?.id || profileData?._id);
+    }
   }, [
     isMyProfile,
     primaryUser,
@@ -102,16 +113,18 @@ const ProfilePage = () => {
     webData,
     vrData,
     profileData,
+    isLoadingUser,
+    isLoadingQBxRData,
+    isLoadingVRScore,
+    isLoadingWebScore,
   ]);
 
   // If not logged in user's profile, get the user data by id
 
   // Check if the user is in the logged in user's favorites
   useEffect(() => {
-    if (primaryUser?.favorites !== undefined) {
-      if (primaryUser.favorites.includes(id)) {
-        setIsFavorite(true);
-      }
+    if (primaryUser?.favorites?.includes(id)) {
+      setIsFavorite(true);
     }
   }, [primaryUser, id]);
 
@@ -122,9 +135,7 @@ const ProfilePage = () => {
   };
 
   // Toggle the blur effect
-  const toggleBlur = () => {
-    setShowBlur((prevState) => !prevState);
-  };
+  const toggleBlur = () => setShowBlur((prevState) => !prevState);
 
   // Toggle the edit profile card
   const handleEditProfile = () => {
@@ -141,17 +152,10 @@ const ProfilePage = () => {
   // Handle the status change event
   const handleStatusChange = async (e) => {
     e.preventDefault();
-
-    var str2bool = (value) => {
-      if (value && typeof value === "string") {
-        if (value.toLowerCase() === "true") return true;
-        if (value.toLowerCase() === "false") return false;
-      }
-      return value;
-    };
+    const status = e.target.value.toLowerCase() === "true";
 
     await dispatch(
-      updateUserInfoAndRefresh({ id: myId, status: str2bool(e.target.value) })
+      updateUserInfoAndRefresh({ id: myId, status: status })
     ).unwrap();
   };
 
@@ -291,20 +295,18 @@ const ProfilePage = () => {
             </Card>
             <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide">
               <Card className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
-                <CardHeader className="w-full flex items-center justify-center bg-transparent shadow-none mt-0 relative overflow-visible">
-                  <div className="font-semibold text-light-primary">
-                    <span className="tracking-wide text-3xl">About</span>
-                  </div>
-                  {isMyProfile && (
-                    <IconButton
-                      variant="text"
-                      ripple={false}
-                      className="absolute -top-4 right-0 text-xl text-light-primary hover:text-green-primary"
-                      onClick={handleEditProfile}
-                    >
-                      <FiEdit />
-                    </IconButton>
-                  )}
+                {isMyProfile && (
+                  <IconButton
+                    variant="text"
+                    ripple={false}
+                    className="absolute top-0 right-0 text-xl text-light-primary hover:text-green-primary"
+                    onClick={handleEditProfile}
+                  >
+                    <FiEdit />
+                  </IconButton>
+                )}
+                <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary mt-0 text-center relative overflow-visible">
+                  About
                 </CardHeader>
                 <CardBody className="text-light-secondary">
                   <div className="grid md:grid-cols-2 text-lg">
@@ -354,84 +356,98 @@ const ProfilePage = () => {
               <div className="my-4"></div>
 
               <Card className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-green-primary">
-                <div className="text-center mb-6">
-                  <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary e m-2">
-                    Your QBxR Score
-                  </CardHeader>
-                  <CardBody className="p-2">
-                    {!isLoadingQBxRData ? (
-                      <>
-                        {profileScores?.qbxr?.qbxr_score ? (
-                          <p className="mx-5 text-5xl text-green-primary">
-                            {profileScores?.qbxr?.qbxr_score}
-                          </p>
+                {profileData?.role === "player" && (
+                  <>
+                    <div className="text-center mb-6">
+                      <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary m-2">
+                        Your QBxR Score
+                      </CardHeader>
+                      <CardBody className="p-2">
+                        {!isLoadingQBxRData ? (
+                          <>
+                            {profileScores?.qbxr?.qbxr_score ? (
+                              <p className="mx-5 text-5xl text-green-primary">
+                                {profileScores?.qbxr?.qbxr_score}
+                              </p>
+                            ) : (
+                              <div>
+                                <p className="m-4 text-3xl text-light-primary">
+                                  No Data
+                                </p>
+                                {checkData(
+                                  profileScores?.web,
+                                  profileScores?.vr
+                                )}
+                              </div>
+                            )}
+                          </>
                         ) : (
-                          <div>
-                            <p className="m-4 text-3xl text-light-primary">
-                              No Data
-                            </p>
-                            {checkData(profileScores?.web, profileScores?.vr)}
-                          </div>
+                          <SkeletonTheme
+                            baseColor="#0C0C0C"
+                            highlightColor="#AAAAAA"
+                            duration={1.5}
+                            borderRadius="0.5rem"
+                          >
+                            <Skeleton width={75} height={75} />
+                          </SkeletonTheme>
                         )}
-                      </>
-                    ) : (
-                      <SkeletonTheme
-                        baseColor="#0C0C0C"
-                        highlightColor="#AAAAAA"
-                        duration={1.5}
-                        borderRadius="0.5rem"
-                      >
-                        <Skeleton width={75} height={75} />
-                      </SkeletonTheme>
-                    )}
 
-                    <p className="text-light-secondary">
-                      Your QBxR score is calculated by taking the average of
-                      your Web and VR test scores.
-                    </p>
-                  </CardBody>
-                </div>
-                <CardBody className="flex md:flex-row flex-col justify-evenly md:space-x-4 p-2">
-                  <div className="flex flex-col">
-                    <ScoreCard
-                      title={"Your Web Test Scores"}
-                      errMessage={"Take The Web Test"}
-                      size="3"
-                      isLoading={false}
-                      data={profileScores?.web}
-                    />
-                    {isMyProfile && (
-                      <Link to="/web">
-                        <Button className="w-full py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
-                          {profileScores?.web === undefined ||
-                          profileScores?.web?.length === 0
-                            ? "Take The Web Test"
-                            : "Retake The Web Test"}
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                  <div className="my-4 md:my-0"></div>
-                  <div className="flex flex-col justify-center">
-                    <ScoreCard
-                      title={"Your VR Test Scores"}
-                      errMessage={"Take The VR Test"}
-                      size="3"
-                      isLoading={false}
-                      data={profileScores?.vr}
-                    />
-                    {isMyProfile && (
-                      <Link to="/vr">
-                        <Button className="w-full py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
-                          {profileScores?.vr === undefined ||
-                          profileScores?.vr?.length === 0
-                            ? "Take The VR Test"
-                            : "Retake The VR Test"}
-                        </Button>
-                      </Link>
-                    )}
-                  </div>
-                </CardBody>
+                        <p className="text-light-secondary">
+                          Your QBxR score is calculated by taking the average of
+                          your Web and VR test scores.
+                        </p>
+                      </CardBody>
+                    </div>
+                    <CardBody className="flex md:flex-row flex-col justify-evenly md:space-x-4 p-2">
+                      <div className="flex flex-col">
+                        <ScoreCard
+                          title={"Your Web Test Scores"}
+                          errMessage={"Take The Web Test"}
+                          size="3"
+                          isLoading={false}
+                          data={profileScores?.web}
+                        />
+                        {isMyProfile && (
+                          <Link to="/web">
+                            <Button className="w-full py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
+                              {profileScores?.web === undefined ||
+                              profileScores?.web?.length === 0
+                                ? "Take The Web Test"
+                                : "Retake The Web Test"}
+                            </Button>
+                          </Link>
+                        )}
+                      </div>
+                      <div className="my-4 md:my-0"></div>
+                      <div className="flex flex-col justify-center">
+                        <ScoreCard
+                          title={"Your VR Test Scores"}
+                          errMessage={"Take The VR Test"}
+                          size="3"
+                          isLoading={false}
+                          data={profileScores?.vr}
+                        />
+                        {isMyProfile && (
+                          <Link to="/vr">
+                            <Button className="w-full py-2 bg-green-primary hover:bg-green-secondary text-light-primary rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
+                              {profileScores?.vr === undefined ||
+                              profileScores?.vr?.length === 0
+                                ? "Take The VR Test"
+                                : "Retake The VR Test"}
+                            </Button>
+                          </Link>
+                        )}
+                      </div>
+                    </CardBody>
+                  </>
+                )}
+                {profileData?.role === "nonplayer" && (
+                  <FavoritesCard
+                    users={userFavorites}
+                    isLoading={isLoadingFavorites}
+                    isSuccess={isSuccessFavorites}
+                  />
+                )}
               </Card>
             </div>
           </div>

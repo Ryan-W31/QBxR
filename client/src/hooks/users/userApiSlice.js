@@ -92,6 +92,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       transformResponse: (response) => {
         return {
           id: response.id,
+          role: response.role,
           firstname: response.firstname,
           lastname: response.lastname,
           email: response.email,
@@ -100,6 +101,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
           birthday: response.birthday,
           phone_number: response.phone_number,
           status: response.status,
+          favorites: response.favorites,
         };
       },
     }),
@@ -110,7 +112,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       },
       keepUnusedDataFor: 60,
       transformResponse: (response) => {
-        return response;
+        return response.favorites;
       },
     }),
     search: builder.query({
