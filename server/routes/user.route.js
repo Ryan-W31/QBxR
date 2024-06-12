@@ -18,6 +18,7 @@ router
   .route("/updatepassword/:id")
   .patch(verifyToken, usersController.updateUserPassword);
 
+router.route("/delete/:id").delete(verifyToken, usersController.deleteUser);
 // Get User Favorites: GET request to /favorites/:id
 router
   .route("/favorites/:id")

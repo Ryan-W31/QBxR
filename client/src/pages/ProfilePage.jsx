@@ -449,9 +449,9 @@ const ProfilePage = () => {
         </div>
         <ProfileCard
           myId={myId}
-          id={showProfile?._id}
-          name={`${showProfile?.firstname} ${showProfile?.lastname}`}
-          school={showProfile?.school_organization}
+          id={showProfile?.id}
+          name={showProfile?.name}
+          school={showProfile?.school}
           score={showProfile?.score}
           isVisible={showProfile !== null}
           onClose={handleClose}

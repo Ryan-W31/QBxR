@@ -40,7 +40,11 @@ const login = async (req, res) => {
   var rank = null;
   var qbxr_score = null;
 
-  if (scores.qbxr_score === undefined) {
+  if (!scores) {
+    obj.qbxr = { qbxr_score: 0, rank: 0 };
+    obj.web = [];
+    obj.vr = [];
+  } else if (scores.qbxr_score === undefined) {
     rank = await Score.where("qbxr_score").gt(0).countDocuments();
     qbxr_score = 0;
   } else {
@@ -69,14 +73,12 @@ const login = async (req, res) => {
     maxAge: 1 * 24 * 60 * 60 * 1000,
   });
 
-  res
-    .status(200)
-    .json({
-      aToken: aToken,
-      id: user._id,
-      user: { ...user, id: user._id },
-      scores: obj,
-    });
+  res.status(200).json({
+    aToken: aToken,
+    id: user._id,
+    user: user,
+    scores: obj,
+  });
 };
 
 // refreshCookie is used to refresh the access token.
@@ -108,7 +110,11 @@ const refreshCookie = (req, res) => {
     var rank = null;
     var qbxr_score = null;
 
-    if (scores.qbxr_score === undefined) {
+    if (!scores) {
+      obj.qbxr = { qbxr_score: 0, rank: 0 };
+      obj.web = [];
+      obj.vr = [];
+    } else if (scores.qbxr_score === undefined) {
       rank = await Score.where("qbxr_score").gt(0).countDocuments();
       qbxr_score = 0;
     } else {

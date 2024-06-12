@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import SearchPage from "./pages/SearchPage";
+import SettingsPage from "./pages/SettingsPage";
 import VRPage from "./pages/VRPage";
 import WebTestPage from "./pages/WebTestPage";
 
@@ -41,21 +42,22 @@ function App() {
 
               {/*Begin Protected Routes*/}
               <Route element={<PersistLogin />}>
-                {/* <Route element={<ProtectedRoutes />}> */}
-                <Route element={<Prefetch />}>
-                  <Route path="home" element={<HomePage />} />
-                  <Route path="leaderboard" element={<LeaderboardPage />} />
-                  <Route path="profile/:id?" element={<ProfilePage />} />
-                  <Route path="search" element={<SearchPage />} />
-                  <Route element={<RoleAuth />}>
-                    <Route path="vr" element={<VRPage />} />
-                    <Route path="web" element={<WebTestPage />} />
+                <Route element={<ProtectedRoutes />}>
+                  <Route element={<Prefetch />}>
+                    <Route path="home" element={<HomePage />} />
+                    <Route path="leaderboard" element={<LeaderboardPage />} />
+                    <Route path="profile/:id?" element={<ProfilePage />} />
+                    <Route path="search" element={<SearchPage />} />
+                    <Route path="settings" element={<SettingsPage />} />
+                    <Route element={<RoleAuth />}>
+                      <Route path="vr" element={<VRPage />} />
+                      <Route path="web" element={<WebTestPage />} />
+                    </Route>
                   </Route>
                 </Route>
+                {/*End Protected Routes*/}
               </Route>
-              {/*End Protected Routes*/}
             </Route>
-            {/* </Route> */}
           </Routes>
         </ToastProvider>
       </Router>

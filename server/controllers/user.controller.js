@@ -30,12 +30,14 @@ const signUp = async (req, res) => {
     email: lowerEmail,
     school_organization: school_organization,
     status: true,
+    score: 0,
   });
 
   await user.createHash(password);
   await user.save();
 
-  if (role === "player") await new Score({ user: user._id }).save();
+  if (role === "player")
+    await new Score({ user: user._id, qbxr_score: 0 }).save();
 
   res.status(201).json({ message: "User created" });
 };
@@ -43,11 +45,9 @@ const signUp = async (req, res) => {
 // getLeaderboard is used to get the top 50 users with the highest scores.
 // The users' information is stored in the database.
 const getLeaderboard = async (req, res) => {
-  const scores = await Score.find().sort({ score: -1 }).limit(50);
-
-  const ids = scores.map((score) => score.user);
-
-  const users = await User.find({ _id: { $in: ids } });
+  const users = await User.find({ role: "player" })
+    .sort({ score: -1 })
+    .limit(50);
 
   const data = users.map((user, index) => {
     return {
@@ -55,7 +55,7 @@ const getLeaderboard = async (req, res) => {
       rank: index + 1,
       name: `${user.firstname} ${user.lastname}`,
       school: user.school_organization,
-      score: scores.find((score) => score.user.equals(user._id)).qbxr_score,
+      score: user.score,
     };
   });
 
@@ -169,6 +169,10 @@ const updateUserPassword = async (req, res) => {
   const { oldPassword, newPassword } = req.body;
   const id = req.params.id;
 
+  if (!oldPassword || !newPassword) {
+    return res.status(400).json({ message: "Invalid Password." });
+  }
+
   const user = await User.findById(id);
   if (!user) {
     return res
@@ -264,6 +268,26 @@ const search = async (req, res) => {
   res.status(200).json(searchedUsers);
 };
 
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+
+  const user = await User.findByIdAndDelete(id);
+  const score = await Score.findOneAndDelete({ user: id });
+
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "Your account was not found. Please try again." });
+  }
+
+  await User.updateMany(
+    { favorites: { $in: [id] } },
+    { $pull: { favorites: id } }
+  );
+
+  res.status(200).json({ message: "Your account has been deleted." });
+};
+
 module.exports = {
   getLeaderboard,
   getUserFavorites,
@@ -272,4 +296,5 @@ module.exports = {
   updateUserInfo,
   updateUserPassword,
   search,
+  deleteUser,
 };
