@@ -4,7 +4,6 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice";
-
 const userAdapter = createEntityAdapter({});
 const initialState = userAdapter.getInitialState();
 
@@ -22,6 +21,27 @@ export const updateUserInfoAndRefresh = createAsyncThunk(
         .unwrap();
 
       console.log("User info updated and token refreshed");
+    } catch (error) {
+      console.error("Error updating user info and refreshing token:", error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const updateUserPasswordAndRefresh = createAsyncThunk(
+  "user/updateUserPasswordAndRefresh",
+  async (body, thunkAPI) => {
+    try {
+      const updateResult = await thunkAPI
+        .dispatch(apiSlice.endpoints.updateUserPassword.initiate(body))
+        .unwrap();
+
+      const refreshResult = await thunkAPI
+        .dispatch(apiSlice.endpoints.refresh.initiate())
+        .unwrap();
+
+      console.log("User Password updated and token refreshed");
+      return updateResult;
     } catch (error) {
       console.error("Error updating user info and refreshing token:", error);
       return thunkAPI.rejectWithValue(error);
@@ -128,6 +148,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
         return response;
       },
     }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/delete/${id}`,
+        method: "DELETE",
+      }),
+      transformResponse: (response) => {
+        return response;
+      },
+    }),
   }),
 });
 
@@ -139,6 +168,7 @@ export const {
   useGetUserByIdQuery,
   useGetUserFavoritesQuery,
   useSearchQuery,
+  useDeleteUserMutation,
 } = userApiSlice;
 
 export const selectUsersResult = userApiSlice.endpoints.getLeaderboard.select();

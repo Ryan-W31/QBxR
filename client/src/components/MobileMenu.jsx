@@ -145,7 +145,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
           ) : (
             <>
               <Link
-                to="#"
+                to="/home"
                 className={currentPageStyle(
                   "home",
                   currentPage,
@@ -161,7 +161,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                 </ListItem>
               </Link>
               <Link
-                to="#"
+                to="/leaderboard"
                 className={currentPageStyle(
                   "leaderboard",
                   currentPage,
@@ -177,7 +177,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                 </ListItem>
               </Link>
               <Link
-                to="#"
+                to="/search"
                 className={currentPageStyle(
                   "search",
                   currentPage,
@@ -193,7 +193,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                 </ListItem>
               </Link>
               <Link
-                to="#"
+                to="/settings"
                 className={currentPageStyle(
                   "settings",
                   currentPage,
@@ -209,7 +209,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
                 </ListItem>
               </Link>
               <Link
-                to="#"
+                to="/profile"
                 className={currentPageStyle(
                   "profile",
                   currentPage,
@@ -230,15 +230,13 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }) => {
         {!isLandingPage ? (
           <div className="absolute w-full bottom-0 right-0">
             <List className="w-full p-0">
-              <Link className="mt-4" to="/login">
-                <Button
-                  onClick={handleLogout}
-                  className="py-2 px-6 text-light-primary bg-red-600 hover:bg-red-800 rounded-none w-full text-center text-lg font-Audiowide"
-                >
-                  <MdOutlineLogout className="inline-block mb-1 mr-2" />
-                  Log Out
-                </Button>
-              </Link>
+              <Button
+                onClick={handleLogout}
+                className="py-2 px-6 text-light-primary bg-red-600 hover:bg-red-800 rounded-none w-full text-center text-lg font-Audiowide"
+              >
+                <MdOutlineLogout className="inline-block mb-1 mr-2" />
+                Log Out
+              </Button>
             </List>
           </div>
         ) : null}

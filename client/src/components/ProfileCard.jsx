@@ -48,6 +48,8 @@ const ProfileCard = ({ myId, id, name, school, score, isVisible, onClose }) => {
     if (user?.favorites !== undefined) {
       if (user.favorites.includes(id)) {
         setIsFavorite(true);
+      } else {
+        setIsFavorite(false);
       }
     }
 

@@ -1,10 +1,5 @@
 import React, { useState, useCallback } from "react";
-import {
-  AiOutlineProfile,
-  AiOutlineSetting,
-  AiOutlineUser,
-} from "react-icons/ai";
-import { classNames } from "../utils/utils";
+import { AiOutlineSetting, AiOutlineUser } from "react-icons/ai";
 import { selectCurrentUser } from "../hooks/auth/authSlice";
 import { useSelector } from "react-redux";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
@@ -30,12 +25,6 @@ const ProfileDropdown = () => {
   const navigate = useNavigate();
   const user = useSelector(selectCurrentUser);
 
-  const menuItems = [
-    { label: "My Profile", link: "/profile", icon: AiOutlineUser },
-    { label: "Settings", link: "/home", icon: AiOutlineSetting },
-    { label: "Log Out", link: "", icon: MdOutlineLogout },
-  ];
-
   const toggleProfileMenu = () => {
     setIsOpen((prevState) => !prevState);
   };
@@ -47,7 +36,7 @@ const ProfileDropdown = () => {
 
   const handleSettingsClick = (event) => {
     event.preventDefault();
-    navigate("/home");
+    navigate("/settings");
   };
 
   // Handle the logout event. If the user is logged out, display a success message and navigate to the login page
