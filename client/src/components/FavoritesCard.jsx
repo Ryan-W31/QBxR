@@ -1,37 +1,18 @@
-import {
-  Button,
-  CardHeader,
-  Input,
-  CardBody,
-  Tabs,
-  TabsHeader,
-  Tab,
-} from "@material-tailwind/react";
+import { Button, CardHeader, CardBody } from "@material-tailwind/react";
 import SearchCard from "./SearchCard";
-import ProfileCard from "./ProfileCard";
-import { useSearchQuery } from "../hooks/users/userApiSlice";
-import { useDebounce } from "../utils/utils";
-import { selectCurrentId } from "../hooks/auth/authSlice";
-import { useSelector } from "react-redux";
 import { SkeletonTheme } from "react-loading-skeleton";
 import React, { useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
-import { FiEdit } from "react-icons/fi";
 import { FaSort } from "react-icons/fa";
+import { useGetUserFavoritesQuery } from "../hooks/users/userApiSlice";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../hooks/auth/authSlice";
 
-const FavoritesCard = ({ users, isLoading, isSuccess }) => {
-  const [role, setRole] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
-  const [showProfile, setShowProfile] = useState(null);
+const FavoritesCard = ({ userId, setShowProfile, toggleBlur }) => {
   const [visibleRows, setVisibleRows] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
   const [sortedUsers, setSortedUsers] = useState([]);
   const [sortedBy, setSortedBy] = useState("score");
   const [direction, setDirection] = useState("desc");
-  const [filters, setFilters] = useState({});
-
-  const myId = useSelector(selectCurrentId);
 
   const cols = [
     { key: "role", title: "Type" },
@@ -40,13 +21,20 @@ const FavoritesCard = ({ users, isLoading, isSuccess }) => {
     { key: "score", title: "Score" },
   ];
 
-  useDebounce(
-    () => {
-      setDebouncedSearchQuery(searchQuery);
-    },
-    [searchQuery],
-    800
-  );
+  const currentUser = useSelector(selectCurrentUser);
+
+  const {
+    data: users,
+    isLoading: isLoading,
+    isSuccess: isSuccess,
+    refetch,
+  } = useGetUserFavoritesQuery(userId, {
+    skip: !userId,
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [currentUser, refetch]);
 
   useEffect(() => {
     if (users?.length > 0) {
@@ -92,17 +80,6 @@ const FavoritesCard = ({ users, isLoading, isSuccess }) => {
     }
   }, [users]);
 
-  // Toggle the visibility of the mobile menu
-  const toggleMenu = () => {
-    setShowMenu((prevState) => !prevState);
-    toggleBlur();
-  };
-
-  // Toggle the blur effect on the background
-  const toggleBlur = () => {
-    setShowBlur((prevState) => !prevState);
-  };
-
   // Handle the row click event. Display the profile card for the selected user and blur the background.
   const handleRowClick = (profile) => {
     setShowProfile(profile);
@@ -110,10 +87,6 @@ const FavoritesCard = ({ users, isLoading, isSuccess }) => {
   };
 
   // Close the profile card and remove the blur effect
-  const handleClose = () => {
-    setShowProfile(null);
-    toggleBlur();
-  };
 
   const handleSort = (key) => {
     if (key === sortedBy) {
@@ -124,10 +97,6 @@ const FavoritesCard = ({ users, isLoading, isSuccess }) => {
       setSortedBy(key);
       setDirection("desc");
     }
-  };
-
-  const handleFilters = (filters) => {
-    setFilters(filters);
   };
 
   let tableContent;
@@ -141,65 +110,27 @@ const FavoritesCard = ({ users, isLoading, isSuccess }) => {
       <SearchCard
         key={user._id}
         role={user.role}
-        name={`${user.firstname} ${user.lastname}`}
-        school={user.school_organization}
+        name={user.name}
+        school={user.school}
         score={user.score}
         onClick={() => handleRowClick(user)}
       />
     ));
   } else {
-    tableContent = null;
+    tableContent = (
+      <tr>
+        <td colSpan="4" className="py-4 text-md">
+          You have no favorites.
+        </td>
+      </tr>
+    );
   }
 
   return (
     <>
-      <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary mt-0 text-center relative overflow-visible">
+      <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary text-center relative overflow-visible font-Audiowide p-6">
         Your Favorites
       </CardHeader>
-      <CardBody className="flex flex-col items-center gap-4 md:flex-row !bg-transparent overflow-visible shadow-none">
-        <Tabs value="all" className="w-full">
-          <TabsHeader
-            className="bg-dark-primary rounded-full"
-            indicatorProps={{ className: "bg-green-primary rounded-full" }}
-          >
-            <Tab
-              value={"all"}
-              className="text-light-primary font-Audiowide"
-              onClick={() => setRole("all")}
-            >
-              All
-            </Tab>
-            <Tab
-              value={"nonplayer"}
-              className="text-light-primary font-Audiowide"
-              onClick={() => setRole("nonplayer")}
-            >
-              Non-Player
-            </Tab>
-            <Tab
-              value={"player"}
-              className="text-light-primary font-Audiowide"
-              onClick={() => setRole("player")}
-            >
-              Player
-            </Tab>
-          </TabsHeader>
-        </Tabs>
-        <div className="w-full">
-          <Input
-            label="Search"
-            className="!font-Audiowide !text-light-secondary border-light-secondary focus:border-light-secondary"
-            labelProps={{
-              className:
-                "!font-Audiowide !text-light-secondary peer-focus:text-light-secondary before:border-light-secondary peer-focus:before:!border-light-secondary after:border-light-secondary peer-focus:after:!border-light-secondary",
-            }}
-            autoComplete="nope"
-            onChange={(e) => setSearchQuery(e.target.value)}
-            icon={<AiOutlineSearch className="h-5 w-5 text-light-secondary" />}
-          />
-        </div>
-      </CardBody>
-
       <CardBody className="relative overflow-scroll border-2 rounded-lg border-green-primary font-Audiowide p-0">
         <SkeletonTheme
           baseColor="#0C0C0C"
@@ -207,43 +138,37 @@ const FavoritesCard = ({ users, isLoading, isSuccess }) => {
           borderRadius="0.5rem"
           duration={1.5}
         >
-          <table className="table-auto w-full text-sm text-center text-light-primary divide-y divide-green-primary overflow-x-auto">
-            <thead className="text-xs text-light-primary bg-dark-secondary">
-              <tr>
-                {cols.map((col) => (
-                  <th
-                    className="py-3 cursor-pointer hover:bg-green-primary"
-                    key={col.key}
-                    onClick={() => handleSort(col.key)}
-                  >
-                    <div className="flex justify-center">
-                      <Button
-                        variant="text"
-                        className="flex justify-center items-center gap-2 font-Audiowide text-light-primary py-0 !bg-transparent"
-                      >
-                        {col.title}
-                        <FaSort />
-                      </Button>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-green-primary">
-              {tableContent}
-            </tbody>
-          </table>
+          <div className="max-h-64 overflow-y-auto">
+            <table className="table-auto w-full text-sm text-center text-light-primary divide-y divide-green-primary overflow-x-auto">
+              <thead className="text-xs text-light-primary bg-dark-secondary">
+                <tr>
+                  {cols.map((col) => (
+                    <th
+                      className="py-3 cursor-pointer hover:bg-green-primary"
+                      key={col.key}
+                      onClick={() => handleSort(col.key)}
+                    >
+                      <div className="flex justify-center">
+                        <Button
+                          variant="text"
+                          ripple={false}
+                          className="flex justify-center items-center gap-2 font-Audiowide text-light-primary py-0 !bg-transparent"
+                        >
+                          {col.title}
+                          <FaSort />
+                        </Button>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-green-primary">
+                {tableContent}
+              </tbody>
+            </table>
+          </div>
         </SkeletonTheme>
       </CardBody>
-      <ProfileCard
-        myId={myId}
-        id={showProfile?._id}
-        name={`${showProfile?.firstname} ${showProfile?.lastname}`}
-        school={showProfile?.school_organization}
-        score={showProfile?.score}
-        isVisible={showProfile !== null}
-        onClose={handleClose}
-      />
     </>
   );
 };

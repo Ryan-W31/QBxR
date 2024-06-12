@@ -3,6 +3,7 @@ import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
 import ScrollToTop from "../components/ScrollToTop";
 import ScoreCard from "../components/ScoreCard";
+import ProfileCard from "../components/ProfileCard";
 import EditProfileCard from "../components/EditProfileCard";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import {
@@ -13,7 +14,6 @@ import {
 import {
   updateUserInfoAndRefresh,
   useGetUserByIdQuery,
-  useGetUserFavoritesQuery,
 } from "../hooks/users/userApiSlice";
 import {
   useGetVRScoreQuery,
@@ -35,11 +35,13 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import FavoritesCard from "../components/FavoritesCard";
+import { set } from "date-fns";
 
 // ProfilePage component. This component displays the user's profile page with the user's name, school, status, bio, and test scores.
 const ProfilePage = () => {
   const [showBlur, setShowBlur] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showProfile, setShowProfile] = useState(null);
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,13 +62,6 @@ const ProfilePage = () => {
     error,
     isLoadingUser,
   } = useGetUserByIdQuery(id, { skip: !id });
-  const {
-    data: userFavorites,
-    isLoading: isLoadingFavorites,
-    isSuccess: isSuccessFavorites,
-  } = useGetUserFavoritesQuery(userId, {
-    skip: !userId,
-  });
 
   // Get the user's VR and Web test scores
   const { data: vrData, isLoading: isLoadingVRScore } = useGetVRScoreQuery(id, {
@@ -102,7 +97,6 @@ const ProfilePage = () => {
       !isLoadingWebScore
     ) {
       setIsLoading(false);
-      setUserId(profileData?.id || profileData?._id);
     }
   }, [
     isMyProfile,
@@ -146,6 +140,7 @@ const ProfilePage = () => {
   // Close the edit profile card
   const handleClose = () => {
     setShowEditProfile(false);
+    setShowProfile(null);
     toggleBlur();
   };
 
@@ -443,15 +438,24 @@ const ProfilePage = () => {
                 )}
                 {profileData?.role === "nonplayer" && (
                   <FavoritesCard
-                    users={userFavorites}
-                    isLoading={isLoadingFavorites}
-                    isSuccess={isSuccessFavorites}
+                    userId={profileData?.id || profileData?._id}
+                    toggleBlur={toggleBlur}
+                    setShowProfile={setShowProfile}
                   />
                 )}
               </Card>
             </div>
           </div>
         </div>
+        <ProfileCard
+          myId={myId}
+          id={showProfile?._id}
+          name={`${showProfile?.firstname} ${showProfile?.lastname}`}
+          school={showProfile?.school_organization}
+          score={showProfile?.score}
+          isVisible={showProfile !== null}
+          onClose={handleClose}
+        />
         <EditProfileCard
           isVisible={showEditProfile}
           id={myId}

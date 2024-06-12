@@ -197,9 +197,15 @@ const getUserFavorites = async (req, res) => {
   }
 
   const favorites = await User.find({ _id: { $in: user.favorites } });
-  console.log("favorites: ", favorites);
+  const searchedUsers = favorites.map((user) => ({
+    id: user._id,
+    role: user.role,
+    name: `${user.firstname} ${user.lastname}`,
+    school: user.school_organization,
+    score: user.score ? user.score : 0,
+  }));
 
-  return res.status(200).json({ favorites: favorites });
+  return res.status(200).json({ favorites: searchedUsers });
 };
 
 const search = async (req, res) => {

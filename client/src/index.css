@@ -59,3 +59,18 @@ body {
     opacity: 1;
   }
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #0C0C0C;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #AAAAAA;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #AAAAAA;
+  }
+}

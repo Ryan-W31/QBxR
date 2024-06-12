@@ -225,6 +225,7 @@ const SearchPage = () => {
                         <div className="flex justify-center">
                           <Button
                             variant="text"
+                            ripple={false}
                             className="flex justify-center items-center gap-2 font-Audiowide text-light-primary py-0 !bg-transparent"
                           >
                             {col.title}
