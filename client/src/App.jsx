@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import EmailAuth from "./pages/EmailAuth";
 import HomePage from "./pages/HomePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -42,6 +43,7 @@ function App() {
 
               {/*Begin Protected Routes*/}
               <Route element={<PersistLogin />}>
+                <Route path="verify/:token?" element={<EmailAuth />} />
                 <Route element={<ProtectedRoutes />}>
                   <Route element={<Prefetch />}>
                     <Route path="home" element={<HomePage />} />

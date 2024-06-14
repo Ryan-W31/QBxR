@@ -11,6 +11,14 @@ router.route("/login").post(loginThrottler, authController.login);
 // Refresh: GET request to /refresh
 router.route("/refresh").get(authController.refreshCookie);
 
+// Verify: POST request to /verify
+router
+  .route("/verify")
+  .post(loginThrottler, authController.sendVerificationEmail);
+
+// Verify: PATCH request to /verify/:token
+router.route("/verify/:token").patch(authController.verifyEmail);
+
 // Logout: POST request to /logout
 router.route("/logout").post(authController.logout);
 

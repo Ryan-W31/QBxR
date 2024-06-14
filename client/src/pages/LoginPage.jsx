@@ -63,7 +63,12 @@ const LoginPage = () => {
       );
       setEmail("");
       setPassword("");
-      navigate("/home");
+
+      if (user?.isVerified === true) {
+        navigate("/home");
+      } else {
+        navigate("/verify");
+      }
     } catch (err) {
       setIsError(true);
 

@@ -3,7 +3,6 @@ const utils = require("../utils/utils");
 const User = require("../models/user.model");
 const Score = require("../models/score.model");
 const jwt = require("jsonwebtoken");
-
 require("dotenv").config();
 
 // login is used to verify the user's credentials and return a JWT access token and refresh token.
@@ -19,7 +18,7 @@ const login = async (req, res) => {
       .json({ message: "Invalid username and/or password." });
   }
 
-  const user = await User.findOne({ email: email });
+  const user = await User.findOne({ email: email.toLowerCase() });
 
   if (!user) {
     return res
@@ -145,6 +144,42 @@ const refreshCookie = (req, res) => {
   });
 };
 
+const sendVerificationEmail = async (req, res) => {
+  const { email, id } = req.body;
+  const emailToken = jwt.sign({ id: id }, process.env.JWT_EMAIL_SECRET, {
+    expiresIn: "5m",
+  });
+
+  let success = utils.sendEmail(email, 1, emailToken);
+
+  res
+    .status(200)
+    .json({ success: success, message: "Verification email sent." });
+};
+
+const verifyEmail = async (req, res) => {
+  const token = req.params.token;
+  jwt.verify(token, process.env.JWT_EMAIL_SECRET, async (err, user) => {
+    if (err) {
+      return res.status(403).json({ isVerified: false });
+    }
+
+    const verifiedUser = await User.findOneAndUpdate(
+      { _id: user.id },
+      { isVerified: true },
+      { new: true }
+    );
+
+    if (!verifiedUser) {
+      return res.status(401).json({ isVerified: false });
+    }
+
+    await verifiedUser.save();
+
+    res.status(200).json({ isVerified: true });
+  });
+};
+
 // logout is used to clear the refresh token cookie.
 // The refresh token cookie is cleared to log the user out.
 // The user is then redirected to the login page.
@@ -167,4 +202,11 @@ const test = (req, res) => {
   res.status(200).json({ message: "Test" });
 };
 
-module.exports = { login, refreshCookie, logout, test };
+module.exports = {
+  login,
+  refreshCookie,
+  logout,
+  test,
+  sendVerificationEmail,
+  verifyEmail,
+};

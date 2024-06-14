@@ -108,11 +108,7 @@ const RegisterPage = () => {
 
       try {
         const res = await signUp(obj).unwrap();
-        notify(
-          "Registration successful. Please check your email to verify.",
-          "success"
-        );
-        navigate("/login");
+        notify("Registration successful.", "success");
       } catch (err) {
         setIsError(true);
         setError(err.data.message);

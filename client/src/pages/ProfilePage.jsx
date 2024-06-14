@@ -47,7 +47,6 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
   const [profileScores, setProfileScores] = useState(null);
-  const [userId, setUserId] = useState(null);
 
   const dispatch = useDispatch();
   const { id } = useParams();
