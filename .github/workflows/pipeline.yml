@@ -7,6 +7,8 @@ on:
 env:
   JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
   JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+  JWT_EMAIL_SECRET: ${{ secrets.JWT_EMAIL_SECRET }}
+  POSTMARK_API_KEY: ${{ secrets.POSTMARK_API_KEY }}
 
 jobs:
   build-and-deploy:
@@ -27,6 +29,8 @@ jobs:
           npm install
           export JWT_ACCESS_SECRET=$JWT_ACCESS_SECRET
           export JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET
+          export JWT_EMAIL_SECRET=$JWT_EMAIL_SECRET
+          export POSTMARK_API_KEY=$POSTMARK_API_KEY
           npm run test
 
       - name: Login to Docker Hub
