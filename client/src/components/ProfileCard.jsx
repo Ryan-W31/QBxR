@@ -80,7 +80,7 @@ const ProfileCard = ({ myId, id, name, school, score, isVisible, onClose }) => {
       className="fixed inset-0 z-50 flex items-center justify-center m-10"
     >
       {/* Display the profile card */}
-      <Card className="relative p-4 w-3/4 max-h-full bg-dark-secondary rounded-lg overflow-auto">
+      <Card className="fade-in relative p-4 w-3/4 max-h-full !bg-dark-secondary rounded-lg overflow-auto">
         {/* Display the close button */}
         <IconButton
           variant="text"

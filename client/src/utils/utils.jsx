@@ -114,6 +114,16 @@ function useDebounce(effect, dependencies, delay) {
   }, [callback, delay]);
 }
 
+function strengthColor(score) {
+  if (score < 2) {
+    return "bg-red-500";
+  } else if (score < 3) {
+    return "bg-yellow-600";
+  } else {
+    return "bg-green-primary";
+  }
+}
+
 export {
   classNames,
   scrollToTop,
@@ -126,4 +136,5 @@ export {
   colorPodium,
   checkData,
   useDebounce,
+  strengthColor,
 };

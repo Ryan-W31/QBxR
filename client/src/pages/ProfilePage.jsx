@@ -47,7 +47,6 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState(null);
   const [profileScores, setProfileScores] = useState(null);
-  const [userId, setUserId] = useState(null);
 
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -200,7 +199,7 @@ const ProfilePage = () => {
             isLandingPage={false}
             currentPage="profile"
           />
-          <div className="mx-auto flex flex-col md:flex-row my-5 p-5">
+          <div className="fade-in mx-auto flex flex-col md:flex-row my-5 p-5">
             <Card className="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-green-primary rounded-lg text-center font-Audiowide relative">
               {!isMyProfile && (
                 <IconButton
@@ -314,7 +313,7 @@ const ProfilePage = () => {
                     <div className="grid grid-cols-2">
                       <div className="px-2 py-2 font-semibold">Email</div>
                       <a
-                        className=" px-2 py-2 text-light-primary hover:text-green-primary"
+                        className="px-2 py-2 text-light-primary hover:text-green-primary whitespace-nowrap overflow-hidden text-ellipsis block"
                         href={"mailto:" + profileData?.email}
                       >
                         {profileData?.email}

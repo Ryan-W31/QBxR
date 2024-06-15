@@ -24,7 +24,8 @@
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
     "react-unity-webgl": "^9.5.2",
-    "validator": "^13.12.0"
+    "validator": "^13.12.0",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.17.0",

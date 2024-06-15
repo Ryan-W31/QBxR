@@ -1,6 +1,27 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { setCredentials, logOut } from "./authSlice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
+export const updateIsVerifiedAndRefresh = createAsyncThunk(
+  "user/updateIsVerifiedAndRefresh",
+  async (token, thunkAPI) => {
+    try {
+      const updateResult = await thunkAPI
+        .dispatch(apiSlice.endpoints.verifyEmail.initiate(token))
+        .unwrap();
+
+      const refreshResult = await thunkAPI
+        .dispatch(apiSlice.endpoints.refresh.initiate())
+        .unwrap();
+
+      console.log("User info updated and token refreshed");
+      return updateResult;
+    } catch (error) {
+      console.error("Error updating user info and refreshing token:", error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 // Auth API slice. This slice contains the login, refresh, and logout endpoints.
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -37,6 +58,31 @@ const authApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
+    sendVerification: builder.mutation({
+      query: (body) => ({
+        url: "/auth/verify",
+        method: "POST",
+        body: body,
+        credentials: "include",
+      }),
+    }),
+    verifyEmail: builder.mutation({
+      query: (token) => ({
+        url: `/auth/verify/${token}`,
+        method: "PATCH",
+      }),
+      transformResponse: (response) => {
+        return response;
+      },
+    }),
+    resetPassword: builder.mutation({
+      query: (body) => ({
+        url: `/auth/reset/${body.id}`,
+        method: "PATCH",
+        body: body,
+        credentials: "include",
+      }),
+    }),
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
@@ -56,5 +102,11 @@ const authApiSlice = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRefreshMutation, useLogoutMutation } =
-  authApiSlice;
+export const {
+  useLoginMutation,
+  useRefreshMutation,
+  useSendVerificationMutation,
+  useVerifyEmailMutation,
+  useResetPasswordMutation,
+  useLogoutMutation,
+} = authApiSlice;

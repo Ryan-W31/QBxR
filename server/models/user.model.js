@@ -51,6 +51,11 @@ const userSchema = new Schema(
     score: {
       type: Number,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
   },
   { collection: "Users" }
 );

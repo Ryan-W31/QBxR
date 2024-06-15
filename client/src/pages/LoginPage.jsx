@@ -63,7 +63,12 @@ const LoginPage = () => {
       );
       setEmail("");
       setPassword("");
-      navigate("/home");
+
+      if (user?.isVerified === true) {
+        navigate("/home");
+      } else {
+        navigate("/verify");
+      }
     } catch (err) {
       setIsError(true);
 
@@ -77,7 +82,7 @@ const LoginPage = () => {
   const content = isLoading ? (
     <div>Loading...</div>
   ) : (
-    <section className="h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
+    <section className="fade-in h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
       <Card className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 pt-10 pb-4 px-6 rounded-lg">
         <CardHeader className="bg-transparent text-center font-Audiowide font-bold shadow-none">
           <label className="text-5xl text-green-primary">QBxR</label>
@@ -144,14 +149,14 @@ const LoginPage = () => {
               ripple={false}
               label="Remember me"
               labelProps={{
-                className: "font-Audiowide text-light-primary",
+                className: "font-Audiowide text-light-primary tracking-wider",
               }}
               containerProps={{ className: "-ml-3" }}
               className="before:bg-dark-secondary checked:bg-green-primary checked:before:bg-green-primary checked:border-green-primary hover:before:opacity-0 border-light-primary before:border-light-primary"
               onChange={handlePersist}
               checked={persist}
             />
-            <Link to="/forgotpassword">
+            <Link to="/reset">
               <Button
                 type="text"
                 className="text-green-primary hover:text-green-secondary hover:underline hover:underline-offset-4 font-Audiowide normal-case pr-0"
