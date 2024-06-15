@@ -19,6 +19,9 @@ router
 // Verify: PATCH request to /verify/:token
 router.route("/verify/:token").patch(authController.verifyEmail);
 
+// Reset Password: PATCH request to /reset/:id
+router.route("/reset/:id").patch(authController.resetPassword);
+
 // Logout: POST request to /logout
 router.route("/logout").post(authController.logout);
 

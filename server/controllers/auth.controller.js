@@ -146,15 +146,28 @@ const refreshCookie = (req, res) => {
 
 const sendVerificationEmail = async (req, res) => {
   const { email, id } = req.body;
-  const emailToken = jwt.sign({ id: id }, process.env.JWT_EMAIL_SECRET, {
-    expiresIn: "5m",
+
+  let emailToken;
+  let success;
+
+  if (!email && !id) {
+    return res.status(400).json({ message: "Invalid email." });
+  } else if (!id) {
+    emailToken = jwt.sign({ email: email }, process.env.JWT_EMAIL_SECRET, {
+      expiresIn: "5m",
+    });
+    success = utils.sendEmail(email, 2, emailToken);
+  } else {
+    emailToken = jwt.sign({ id: id }, process.env.JWT_EMAIL_SECRET, {
+      expiresIn: "5m",
+    });
+    success = utils.sendEmail(email, 1, emailToken);
+  }
+
+  res.status(200).json({
+    success: success,
+    message: "Verification email sent.",
   });
-
-  let success = utils.sendEmail(email, 1, emailToken);
-
-  res
-    .status(200)
-    .json({ success: success, message: "Verification email sent." });
 };
 
 const verifyEmail = async (req, res) => {
@@ -164,20 +177,54 @@ const verifyEmail = async (req, res) => {
       return res.status(403).json({ isVerified: false });
     }
 
-    const verifiedUser = await User.findOneAndUpdate(
-      { _id: user.id },
-      { isVerified: true },
-      { new: true }
-    );
+    if (user.email) {
+      const verifiedUser = await User.findOne({ email: user.email });
 
-    if (!verifiedUser) {
-      return res.status(401).json({ isVerified: false });
+      if (!verifiedUser) {
+        return res.status(401).json({ id: null, isVerified: false });
+      }
+
+      res.status(200).json({ id: verifiedUser._id, isVerified: true });
+    } else {
+      const verifiedUser = await User.findOneAndUpdate(
+        { _id: user.id },
+        { isVerified: true },
+        { new: true }
+      );
+
+      if (!verifiedUser) {
+        return res.status(401).json({ isVerified: false });
+      }
+
+      await verifiedUser.save();
+
+      res.status(200).json({ isVerified: true });
     }
-
-    await verifiedUser.save();
-
-    res.status(200).json({ isVerified: true });
   });
+};
+
+const resetPassword = async (req, res) => {
+  const { password } = req.body;
+  const id = req.params.id;
+
+  if (!password) {
+    return res.status(400).json({ message: "Invalid Password." });
+  }
+
+  if (!id) {
+    return res.status(400).json({ message: "Invalid User." });
+  }
+
+  const user = await User.findById(id);
+  if (!user) {
+    return res
+      .status(404)
+      .json({ message: "Your account was not found. Please try again." });
+  }
+
+  await user.createHash(password);
+  await user.save();
+  res.status(200).json({ message: "Your password has been updated." });
 };
 
 // logout is used to clear the refresh token cookie.
@@ -209,4 +256,5 @@ module.exports = {
   test,
   sendVerificationEmail,
   verifyEmail,
+  resetPassword,
 };

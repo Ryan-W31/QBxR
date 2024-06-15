@@ -16,7 +16,10 @@ import {
   Tabs,
   TabsHeader,
   Input,
+  Progress,
 } from "@material-tailwind/react";
+import { strengthColor } from "../utils/utils";
+import zxcvbn from "zxcvbn";
 
 // RegisterPage component. This component displays the registration form.
 const RegisterPage = () => {
@@ -34,6 +37,7 @@ const RegisterPage = () => {
   const [school_organization, setSchool_Organization] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordScore, setPasswordScore] = useState(0);
   const [isChecked, setIsChecked] = useState(false);
   const [isError, setIsError] = useState(false);
   const [error, setError] = useState("");
@@ -63,6 +67,11 @@ const RegisterPage = () => {
     }
   }, [isSuccess, navigate]);
 
+  useEffect(() => {
+    const score = zxcvbn(password).score;
+    setPasswordScore(score);
+  }, [password, setPasswordScore]);
+
   // Handle the checkbox event
   const handleCheck = () => {
     setIsChecked(!isChecked);
@@ -88,6 +97,12 @@ const RegisterPage = () => {
       if (password !== confirmPassword) {
         setIsError(true);
         setError("Passwords do not match.");
+        return;
+      }
+
+      if (passwordScore < 2) {
+        setIsError(true);
+        setError("Password is too weak.");
         return;
       }
 
@@ -121,7 +136,7 @@ const RegisterPage = () => {
 
   // Return the registration form
   return (
-    <section className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
+    <section className="fade-in h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-x-16 items-center">
       <Card className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 pt-10 pb-4 px-6 rounded-lg">
         <CardHeader className="text-center font-Audiowide font-bold bg-transparent shadow-none">
           <label className="text-5xl text-green-primary">QBxR</label>
@@ -238,6 +253,22 @@ const RegisterPage = () => {
                   <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
                 )}
               </IconButton>
+              {password !== "" && (
+                <>
+                  <div className="text-xs my-2 flex items-center justify-between gap-4">
+                    <p className="font-Audiowide text-light-primary">WEAK</p>
+                    <p className="font-Audiowide text-light-primary">STRONG</p>
+                  </div>
+                  <Progress
+                    className="w-full rounded-full bg-dark-primary"
+                    size="sm"
+                    value={(passwordScore + 1) * 20}
+                    barProps={{
+                      className: `${strengthColor(passwordScore)} rounded-full`,
+                    }}
+                  />
+                </>
+              )}
             </div>
             <div className="my-2" />
 

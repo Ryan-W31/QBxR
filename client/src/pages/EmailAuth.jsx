@@ -26,7 +26,7 @@ const EmailAuth = () => {
         notify("Email verified successfully.", "success", "top-right");
       } catch (err) {
         console.log(err);
-        notify("Failed to verify email.", "error", "top-right");
+        notify("This link is invalid or has expired.", "error", "top-right");
       }
     } else {
       try {
@@ -64,7 +64,7 @@ const EmailAuth = () => {
   };
 
   return (
-    <section className="h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
+    <section className="fade-in h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
       <Card className="md:w-1/2 min-w-96 max-w-xl bg-dark-secondary/80 pt-10 pb-4 px-6 rounded-lg">
         <CardHeader className="bg-transparent text-center font-Audiowide font-bold shadow-none mb-4">
           <h1 className="text-5xl text-green-primary">QBxR</h1>

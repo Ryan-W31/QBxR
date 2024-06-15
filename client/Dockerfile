@@ -7,7 +7,7 @@ RUN npm run build
 
 FROM caddy:2.8
 
-COPY ./Caddyfile.dev /etc/caddy/Caddyfile
+COPY ./Caddyfile.prod /etc/caddy/Caddyfile
 
 COPY --from=builder /app/dist/ /srv/
 

@@ -62,7 +62,7 @@ function sendEmail(email, subject, token) {
         HtmlBody: `<html style="background-color:#0C0C0C">
   <body style="text-align:center">
     <p style="color:#EEEEEE;">Please click the button below to verify your email: </p>
-    <a href="http://localhost/verify/${token}" style="background-color:#1FB622;padding-left:1.5rem;padding-right:1.5rem;padding-top:0.5rem;padding-bottom:0.5rem;border-radius:9999px;color:#EEEEEE;text-decoration:none">Verify</a>
+    <a href="https://qbxr.net/verify/${token}" style="background-color:#1FB622;padding-left:1.5rem;padding-right:1.5rem;padding-top:0.5rem;padding-bottom:0.5rem;border-radius:9999px;color:#EEEEEE;text-decoration:none">Verify</a>
   </body>
 </html>`,
       })
@@ -78,8 +78,12 @@ function sendEmail(email, subject, token) {
         From: "no-reply@qbxr.net",
         To: email,
         Subject: "QBxR Password Reset",
-        TextBody: `Please click the following link to reset your password: Reset`,
-        HtmlBody: `<p>Please click the following link to reset your password: <a href="http://localhost/reset/${token}">Reset</a></p>`,
+        HtmlBody: `<html style="background-color:#0C0C0C">
+  <body style="text-align:center">
+    <p style="color:#EEEEEE;">Please click the button below to verify your email: </p>
+    <a href="https://qbxr.net/reset/${token}" style="background-color:#1FB622;padding-left:1.5rem;padding-right:1.5rem;padding-top:0.5rem;padding-bottom:0.5rem;border-radius:9999px;color:#EEEEEE;text-decoration:none">Reset</a>
+  </body>
+</html>`,
       })
       .then(() => {
         return true;

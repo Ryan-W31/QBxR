@@ -39,7 +39,7 @@ function App() {
               <Route index element={<LandingPage />} />
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
-              <Route path="forgotpassword" element={<ForgotPasswordPage />} />
+              <Route path="reset/:token?" element={<ForgotPasswordPage />} />
 
               {/*Begin Protected Routes*/}
               <Route element={<PersistLogin />}>

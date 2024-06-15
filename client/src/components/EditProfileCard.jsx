@@ -70,7 +70,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
       tabIndex="-1"
       className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
     >
-      <Card className="relative p-4 w-full h-full md:h-auto font-Audiowide max-w-3xl bg-dark-secondary rounded-lg sm:p-5">
+      <Card className="fade-in relative p-4 w-full h-full md:h-auto font-Audiowide max-w-3xl !bg-dark-secondary rounded-lg sm:p-5">
         {/* Modal Header */}
         <div className="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
           <CardHeader className="text-lg font-semibold text-light-primary bg-transparent shadow-none mt-0">

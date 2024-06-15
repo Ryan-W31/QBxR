@@ -72,8 +72,16 @@ const authApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
       }),
       transformResponse: (response) => {
-        return response.isVerified;
+        return response;
       },
+    }),
+    resetPassword: builder.mutation({
+      query: (body) => ({
+        url: `/auth/reset/${body.id}`,
+        method: "PATCH",
+        body: body,
+        credentials: "include",
+      }),
     }),
     logout: builder.mutation({
       query: () => ({
@@ -99,5 +107,6 @@ export const {
   useRefreshMutation,
   useSendVerificationMutation,
   useVerifyEmailMutation,
+  useResetPasswordMutation,
   useLogoutMutation,
 } = authApiSlice;

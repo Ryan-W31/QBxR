@@ -129,7 +129,7 @@ const FavoritesCard = ({ userId, setShowProfile, toggleBlur }) => {
   return (
     <>
       <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-light-primary text-center relative overflow-visible font-Audiowide p-6">
-        Your Favorites
+        Favorites
       </CardHeader>
       <CardBody className="relative overflow-scroll border-2 rounded-lg border-green-primary font-Audiowide p-0">
         <SkeletonTheme

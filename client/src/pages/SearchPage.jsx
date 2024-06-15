@@ -183,7 +183,7 @@ const SearchPage = () => {
           isLandingPage={false}
           currentPage="search"
         />
-        <Card className="container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 bg-dark-secondary/80 p-5 rounded-lg justify-center border-t-4 border-green-primary">
+        <Card className="fade-in container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 !bg-dark-secondary/80 p-5 rounded-lg justify-center border-t-4 border-green-primary">
           <CardHeader className="mt-2 bg-transparent shadow-none">
             <h1 className="text-6xl font-bold font-Audiowide text-green-primary text-center mb-4">
               Search

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -6,6 +6,7 @@ import {
   Button,
   IconButton,
   Input,
+  Progress,
 } from "@material-tailwind/react";
 import NavBar from "../components/NavBar";
 import MobileMenu from "../components/MobileMenu";
@@ -22,6 +23,8 @@ import {
 import { selectCurrentId } from "../hooks/auth/authSlice";
 import { useToast } from "../components/Toast";
 import usePersist from "../hooks/auth/usePersist";
+import { strengthColor } from "../utils/utils";
+import zxcvbn from "zxcvbn";
 
 const SettingsPage = () => {
   const [showMenu, setShowMenu] = useState(false);
@@ -37,6 +40,7 @@ const SettingsPage = () => {
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [deleteMessage, setDeleteMessage] = useState("");
+  const [passwordScore, setPasswordScore] = useState(0);
   const [persist, setPersist] = usePersist();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -54,6 +58,11 @@ const SettingsPage = () => {
     setShowNewPassword((prevState) => !prevState);
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword((prevState) => !prevState);
+
+  useEffect(() => {
+    const score = zxcvbn(newPassword).score;
+    setPasswordScore(score);
+  }, [newPassword]);
 
   const toggleMenu = () => {
     setShowMenu((prevState) => !prevState);
@@ -117,10 +126,15 @@ const SettingsPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(oldPassword, newPassword, confirmPassword);
       if (newPassword !== confirmPassword) {
         setIsError(true);
         setError("Passwords do not match.");
+        return;
+      }
+
+      if (passwordScore < 2) {
+        setIsError(true);
+        setError("New password is too weak.");
         return;
       }
 
@@ -160,7 +174,7 @@ const SettingsPage = () => {
           isLandingPage={false}
           currentPage="profile"
         />
-        <section className="flex justify-center items-center mt-10 p-5">
+        <section className="fade-in flex justify-center items-center mt-10 p-5">
           <Card className="md:w-1/3 min-w-96 max-w-lg bg-dark-secondary/80 rounded-lg h-full">
             <CardHeader className="mt-4 bg-transparent shadow-none">
               <h1 className="text-6xl font-bold font-Audiowide text-green-primary text-center">
@@ -208,7 +222,7 @@ const SettingsPage = () => {
           tabIndex="-1"
           className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
         >
-          <Card className="relative p-4 w-full h-full md:h-auto font-Audiowide max-w-xl bg-dark-secondary rounded-lg sm:p-5">
+          <Card className="fade-in relative p-4 w-full h-full md:h-auto font-Audiowide max-w-xl !bg-dark-secondary rounded-lg sm:p-5">
             {/* Modal Header */}
             <div className="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
               <CardHeader className="text-lg font-semibold text-light-primary bg-transparent shadow-none mt-0">
@@ -279,6 +293,28 @@ const SettingsPage = () => {
                       <AiFillEyeInvisible className="w-5 h-5 text-light-secondary" />
                     )}
                   </IconButton>
+                  {newPassword !== "" && (
+                    <>
+                      <div className="text-xs my-2 flex items-center justify-between gap-4">
+                        <p className="font-Audiowide text-light-primary">
+                          WEAK
+                        </p>
+                        <p className="font-Audiowide text-light-primary">
+                          STRONG
+                        </p>
+                      </div>
+                      <Progress
+                        className="w-full rounded-full bg-dark-primary"
+                        size="sm"
+                        value={(passwordScore + 1) * 20}
+                        barProps={{
+                          className: `${strengthColor(
+                            passwordScore
+                          )} rounded-full`,
+                        }}
+                      />
+                    </>
+                  )}
                 </div>
                 {/* End Password Field */}
 
@@ -327,7 +363,7 @@ const SettingsPage = () => {
           tabIndex="-1"
           className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
         >
-          <Card className="relative p-4 w-full h-full md:h-auto font-Audiowide max-w-xl bg-dark-secondary rounded-lg sm:p-5">
+          <Card className="fade-in relative p-4 w-full h-full md:h-auto font-Audiowide max-w-xl !bg-dark-secondary rounded-lg sm:p-5">
             {/* Modal Header */}
             <div className="flex justify-center items-center pb-4 rounded-t border-b">
               <CardHeader className="text-lg font-semibold text-light-primary bg-transparent shadow-none mt-0">
