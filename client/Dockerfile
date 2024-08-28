@@ -1,15 +1,19 @@
-FROM node:18-alpine AS builder
+# Development stage
+FROM node:18-bookworm-slim AS development
+
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+COPY package*.json .
+
+RUN npm ci
+
 COPY . .
-RUN npm run build
 
-FROM caddy:2.8
+ARG VITE_API_URL
 
-COPY ./Caddyfile.prod /etc/caddy/Caddyfile
+RUN VITE_API_URL=${VITE_API_URL} npm run build
 
-COPY --from=builder /app/dist/ /srv/
-
-EXPOSE 80
-EXPOSE 443
+# Production stage
+FROM caddy:2-alpine as production
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=development /app/dist /srv
