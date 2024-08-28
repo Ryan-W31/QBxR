@@ -1,5 +1,5 @@
 import { CookieOptions, Response } from "express";
-import { fifteenMinutesFromNow, thirtyDaysFromNow } from "./date";
+import { fifteenMinutesFromNow, sevenDaysFromNow } from "./date";
 
 export const REFRESH_PATH = "/auth/refresh";
 
@@ -16,7 +16,7 @@ export const getAccessTokenCookieOptions = (): CookieOptions => ({
 
 export const getRefreshTokenCookieOptions = (): CookieOptions => ({
   ...defaults,
-  expires: thirtyDaysFromNow(),
+  expires: sevenDaysFromNow(),
   path: REFRESH_PATH,
 });
 

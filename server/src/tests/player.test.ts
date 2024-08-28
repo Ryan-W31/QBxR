@@ -1,7 +1,6 @@
-const request = require("supertest");
-
+import request from "supertest";
 const app = require("../app");
-
+import { describe, it, expect } from "@jest/globals";
 require("dotenv").config();
 
 // Test the /api/auth/test route

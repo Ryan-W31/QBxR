@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { thirtyDaysFromNow } from "../utils/date";
+import { sevenDaysFromNow } from "../utils/date";
 
 export interface SessionDocument extends mongoose.Document {
   userId: mongoose.Types.ObjectId;
@@ -23,7 +23,7 @@ const sessionSchema = new mongoose.Schema<SessionDocument>({
   expiresAt: {
     type: Date,
     required: true,
-    default: thirtyDaysFromNow,
+    default: sevenDaysFromNow,
   },
 });
 

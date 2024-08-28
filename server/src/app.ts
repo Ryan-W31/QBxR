@@ -4,12 +4,12 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { APP_ORIGIN_URL } from "./contants/env";
 import errorHandler from "./middleware/errorHandler";
-import catchErrors from "./utils/catchErrors";
 import { OK } from "./contants/http";
 
-// import UserRouter from "./routes/user.route";
+import userRouter from "./routes/user.route";
 import authRouter from "./routes/auth.route";
-// import ScoreRouter from "./routes/score.route";
+import scoreRouter from "./routes/score.route";
+import auth from "./middleware/auth";
 
 const app = express();
 app.use(express.json());
@@ -31,8 +31,8 @@ app.get("/", (req, res) => {
 
 app.use(errorHandler);
 // Routes
-// app.use("/api/user", UserRouter);
 app.use("/auth", authRouter);
-// app.use("/api/score", ScoreRouter);
+app.use("/user", auth, userRouter);
+app.use("/score", auth, scoreRouter);
 
 export default app;
