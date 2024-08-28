@@ -9,9 +9,11 @@ export const store = configureStore({
     [apiSlice.reducerPath]: apiSlice.reducer,
     auth: authReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiSlice.middleware),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
   devTools: true,
 });
 
 setupListeners(store.dispatch);
+
+export type IRootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
