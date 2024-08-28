@@ -1,84 +1,40 @@
-// auth.controller is used to handle the login, refresh, and logout of the user.
-const utils = require("../utils/utils");
-const User = require("../models/user.model");
-const Score = require("../models/score.model");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
+import { CREATED, OK } from "../contants/http";
+import { loginEndpoint, signUpEndpoint } from "../services/auth.service";
+import catchErrors from "../utils/catchErrors";
+import { setAuthCookies } from "../utils/cookies";
+import { loginSchema, signUpSchema } from "./auth.schemas";
+
+// signUp is used to create a new user account.
+// The user's information is stored in the database.
+export const signUpController = catchErrors(async (req, res) => {
+  const request = signUpSchema.parse({
+    ...req.body,
+    userAgent: req.headers["user-agent"],
+  });
+
+  const { user, accessToken, refreshToken } = await signUpEndpoint(request);
+  return setAuthCookies({ res, accessToken, refreshToken })
+    .status(CREATED)
+    .json(user);
+});
 
 // login is used to verify the user's credentials and return a JWT access token and refresh token.
 // The access token is used to authenticate the user and the refresh token is used to refresh the access token.
 // The refresh token is stored in a cookie and the access token is stored in the client's local storage (redux store).
 // The user and user's score are also cached and returned to the client.
-const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res
-      .status(400)
-      .json({ message: "Invalid username and/or password." });
-  }
-
-  const user = await User.findOne({ email: email.toLowerCase() });
-
-  if (!user) {
-    return res
-      .status(401)
-      .json({ message: "Invalid username and/or password." });
-  }
-
-  const isValid = await user.verifyPassword(password);
-
-  if (!isValid) {
-    return res
-      .status(401)
-      .json({ message: "Invalid username and/or password." });
-  }
-
-  const scores = await Score.findOne({ user: user._id });
-  var obj = {};
-  var rank = null;
-  var qbxr_score = null;
-
-  if (!scores) {
-    obj.qbxr = { qbxr_score: 0, rank: 0 };
-    obj.web = [];
-    obj.vr = [];
-  } else if (scores.qbxr_score === undefined) {
-    rank = await Score.where("qbxr_score").gt(0).countDocuments();
-    qbxr_score = 0;
-  } else {
-    rank = await Score.where("qbxr_score")
-      .gt(scores.qbxr_score)
-      .countDocuments();
-    qbxr_score = scores.qbxr_score;
-  }
-
-  obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
-  obj.web = utils.formatWebScores(scores);
-  obj.vr = utils.formatVRScores(scores);
-
-  const aToken = jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, {
-    expiresIn: "15m",
+export const loginController = catchErrors(async (req, res) => {
+  const request = loginSchema.parse({
+    ...req.body,
+    userAgent: req.headers["user-agent"],
   });
 
-  const rToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, {
-    expiresIn: "1d",
-  });
+  const { accessToken, refreshToken, userId, user, scores } =
+    await loginEndpoint(request);
 
-  res.cookie("jwt_refresh", rToken, {
-    httpOnly: true,
-    sameSite: "none",
-    secure: true,
-    maxAge: 1 * 24 * 60 * 60 * 1000,
-  });
-
-  res.status(200).json({
-    aToken: aToken,
-    id: user._id,
-    user: user,
-    scores: obj,
-  });
-};
+  return setAuthCookies({ res, accessToken, refreshToken })
+    .status(OK)
+    .json({ userId, user, scores });
+});
 
 // refreshCookie is used to refresh the access token.
 // The refresh token is stored in a cookie and is used to verify the user.

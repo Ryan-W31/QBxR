@@ -1,7 +1,7 @@
 // score.controller is used to handle the setting and getting of the user's scores.
 const Score = require("../models/score.model");
 const User = require("../models/user.model");
-const { formatWebScores, formatVRScores } = require("../utils/utils");
+const { formatWebScores, formatVRScores } = require("../src/utils/utils");
 
 // setVRScore is used to set the user's VR scores.
 // The user's VR scores are stored in the database.

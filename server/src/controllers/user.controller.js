@@ -4,43 +4,6 @@ const Score = require("../models/score.model");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-// signUp is used to create a new user account.
-// The user's information is stored in the database.
-const signUp = async (req, res) => {
-  const { role, firstname, lastname, email, password, school_organization } =
-    req.body;
-
-  if (!firstname || !lastname || !email || !password) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
-
-  let lowerEmail = email.toLowerCase();
-  const dup = await User.findOne({ email: lowerEmail });
-
-  if (dup) {
-    return res
-      .status(400)
-      .json({ message: "A user has already registered with this email." });
-  }
-
-  const user = new User({
-    role: role,
-    firstname: firstname,
-    lastname: lastname,
-    email: lowerEmail,
-    school_organization: school_organization,
-    status: true,
-    score: 0,
-  });
-
-  await user.createHash(password);
-  await user.save();
-
-  if (role === "player")
-    await new Score({ user: user._id, qbxr_score: 0 }).save();
-
-  res.status(201).json({ message: "User created" });
-};
 
 // getLeaderboard is used to get the top 50 users with the highest scores.
 // The users' information is stored in the database.
