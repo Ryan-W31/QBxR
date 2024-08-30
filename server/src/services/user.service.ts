@@ -11,7 +11,7 @@ export const getLeaderboardEndpoint = async () => {
 
   const data = users.map((user, index) => {
     return {
-      _id: user._id,
+      userId: user._id,
       rank: index + 1,
       name: `${user.firstname} ${user.lastname}`,
       school: user.school_organization,

@@ -1,58 +1,37 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { setCredentials, logOut } from "./authSlice";
-import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const updateIsVerifiedAndRefresh = createAsyncThunk(
-  "user/updateIsVerifiedAndRefresh",
-  async (token, thunkAPI) => {
-    try {
-      const updateResult = await thunkAPI
-        .dispatch(apiSlice.endpoints.verifyEmail.initiate(token))
-        .unwrap();
-
-      const refreshResult = await thunkAPI
-        .dispatch(apiSlice.endpoints.refresh.initiate())
-        .unwrap();
-
-      console.log("User info updated and token refreshed");
-      return updateResult;
-    } catch (error) {
-      console.error("Error updating user info and refreshing token:", error);
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
+interface RefreshResponse {
+  accessToken: string;
+  userId: string;
+  user: string;
+  scores: any;
+}
 // Auth API slice. This slice contains the login, refresh, and logout endpoints.
-const authApiSlice = apiSlice.injectEndpoints({
+export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
         url: "/auth/login",
         method: "POST",
         body: { ...credentials },
-        credentials: "include",
       }),
     }),
-    refresh: builder.mutation({
-      query: () => ({
-        url: "/auth/refresh",
-        method: "GET",
-        credentials: "include",
-      }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+    refresh: builder.query<RefreshResponse, void>({
+      query: () => `/auth/refresh`,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const refresh = await queryFulfilled;
           dispatch(
             setCredentials({
-              aToken: refresh.data.aToken,
-              id: refresh.data.id,
+              accessToken: refresh.data.accessToken,
+              userId: refresh.data.userId,
               user: refresh.data.user,
               scores: refresh.data.scores,
             })
           );
 
           console.log("Refreshed token");
-          return refresh;
         } catch (err) {
           console.log(err);
         }
@@ -63,7 +42,6 @@ const authApiSlice = apiSlice.injectEndpoints({
         url: "/auth/verify",
         method: "POST",
         body: body,
-        credentials: "include",
       }),
     }),
     verifyEmail: builder.mutation({
@@ -80,16 +58,14 @@ const authApiSlice = apiSlice.injectEndpoints({
         url: `/auth/reset/${body.id}`,
         method: "PATCH",
         body: body,
-        credentials: "include",
       }),
     }),
     logout: builder.mutation({
       query: () => ({
         url: "/auth/logout",
         method: "POST",
-        credentials: "include",
       }),
-      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
           dispatch(logOut());
@@ -104,7 +80,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useRefreshMutation,
+  useRefreshQuery,
   useSendVerificationMutation,
   useVerifyEmailMutation,
   useResetPasswordMutation,

@@ -57,7 +57,7 @@ export const getUserFavoritesController = catchErrors(async (req, res) => {
 
   const favorites = await User.find({ _id: { $in: user.favorites } });
   const favoriteUsers = favorites.map((user) => ({
-    id: user._id,
+    userId: user._id,
     role: user.role,
     name: `${user.firstname} ${user.lastname}`,
     school: user.school_organization,
