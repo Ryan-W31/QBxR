@@ -1,23 +1,47 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { setCredentials, logOut } from "./authSlice";
 
-interface RefreshResponse {
+interface AuthResponse {
   accessToken: string;
   userId: string;
   user: any;
   scores: any;
 }
+
+interface Credentials {
+  email: string;
+  password: string;
+}
+
 // Auth API slice. This slice contains the login, refresh, and logout endpoints.
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation({
+    login: builder.mutation<AuthResponse, Credentials>({
       query: (credentials) => ({
         url: "/auth/login",
         method: "POST",
         body: { ...credentials },
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const res = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              accessToken: res.data.accessToken,
+              userId: res.data.userId,
+              user: res.data.user,
+              scores: res.data.scores,
+            })
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      },
+      transformResponse: (response: AuthResponse) => {
+        return response.user;
+      },
     }),
-    refresh: builder.query<RefreshResponse, void>({
+    refresh: builder.query<AuthResponse, void>({
       query: () => `/auth/refresh`,
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
