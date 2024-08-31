@@ -4,7 +4,7 @@ import { setCredentials, logOut } from "./authSlice";
 interface RefreshResponse {
   accessToken: string;
   userId: string;
-  user: string;
+  user: any;
   scores: any;
 }
 // Auth API slice. This slice contains the login, refresh, and logout endpoints.
@@ -60,7 +60,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: body,
       }),
     }),
-    logout: builder.mutation({
+    logout: builder.mutation<void, void>({
       query: () => ({
         url: "/auth/logout",
         method: "POST",

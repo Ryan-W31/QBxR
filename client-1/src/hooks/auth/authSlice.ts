@@ -4,8 +4,28 @@ import { IRootState } from "../../app/store";
 export interface AuthState {
   accessToken: string | null;
   userId: string | null;
-  user: string | null;
-  scores: string | null;
+  user: {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    status: boolean;
+    role: string;
+    school_organization: string;
+    bio: string;
+    birthday: string;
+    phone_number: string;
+    score: number;
+    isVerified: boolean;
+    favorites: string[];
+    createdAt: string;
+    updatedAt: string;
+  } | null;
+  scores: {
+    qbxr: { qbxr_score: number; rank: number };
+    web: { title: string; score: number }[];
+    vr: { title: string; score: number }[];
+  } | null;
 }
 // Slice for authentication. Contains the token, id, user, and scores.
 const authSlice = createSlice({

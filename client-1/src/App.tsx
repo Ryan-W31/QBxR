@@ -1,35 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Main App component
+import { Routes, Route } from "react-router-dom";
 
+// Import the pages
+import LandingPage from "./pages/LandingPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import EmailAuth from "./pages/EmailAuth";
+import HomePage from "./pages/HomePage";
+import LeaderboardPage from "./pages/LeaderboardPage";
+import ProfilePage from "./pages/ProfilePage";
+import SearchPage from "./pages/SearchPage";
+import SettingsPage from "./pages/SettingsPage";
+import VRPage from "./pages/VRPage";
+import WebTestPage from "./pages/WebTestPage";
+
+// Import the Layout, Prefetch, and PersistLogin components
+import Prefetch from "./components/Prefetch";
+import PersistLogin from "./components/PersistLogin";
+
+import ProtectedRoutes from "./hooks/protectedRoutes/ProtectedRoutes";
+import RoleAuth from "./hooks/protectedRoutes/RoleAuth";
+
+// Main App component
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Routes>
+      <Route path="/">
+        <Route index element={<LandingPage />} />
+        {/* <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="reset/:token?" element={<ForgotPasswordPage />} /> */}
+
+        {/*Begin Protected Routes*/}
+        {/* <Route element={<PersistLogin />}>
+          <Route path="verify/:token?" element={<EmailAuth />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route element={<Prefetch />}>
+              <Route path="home" element={<HomePage />} />
+              <Route path="leaderboard" element={<LeaderboardPage />} />
+              <Route path="profile/:id?" element={<ProfilePage />} />
+              <Route path="search" element={<SearchPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+              <Route element={<RoleAuth />}>
+                <Route path="vr" element={<VRPage />} />
+                <Route path="web" element={<WebTestPage />} />
+              </Route>
+            </Route>
+          </Route> */}
+        {/*End Protected Routes*/}
+        {/* </Route> */}
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
