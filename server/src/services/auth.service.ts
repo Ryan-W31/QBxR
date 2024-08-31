@@ -237,7 +237,7 @@ export const sendPasswordResetEmailEndpoint = async (email: string) => {
       expiresAt,
     });
 
-    const url = `${APP_ORIGIN_URL}/auth/reset?code=${verificationCode._id}&exp=${expiresAt.getTime()}`;
+    const url = `${APP_ORIGIN_URL}/reset?code=${verificationCode._id}&exp=${expiresAt.getTime()}`;
     const { data, error } = await sendMail({
       to: email,
       ...getPasswordResetTemplate(url),

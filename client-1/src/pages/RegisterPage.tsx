@@ -22,7 +22,7 @@ interface CustomError {
 }
 
 // LoginPage component. This component displays the login form.
-const LoginPage = () => {
+const RegisterPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -282,4 +282,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;
