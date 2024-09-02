@@ -3,9 +3,9 @@ import { authApiSlice } from "./authApiSlice";
 
 export const updateIsVerifiedAndRefresh = createAsyncThunk(
   "user/updateIsVerifiedAndRefresh",
-  async (token, thunkAPI) => {
+  async (code: string, thunkAPI) => {
     try {
-      const updateResult = await thunkAPI.dispatch(authApiSlice.endpoints.verifyEmail.initiate(token)).unwrap();
+      const updateResult = await thunkAPI.dispatch(authApiSlice.endpoints.verifyEmail.initiate(code)).unwrap();
 
       await thunkAPI.dispatch(authApiSlice.endpoints.refresh.initiate()).unwrap();
 

@@ -114,9 +114,9 @@ const LoginPage = () => {
                           onClick={togglePasswordVisibility}
                         >
                           {isPasswordVisible ? (
-                            <Eye className="h-6 w-6 text-background" />
+                            <Eye size={24} className="text-background" />
                           ) : (
-                            <EyeOff className="h-6 w-6 text-background" />
+                            <EyeOff size={24} className="text-background" />
                           )}
                         </Button>
                       </div>
@@ -144,7 +144,7 @@ const LoginPage = () => {
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-6 w-6 animate-spin" /> Logging In...
+                      <Loader2 size={24} className="mr-2 animate-spin" /> Logging In...
                     </>
                   ) : (
                     "Log In"

@@ -68,13 +68,18 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: body,
       }),
     }),
-    verifyEmail: builder.mutation({
+    verifyEmail: builder.query({
       query: (token) => ({
         url: `/auth/verify/${token}`,
-        method: "PATCH",
+        method: "GET",
       }),
-      transformResponse: (response) => {
-        return response;
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(authApiSlice.endpoints.refresh.initiate());
+        } catch (err) {
+          console.log(err);
+        }
       },
     }),
     sendPasswordResetEmail: builder.mutation({
@@ -113,7 +118,7 @@ export const {
   useLoginMutation,
   useRefreshQuery,
   useSendEmailVerificationMutation,
-  useVerifyEmailMutation,
+  useVerifyEmailQuery,
   useSendPasswordResetEmailMutation,
   useResetPasswordMutation,
   useLogoutMutation,

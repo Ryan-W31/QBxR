@@ -22,6 +22,10 @@ export const registerFormSchema = loginFormSchema
     path: ["confirmPassword"],
   });
 
+export const verifyEmailSchema = z.object({
+  email: emailSchema,
+});
+
 export const resetPasswordSchema = z
   .object({
     password: passwordSchema,

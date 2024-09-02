@@ -38,7 +38,7 @@ const ScrollToTop = ({ showMenu }: ScrollToTopProps) => {
           "items-center text-light-primary transition-opacity"
         )}
       >
-        <ArrowUpFromLine className="h-6 w-6" aria-hidden="true" />
+        <ArrowUpFromLine size={24} aria-hidden="true" />
       </Button>
     </div>
   );

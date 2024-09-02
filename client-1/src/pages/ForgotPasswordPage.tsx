@@ -74,7 +74,7 @@ const ForgotPasswordPage = () => {
                     <Button type="submit" size="lg" disabled={isSendingEmail}>
                       {isSendingEmail ? (
                         <>
-                          <Loader2 className="mr-2 h-6 w-6 animate-spin" /> Sending Email...
+                          <Loader2 size={24} className="mr-2 animate-spin" /> Sending Email...
                         </>
                       ) : (
                         "Send Email"

@@ -19,7 +19,7 @@ const ErrorMessage = ({ message, onClose }: ErrorMessageProps) => {
 
       {/* Close button */}
       <Button variant="ghost" size="icon" className="bg-transparent shadow-none hover:bg-transparent" onClick={onClose}>
-        <X className="h-6 w-6 text-foreground" />
+        <X size={24} className="text-foreground" />
       </Button>
       {/* End Close button */}
     </div>

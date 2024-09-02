@@ -47,7 +47,7 @@ const ProfileDropdown = () => {
       <DropdownMenuTrigger>
         <Button className="flex bg-transparent items-center gap-4 px-0">
           <div className="flex items-center justify-center h-9 w-9 bg-green-primary rounded-full border-2 border-light-primary hover:bg-green-secondary">
-            <User className="h-6 w-6" />
+            <User size={24} />
           </div>
           <div>
             <p className="font-Audiowide text-[0.5rem] text-light-primary text-left">{`${user?.firstname}`}</p>
@@ -60,7 +60,7 @@ const ProfileDropdown = () => {
           onSelect={() => navigate("/profile")}
           className="flex items-center gap-2 rounded-b-none hover:!bg-green-primary w-full"
         >
-          <User className="h-4 w-4 text-light-primary" />
+          <User size={24} className="text-light-primary" />
 
           <span className="text-light-primary font-Audiowide text-md">My Profile</span>
         </DropdownMenuItem>
@@ -68,7 +68,7 @@ const ProfileDropdown = () => {
           onSelect={() => navigate("/settings")}
           className="flex items-center gap-2 rounded-none hover:!bg-green-primary w-full"
         >
-          <Settings className="h-4 w-4 text-light-primary" />
+          <Settings size={24} className="text-light-primary" />
 
           <span className="text-light-primary font-Audiowide text-md">Settings</span>
         </DropdownMenuItem>
@@ -77,7 +77,7 @@ const ProfileDropdown = () => {
           onSelect={handleLogout}
           className="flex items-center gap-2 rounded-t-none hover:!bg-red-600 w-full"
         >
-          <LogOut className="h-4 w-4 text-light-primary" />
+          <LogOut size={24} className="text-light-primary" />
 
           <span className="text-light-primary font-Audiowide text-md">Log Out</span>
         </DropdownMenuItem>

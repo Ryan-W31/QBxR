@@ -7,7 +7,8 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-import EmailAuth from "./pages/EmailAuth";
+import EmailInterceptPage from "./pages/EmailInterceptPage";
+import VerifyEmailPage from "./pages/VerifyEmailPage";
 import HomePage from "./pages/HomePage";
 import LeaderboardPage from "./pages/LeaderboardPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -32,24 +33,24 @@ function App() {
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="forgot" element={<ForgotPasswordPage />} />
-        ``
         <Route path="reset" element={<ResetPasswordPage />} />
         {/*Begin Protected Routes*/}
-        {/* <Route element={<PersistLogin />}>
-          <Route path="verify/:token?" element={<EmailAuth />} />
-          <Route element={<ProtectedRoutes />}>
-            <Route element={<Prefetch />}>
-              <Route path="home" element={<HomePage />} />
-              <Route path="leaderboard" element={<LeaderboardPage />} />
-              <Route path="profile/:id?" element={<ProfilePage />} />
-              <Route path="search" element={<SearchPage />} />
-              <Route path="settings" element={<SettingsPage />} />
-              <Route element={<RoleAuth />}>
-                <Route path="vr" element={<VRPage />} />
-                <Route path="web" element={<WebTestPage />} />
-              </Route>
-            </Route>
-          </Route> */}
+        {/* <Route element={<PersistLogin />}> */}
+        <Route path="email" element={<EmailInterceptPage />} />
+        <Route path="verify" element={<VerifyEmailPage />} />
+        {/* <Route element={<ProtectedRoutes />}> */}
+        {/* <Route element={<Prefetch />}> */}
+        {/* <Route path="home" element={<HomePage />} /> */}
+        {/* <Route path="leaderboard" element={<LeaderboardPage />} /> */}
+        {/* <Route path="profile/:id?" element={<ProfilePage />} /> */}
+        {/* <Route path="search" element={<SearchPage />} /> */}
+        {/* <Route path="settings" element={<SettingsPage />} /> */}
+        {/* <Route element={<RoleAuth />}> */}
+        {/* <Route path="vr" element={<VRPage />} /> */}
+        {/* <Route path="web" element={<WebTestPage />} /> */}
+        {/* </Route> */}
+        {/* </Route> */}
+        {/* </Route> */}
         {/*End Protected Routes*/}
         {/* </Route> */}
       </Route>

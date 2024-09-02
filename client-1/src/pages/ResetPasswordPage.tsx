@@ -94,9 +94,9 @@ const ResetPasswordPage = () => {
                               onClick={togglePasswordVisibility}
                             >
                               {isPasswordVisible ? (
-                                <Eye className="h-6 w-6 text-background" />
+                                <Eye size={24} className="text-background" />
                               ) : (
-                                <EyeOff className="h-6 w-6 text-background" />
+                                <EyeOff size={24} className="text-background" />
                               )}
                             </Button>
                           </div>
@@ -127,9 +127,9 @@ const ResetPasswordPage = () => {
                               onClick={toggleConfirmPasswordVisibility}
                             >
                               {isConfirmPasswordVisible ? (
-                                <Eye className="h-6 w-6 text-background" />
+                                <Eye size={24} className="text-background" />
                               ) : (
-                                <EyeOff className="h-6 w-6 text-background" />
+                                <EyeOff size={24} className="text-background" />
                               )}
                             </Button>
                           </div>
@@ -146,7 +146,7 @@ const ResetPasswordPage = () => {
                     >
                       {isLoading ? (
                         <>
-                          <Loader2 className="mr-2 h-6 w-6 animate-spin" /> Resetting Password...
+                          <Loader2 size={24} className="mr-2 animate-spin" /> Resetting Password...
                         </>
                       ) : (
                         "Reset Password"

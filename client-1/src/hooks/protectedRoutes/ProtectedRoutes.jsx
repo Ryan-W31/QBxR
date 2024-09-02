@@ -4,23 +4,19 @@ import { selectCurrentToken, selectCurrentUser } from "../auth/authSlice";
 
 // ProtectedRoutes component. This component protects the routes that require authentication.
 const ProtectedRoutes = () => {
-  const token = useSelector(selectCurrentToken);
+  const accessToken = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
   const location = useLocation();
 
-  if (token === undefined || user === undefined) {
-    return null; // or loading indicator/spinner/etc
+  if (accessToken === undefined || user === undefined) {
+    <div className="h-screen flex justify-center items-center">
+      <Loader2 className="animate-spin h-12 w-12 text-primary" />
+    </div>;
   }
 
   // If the user is authenticated, display the protected routes. Otherwise, navigate to the login page.
-  return token ? (
-    <>
-      {user?.isVerified ? (
-        <Outlet />
-      ) : (
-        <Navigate to="/verify" state={{ from: location }} replace />
-      )}
-    </>
+  return user ? (
+    <>{user.isVerified ? <Outlet /> : <Navigate to="/email" state={{ from: location }} replace />}</>
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />
   );

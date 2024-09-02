@@ -20,6 +20,7 @@ import { sendMail } from "../utils/sendMail";
 import { getPasswordResetTemplate, getVerifyEmailTemplate } from "../utils/emailTemplates";
 import { hashValue } from "../utils/bcrypt";
 import { userRoleSchema } from "../controllers/auth.schemas";
+import app from "../app";
 
 type LoginParams = {
   email: string;
@@ -35,6 +36,24 @@ export const loginEndpoint = async ({ email, password, userAgent }: LoginParams)
 
   const userId = user._id;
   const session = await Session.create({ userId, userAgent });
+
+  if (user.isVerified === false) {
+    const verificationCode = await VerificationCodeModel.create({
+      userId,
+      type: VerificationCodeType.EmailVerification,
+      expiresAt: oneYearFromNow(),
+    });
+
+    const url = `${APP_ORIGIN_URL}/verify?code=${verificationCode._id}`;
+
+    // send verification email
+    const { error } = await sendMail({
+      to: user.email,
+      ...getVerifyEmailTemplate(url),
+    });
+
+    appAssert(!error, INTERNAL_SERVER_ERROR, "Failed to send verification email");
+  }
 
   const scores = await Score.findOne({ user: user._id });
   var obj = {
@@ -117,7 +136,7 @@ export const signUpEndpoint = async ({
     expiresAt: oneYearFromNow(),
   });
 
-  const url = `${APP_ORIGIN_URL}/email/verify/${verificationCode._id}`;
+  const url = `${APP_ORIGIN_URL}/verify?code=${verificationCode._id}`;
 
   // send verification email
   const { error } = await sendMail({
@@ -125,7 +144,7 @@ export const signUpEndpoint = async ({
     ...getVerifyEmailTemplate(url),
   });
   // ignore email errors for now
-  if (error) console.error(error);
+  appAssert(!error, INTERNAL_SERVER_ERROR, "Failed to send verification email");
 
   // create session
   const session = await Session.create({
@@ -188,7 +207,7 @@ export const sendVerificationEmailEndpoint = async (email: string) => {
     expiresAt: fiveMinutesFromNow(),
   });
 
-  const url = `${APP_ORIGIN_URL}/auth/verify/${verificationCode._id}`;
+  const url = `${APP_ORIGIN_URL}/verify?code=${verificationCode._id}`;
 
   // send verification email
   const { error } = await sendMail({
@@ -201,9 +220,9 @@ export const sendVerificationEmailEndpoint = async (email: string) => {
   return { success: true };
 };
 
-export const verifyEmailEndpoint = async (token: string) => {
+export const verifyEmailEndpoint = async (code: string) => {
   const verificationCode = await VerificationCodeModel.findOne({
-    _id: token,
+    _id: code,
     type: VerificationCodeType.EmailVerification,
     expiresAt: { $gt: new Date() },
   });
