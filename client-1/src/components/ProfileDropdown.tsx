@@ -1,7 +1,5 @@
 import { useCallback } from "react";
 import { Settings, User } from "lucide-react";
-import { selectCurrentUser } from "../hooks/auth/authSlice";
-import { useSelector } from "react-redux";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import usePersist from "../hooks/auth/usePersist";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +19,6 @@ const ProfileDropdown = () => {
   const { toast } = useToast();
 
   const navigate = useNavigate();
-  const user = useSelector(selectCurrentUser);
 
   // Handle the logout event. If the user is logged out, display a success message and navigate to the login page
   const handleLogout = useCallback(
@@ -43,46 +40,46 @@ const ProfileDropdown = () => {
 
   // Return the profile dropdown menu
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Button className="flex bg-transparent items-center gap-4 px-0">
-          <div className="flex items-center justify-center h-9 w-9 bg-green-primary rounded-full border-2 border-light-primary hover:bg-green-secondary">
-            <User size={24} />
+    <div className="hidden lg:block">
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div className="w-[120px] flex items-center justify-end">
+            <Button className="flex items-center p-0 h-9 w-9">
+              <div className="flex items-center justify-center h-9 w-9 bg-transparent rounded-full border-2 border-foreground">
+                <User size={24} />
+              </div>
+            </Button>
           </div>
-          <div>
-            <p className="font-Audiowide text-[0.5rem] text-light-primary text-left">{`${user?.firstname}`}</p>
-            <p className="font-Audiowide text-[0.5rem] text-light-primary text-left">{`${user?.lastname}`}</p>
-          </div>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="p-0 bg-dark-secondary gap-y-2">
-        <DropdownMenuItem
-          onSelect={() => navigate("/profile")}
-          className="flex items-center gap-2 rounded-b-none hover:!bg-green-primary w-full"
-        >
-          <User size={24} className="text-light-primary" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="p-0 bg-background-secondary gap-y-2 w-48">
+          <DropdownMenuItem
+            onSelect={() => navigate("/profile")}
+            className="flex items-center gap-2 rounded-b-none hover:!bg-primary w-full"
+          >
+            <User size={24} className="text-foreground" />
 
-          <span className="text-light-primary font-Audiowide text-md">My Profile</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => navigate("/settings")}
-          className="flex items-center gap-2 rounded-none hover:!bg-green-primary w-full"
-        >
-          <Settings size={24} className="text-light-primary" />
+            <span className="text-foreground font-Audiowide text-lg">My Profile</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => navigate("/settings")}
+            className="flex items-center gap-2 rounded-none hover:!bg-primary w-full"
+          >
+            <Settings size={24} className="text-foreground" />
 
-          <span className="text-light-primary font-Audiowide text-md">Settings</span>
-        </DropdownMenuItem>
-        <hr className="border-light-primary" />
-        <DropdownMenuItem
-          onSelect={handleLogout}
-          className="flex items-center gap-2 rounded-t-none hover:!bg-red-600 w-full"
-        >
-          <LogOut size={24} className="text-light-primary" />
+            <span className="text-foreground font-Audiowide text-lg">Settings</span>
+          </DropdownMenuItem>
+          <hr className="border-light-primary" />
+          <DropdownMenuItem
+            onSelect={handleLogout}
+            className="flex items-center gap-2 rounded-t-none hover:!bg-red-600 w-full"
+          >
+            <LogOut size={24} className="text-foreground" />
 
-          <span className="text-light-primary font-Audiowide text-md">Log Out</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            <span className="text-foreground font-Audiowide text-lg">Log Out</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 

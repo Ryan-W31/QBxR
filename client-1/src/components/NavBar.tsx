@@ -67,45 +67,51 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
   ) : (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {/* Home Link */}
-      <Link
-        to="/home"
-        className={currentPageStyle(
-          "home",
-          currentPage,
-          "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-          "relative w-fit block"
-        )}
-      >
-        Home
-      </Link>
+      <Button variant="link" asChild>
+        <Link
+          to="/home"
+          className={currentPageStyle(
+            "home",
+            currentPage,
+            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
+            "relative w-fit block"
+          )}
+        >
+          Home
+        </Link>
+      </Button>
       {/* End Home Link */}
 
       {/* Leaderboard Link */}
-      <Link
-        to="/leaderboard"
-        className={currentPageStyle(
-          "leaderboard",
-          currentPage,
-          "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-          "relative w-fit block"
-        )}
-      >
-        Leaderboard
-      </Link>
+      <Button variant="link" asChild>
+        <Link
+          to="/leaderboard"
+          className={currentPageStyle(
+            "leaderboard",
+            currentPage,
+            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
+            "relative w-fit block"
+          )}
+        >
+          Leaderboard
+        </Link>
+      </Button>
       {/* End Leaderboard Link */}
 
       {/* Search Link */}
-      <Link
-        to="/search"
-        className={currentPageStyle(
-          "search",
-          currentPage,
-          "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-          "relative w-fit block"
-        )}
-      >
-        Search
-      </Link>
+      <Button variant="link" asChild>
+        <Link
+          to="/search"
+          className={currentPageStyle(
+            "search",
+            currentPage,
+            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
+            "relative w-fit block"
+          )}
+        >
+          Search
+        </Link>
+      </Button>
       {/* End Search Link */}
     </ul>
   );
@@ -114,12 +120,12 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
     <nav
       className={cn(
         showMenu ? "blur-lg" : "",
-        "sticky w-full max-w-full rounded-none border-0 border-b-2 border-primary top-0 mx-auto bg-background-secondary/80 shadow-md bg-opacity-80 backdrop-blur-xl backdrop-saturate-200 p-6 z-10"
+        "sticky w-full inset-x-0 border-b-2 border-primary top-0 mx-auto bg-background-secondary/80 shadow-md bg-opacity-80 backdrop-blur-xl backdrop-saturate-200 p-6 z-50"
       )}
     >
       {/* Display the navigation bar (Depending on Landing Page) */}
-      <div className="flex items-center justify-between">
-        {/* QBxR Logo */}
+      {/* QBxR Logo */}
+      <div className="container px-4 flex items-center justify-between max-w-screen-2xl">
         <div className="flex items-center justify-center h-[60px] w-[120px]">
           <a href="/home" className="text-3xl font-extrabold text-primary font-Audiowide text-center">
             QBxR

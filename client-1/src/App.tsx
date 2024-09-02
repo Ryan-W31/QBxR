@@ -40,7 +40,7 @@ function App() {
         <Route path="verify" element={<VerifyEmailPage />} />
         {/* <Route element={<ProtectedRoutes />}> */}
         {/* <Route element={<Prefetch />}> */}
-        {/* <Route path="home" element={<HomePage />} /> */}
+        <Route path="home" element={<HomePage />} />
         {/* <Route path="leaderboard" element={<LeaderboardPage />} /> */}
         {/* <Route path="profile/:id?" element={<ProfilePage />} /> */}
         {/* <Route path="search" element={<SearchPage />} /> */}

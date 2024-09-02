@@ -93,75 +93,45 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: Mobile
               </Button>
             </div>
           ) : (
-            <div className="w-full grid grid-cols-1">
+            <div className="w-full grid grid-cols-1 place-items-start gap-y-8 mt-12">
               <Button variant="link" asChild>
-                <Link
-                  to="/home"
-                  className={currentPageStyle(
-                    "home",
-                    currentPage,
-                    "text-primary",
-                    "text-light-primary hover:text-primary"
-                  )}
-                >
-                  <House />
-                  Home
+                <Link to="#" className={currentPageStyle("home", currentPage, "text-primary", "")}>
+                  <div className="flex flex-row items-center">
+                    <User className="mr-2" />
+                    My Profile
+                  </div>
                 </Link>
               </Button>
               <Button variant="link" asChild>
-                <Link
-                  to="/profile"
-                  className={currentPageStyle(
-                    "profile",
-                    currentPage,
-                    "text-primary",
-                    "text-light-primary hover:text-primary"
-                  )}
-                >
-                  <User />
-                  Profile
+                <Link to="/home" className={currentPageStyle("about", currentPage, "text-primary", "")}>
+                  <div className="flex flex-row items-center">
+                    <House className="mr-2" />
+                    Home
+                  </div>
                 </Link>
               </Button>
               <Button variant="link" asChild>
-                <Link
-                  to="/leaderboard"
-                  className={currentPageStyle(
-                    "leaderboard",
-                    currentPage,
-                    "text-primary",
-                    "text-light-primary hover:text-primary"
-                  )}
-                >
-                  <Trophy />
-                  Leaderboard
+                <Link to="/leaderboard" className={currentPageStyle("how", currentPage, "text-primary", "")}>
+                  <div className="flex flex-row items-center">
+                    <Trophy className="mr-2" />
+                    Leaderboard
+                  </div>
                 </Link>
               </Button>
               <Button variant="link" asChild>
-                <Link
-                  to="/search"
-                  className={currentPageStyle(
-                    "search",
-                    currentPage,
-                    "text-primary",
-                    "text-light-primary hover:text-primary"
-                  )}
-                >
-                  <Search />
-                  Search
+                <Link to="/search" className={currentPageStyle("home", currentPage, "text-primary", "")}>
+                  <div className="flex flex-row items-center">
+                    <Search className="mr-2" />
+                    Search
+                  </div>
                 </Link>
               </Button>
               <Button variant="link" asChild>
-                <Link
-                  to="/settings"
-                  className={currentPageStyle(
-                    "settings",
-                    currentPage,
-                    "text-primary",
-                    "text-light-primary hover:text-primary"
-                  )}
-                >
-                  <Settings />
-                  Settings
+                <Link to="/settings" className={currentPageStyle("about", currentPage, "text-primary", "")}>
+                  <div className="flex flex-row items-center">
+                    <Settings className="mr-2" />
+                    Settings
+                  </div>
                 </Link>
               </Button>
             </div>

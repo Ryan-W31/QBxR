@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
+import { authApiSlice } from "../auth/authApiSlice";
 
 interface LeaderboardUser {
   userId: string;
@@ -52,13 +53,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserInfo: builder.mutation({
       query: (body) => ({
-        url: `/user/updateinfo/${body.id}`,
+        url: `/user/updateinfo/${body.userId}`,
         method: "PATCH",
         body: body,
       }),
-      async onQueryStarted(_, { queryFulfilled }) {
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+          dispatch(authApiSlice.endpoints.refresh.initiate());
           console.log("User info updated");
         } catch (err) {
           console.error("Error updating user info:", err);
@@ -67,13 +69,22 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserPassword: builder.mutation({
       query: (body) => ({
-        url: `/user/updatepassword/${body.id}`,
+        url: `/user/updatepassword/${body.userId}`,
         method: "PATCH",
         body: body,
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(authApiSlice.endpoints.refresh.initiate());
+          console.log("User password updated");
+        } catch (err) {
+          console.error("Error updating user info:", err);
+        }
+      },
     }),
     getUserById: builder.query<User, void>({
-      query: (id) => `/user/${id}`,
+      query: (userId) => `/user/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response: User) => {
         return {
@@ -91,8 +102,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
         };
       },
     }),
-    getUserFavorites: builder.query<LeaderboardUser[], void>({
-      query: (id) => `/user/favorites/${id}`,
+    getUserFavorites: builder.query<LeaderboardUser[], string | null>({
+      query: (userId) => `/user/favorites/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response: { favorites: LeaderboardUser[] }) => {
         return response.favorites;

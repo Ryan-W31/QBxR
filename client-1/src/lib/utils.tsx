@@ -52,7 +52,7 @@ export function scoreColor(scoreColor: number) {
   } else if (scoreColor < 70) {
     return "text-yellow-600";
   } else {
-    return "text-green-primary";
+    return "text-primary";
   }
 }
 
@@ -63,7 +63,7 @@ export function barColor(scoreColor: number) {
   } else if (scoreColor < 70) {
     return "bg-yellow-600";
   } else {
-    return "bg-green-primary";
+    return "bg-primary";
   }
 }
 
@@ -76,18 +76,21 @@ export function colorPodium(rank: number) {
   } else if (rank === 3) {
     return "bg-[#CD7F32]/80";
   } else {
-    return "bg-dark-secondary";
+    return "bg-background-secondary";
   }
 }
 
 // Function to check if the user has taken the Web and VR tests
-export function checkData(webData: [], vrData: []) {
+export function checkData(
+  webData: { title: string; score: number }[] | undefined,
+  vrData: { title: string; score: number }[] | undefined
+) {
   if ((webData === undefined || webData?.length === 0) && (vrData === undefined || vrData?.length === 0)) {
-    return <p className="text-xl font-Audiowide text-light-primary">Take the Web and VR Tests</p>;
+    return <p className="text-base md:text-xl font-Audiowide text-foreground">Take the Web and VR Tests</p>;
   } else if (webData === undefined || webData?.length === 0) {
-    return <p className="text-xl font-Audiowide text-light-primary">Take the Web Test</p>;
+    return <p className="text-base md:text-xl font-Audiowide text-foreground">Take the Web Test</p>;
   } else {
-    return <p className="text-xl font-Audiowide text-light-primary">Take the VR Test</p>;
+    return <p className="text-base md:text-xl font-Audiowide text-foreground">Take the VR Test</p>;
   }
 }
 
@@ -106,6 +109,6 @@ export function strengthColor(score: number) {
   } else if (score < 3) {
     return "bg-yellow-600";
   } else {
-    return "bg-green-primary";
+    return "bg-primary";
   }
 }

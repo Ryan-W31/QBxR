@@ -1,7 +1,6 @@
-import React from "react";
-import Skeleton from "react-loading-skeleton";
-import { scoreColor, barColor } from "../utils/utils";
-import { Progress } from "@material-tailwind/react";
+import { scoreColor, barColor } from "../lib/utils";
+import { Progress } from "./ui/progress";
+import { Skeleton } from "./ui/skeleton";
 
 // ProgressBar component. This component displays a progress bar with a title and score.
 const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
@@ -10,13 +9,11 @@ const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
     <div className="mb-10">
       {/* Display the skeleton loading animation */}
       <div className="flex justify-between mb-1">
-        <span className={`text-base font-medium text-light-primary`}>
-          {title}
-        </span>
-        <Skeleton width={50} />
+        <span className={`text-base font-medium text-light-primary`}>{title}</span>
+        <Skeleton className="w-[50px]" />
       </div>
       <div>
-        <Skeleton width={375} />
+        <Skeleton className="w-[375px]" />
       </div>
       {/* End Display the skeleton loading animation */}
     </div>
@@ -26,25 +23,16 @@ const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
 
       <div className="mb-1 flex items-center justify-between gap-4">
         {/* Title */}
-        <span className={`text-base font-medium ${scoreColor(score)}`}>
-          {title}
-        </span>
+        <span className={`text-base font-medium ${scoreColor(score)}`}>{title}</span>
         {/* End Title */}
 
         {/* Score */}
-        <span className={`text-sm font-medium ${scoreColor(score)}`}>
-          {score}
-        </span>
+        <span className={`text-sm font-medium ${scoreColor(score)}`}>{score}</span>
         {/* End Score */}
       </div>
 
       {/* Progress Bar */}
-      <Progress
-        value={score}
-        size="lg"
-        className="w-full rounded-full bg-dark-primary"
-        barProps={{ className: `${barColor(score)} rounded-full` }}
-      />
+      <Progress value={score} barColor={barColor(score)} />
       {/* End Progress Bar */}
     </div>
   );
