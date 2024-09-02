@@ -153,7 +153,7 @@ export const searchEndpoint = async ({ search, filters }: SearchParams) => {
   const users = await User.find(query);
 
   const searchedUsers = users.map((user) => ({
-    id: user._id,
+    userId: user._id,
     role: user.role,
     name: `${user.firstname} ${user.lastname}`,
     school: user.school_organization,

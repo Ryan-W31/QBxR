@@ -75,12 +75,12 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
   const content = (
     <div id="profile-popup" tabIndex={-1} className="fixed inset-0 z-50 flex items-center justify-center m-10">
       {/* Display the profile card */}
-      <Card className="fade-in relative p-4 w-3/4 max-h-full !bg-dark-secondary rounded-lg overflow-auto">
+      <Card className="relative p-4 w-3/4 max-h-full rounded-lg bg-background-secondary overflow-auto">
         {/* Display the close button */}
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-3 right-3 rounded-lg text-sm ml-auto inline-flex items-center justify-center"
+          className="absolute top-3 right-3 rounded-lg text-sm ml-auto inline-flex items-center justify-center hover:bg-transparent"
           onClick={onClose}
         >
           <X size={32} className="cursor-pointer text-3xl text-primary" />
@@ -92,7 +92,7 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-12 right-3 rounded-lg text-sm ml-auto inline-flex items-center justify-center"
+            className="absolute top-12 right-3 rounded-lg text-sm ml-auto inline-flex items-center justify-center hover:bg-transparent"
             onClick={handleFavorite}
           >
             {isFavorite ? (
@@ -107,34 +107,34 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
         {/* Display the profile details */}
         <div className="p-4 md:p-5 text-center font-Audiowide">
           <CardHeader className="mt-2 pb-2 bg-transparent rounded-none shadow-none border-b-2 border-primary">
-            <h3 className="text-3xl font-normal text-light-primary">Profile Details</h3>
+            <h3 className="text-3xl font-normal text-foreground">Profile Details</h3>
           </CardHeader>
-          <CardContent className="w-full flex-col bg-dark-secondary/80 p-3 rounded-lg text-center font-Audiowide">
+          <CardContent className="w-full flex-col p-3 rounded-lg text-center font-Audiowide">
             {/* Profile Image */}
             <div className="image overflow-hidden">
-              <div className="h-60 w-60 text-light-primary bg-primary border border-light-primary rounded-full inline-flex items-center justify-center text-md md:text-4xl">
+              <div className="h-60 w-60 text-foreground bg-primary border border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
                 {getInitials(name)}
               </div>
             </div>
             {/* End Profile Image */}
 
             {/* Profile Name */}
-            <h1 className="text-light-primary font-bold text-xl mt-2">{name}</h1>
+            <h1 className="text-foreground text-xl mt-2">{name}</h1>
             {/* End Profile Name */}
 
             {/* Profile School */}
-            <h3 className="text-light-secondary font-lg text-semibold mb-4">{school}</h3>
+            <h3 className="text-light-secondary font-lg  mb-4">{school}</h3>
             {/* End Profile School */}
 
-            <hr className="border-light-primary border-1 mx-auto" />
+            <hr className="border-primary border-1 mx-auto" />
             {/* Profile Score */}
             {typedWebData === undefined ||
             typedVRData === undefined ||
             typedWebData?.length === 0 ||
             typedVRData?.length === 0 ? (
-              <p className="text-3xl text-light-primary m-4">QBxR Score: No Data</p>
+              <p className="text-3xl text-foreground m-4">QBxR Score: No Data</p>
             ) : (
-              <p className="text-3xl text-light-primary m-4">
+              <p className="text-3xl text-foreground m-4">
                 QBxR Score: <span className={cn(scoreColor(score))}>{score}</span>
               </p>
             )}
@@ -142,7 +142,7 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
             {/* End Profile Score */}
 
             {/* Profile Test Scores */}
-            <CardContent className="flex flex-col justify-around font-Audiowide">
+            <CardContent className="flex flex-col items-center justify-around font-Audiowide">
               {/* Web Test Scores */}
               <ScoreCard
                 title={"Web Test Scores"}

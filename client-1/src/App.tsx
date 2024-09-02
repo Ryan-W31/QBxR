@@ -41,9 +41,9 @@ function App() {
         {/* <Route element={<ProtectedRoutes />}> */}
         {/* <Route element={<Prefetch />}> */}
         <Route path="home" element={<HomePage />} />
-        {/* <Route path="leaderboard" element={<LeaderboardPage />} /> */}
+        <Route path="leaderboard" element={<LeaderboardPage />} />
         {/* <Route path="profile/:id?" element={<ProfilePage />} /> */}
-        {/* <Route path="search" element={<SearchPage />} /> */}
+        <Route path="search" element={<SearchPage />} />
         {/* <Route path="settings" element={<SettingsPage />} /> */}
         {/* <Route element={<RoleAuth />}> */}
         {/* <Route path="vr" element={<VRPage />} /> */}

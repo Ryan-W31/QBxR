@@ -94,14 +94,14 @@ export function checkData(
   }
 }
 
-// export function useDebounce(effect, dependencies, delay) {
-//   const callback = useCallback(effect, dependencies);
+export function useDebounce(effect: any, dependencies: string[], delay: number) {
+  const callback = useCallback(effect, dependencies);
 
-//   useEffect(() => {
-//     const timeout = setTimeout(callback, delay);
-//     return () => clearTimeout(timeout);
-//   }, [callback, delay]);
-// }
+  useEffect(() => {
+    const timeout = setTimeout(callback, delay);
+    return () => clearTimeout(timeout);
+  }, [callback, delay]);
+}
 
 export function strengthColor(score: number) {
   if (score < 2) {
