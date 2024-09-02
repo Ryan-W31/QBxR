@@ -1,16 +1,13 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useSetVRScoreMutation } from "../hooks/scores/scoreApiSlice";
 import { selectCurrentId } from "../hooks/auth/authSlice";
-import { updateWebScoreAndRefresh } from "../hooks/scores/scoreApiSlice";
 
-// WebTestPage component. This component displays the web test page with the Unity WebGL build.
-const WebTestPage = () => {
+// VRPage component. This component displays the VR test page with the Unity WebGL build.
+const VRPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const id = useSelector(selectCurrentId);
-
+  const userId = useSelector(selectCurrentId);
   const { unityProvider } = useUnityContext({
     loaderUrl: "/Build/vrtest2.loader.js",
     dataUrl: "/Build/vrtest2.data",
@@ -21,43 +18,41 @@ const WebTestPage = () => {
     },
   });
 
-  // Handle the form submit event. Update the web test scores and refresh the user data.
-  const handleSubmit = async (event) => {
+  const [updateVRScore] = useSetVRScoreMutation();
+
+  // Handle the form submit event. Update the VR test scores and refresh the user data.
+  const handleSubmit = async (event: Event) => {
     event.preventDefault();
-    const webScore1 = document.getElementById("webscore1").value;
-    const webScore2 = document.getElementById("webscore2").value;
-    const webScore3 = document.getElementById("webscore3").value;
-    const webScore4 = document.getElementById("webscore4").value;
+    const vrScore1 = (document.getElementById("vrscore1") as HTMLInputElement)?.value;
+    const vrScore2 = (document.getElementById("vrscore2") as HTMLInputElement)?.value;
+    const vrScore3 = (document.getElementById("vrscore3") as HTMLInputElement)?.value;
+    const vrScore4 = (document.getElementById("vrscore4") as HTMLInputElement)?.value;
 
     var obj = {
-      id: id,
-      webScore1: webScore1,
-      webScore2: webScore2,
-      webScore3: webScore3,
-      webScore4: webScore4,
+      userId: userId,
+      vrScore1: vrScore1,
+      vrScore2: vrScore2,
+      vrScore3: vrScore3,
+      vrScore4: vrScore4,
     };
 
-    await dispatch(updateWebScoreAndRefresh(obj)).unwrap();
+    await updateVRScore(obj);
     navigate("/profile");
   };
 
-  // Return the WebTestPage component
+  // Return the VRPage component
   return (
     <div className="h-screen flex flex-col justify-center space-y-10 md:space-x-16 items-center">
-      <Unity
-        unityProvider={unityProvider}
-        style={{ width: "960px", height: "600px" }}
-      />
+      <Unity unityProvider={unityProvider} style={{ width: "960px", height: "600px" }} />
+
       <div className="text-center">
-        <p className="text-light-primary font-Audiowide">
-          Input Web Test Values 0-100 (Development Only)
-        </p>
+        <p className="text-light-primary font-Audiowide">Input VR Test Values 0-100 (Development Only)</p>
         <form className="text-light-primary font-Audiowide space-x-8">
-          <label for="webscore1">
+          <label htmlFor="vrscore1">
             <input
               type="number"
-              id="webscore1"
-              name="webscore1"
+              id="vrscore1"
+              name="vrscore1"
               min="0"
               max="100"
               step="10"
@@ -65,13 +60,13 @@ const WebTestPage = () => {
               required
               className="m-2 bg-dark-secondary rounded-lg text-center"
             />
-            Web Score 1
+            VR Score 1
           </label>
-          <label for="webscore2">
+          <label htmlFor="vrscore2">
             <input
               type="number"
-              id="webscore2"
-              name="webscore2"
+              id="vrscore2"
+              name="vrscore2"
               min="0"
               max="100"
               placeholder="0"
@@ -79,13 +74,13 @@ const WebTestPage = () => {
               required
               className="m-2 bg-dark-secondary rounded-lg text-center"
             />
-            Web Score 2
+            VR Score 2
           </label>
-          <label for="webscore3">
+          <label htmlFor="vrscore3">
             <input
               type="number"
-              id="webscore3"
-              name="webscore3"
+              id="vrscore3"
+              name="vrscore3"
               min="0"
               max="100"
               placeholder="0"
@@ -93,13 +88,13 @@ const WebTestPage = () => {
               required
               className="m-2 bg-dark-secondary rounded-lg text-center"
             />
-            Web Score 3
+            VR Score 3
           </label>
-          <label for="webscore4">
+          <label htmlFor="vrscore4">
             <input
               type="number"
-              id="webscore4"
-              name="webscore4"
+              id="vrscore4"
+              name="vrscore4"
               min="0"
               max="100"
               placeholder="0"
@@ -107,12 +102,12 @@ const WebTestPage = () => {
               required
               className="m-2 bg-dark-secondary rounded-lg text-center"
             />
-            Web Score 4
+            VR Score 4
           </label>
           <button
             type="button"
             className="bg-green-primary text-light-primary font-Audiowide px-4 py-2 rounded-full hover:bg-green-secondary"
-            onClick={handleSubmit}
+            onClick={() => handleSubmit}
           >
             Submit
           </button>
@@ -122,4 +117,4 @@ const WebTestPage = () => {
   );
 };
 
-export default WebTestPage;
+export default VRPage;

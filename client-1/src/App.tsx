@@ -19,10 +19,9 @@ import WebTestPage from "./pages/WebTestPage";
 
 // Import the Layout, Prefetch, and PersistLogin components
 import Prefetch from "./components/Prefetch";
-import PersistLogin from "./components/PersistLogin";
 
-import ProtectedRoutes from "./hooks/protectedRoutes/ProtectedRoutes";
-import RoleAuth from "./hooks/protectedRoutes/RoleAuth";
+import ProtectedRoutes from "./hooks/auth/ProtectedRoutes";
+import RoleAuth from "./hooks/auth/RoleAuth";
 
 // Main App component
 function App() {
@@ -35,24 +34,22 @@ function App() {
         <Route path="forgot" element={<ForgotPasswordPage />} />
         <Route path="reset" element={<ResetPasswordPage />} />
         {/*Begin Protected Routes*/}
-        {/* <Route element={<PersistLogin />}> */}
         <Route path="email" element={<EmailInterceptPage />} />
         <Route path="verify" element={<VerifyEmailPage />} />
-        {/* <Route element={<ProtectedRoutes />}> */}
-        {/* <Route element={<Prefetch />}> */}
-        <Route path="home" element={<HomePage />} />
-        <Route path="leaderboard" element={<LeaderboardPage />} />
-        {/* <Route path="profile/:id?" element={<ProfilePage />} /> */}
-        <Route path="search" element={<SearchPage />} />
-        {/* <Route path="settings" element={<SettingsPage />} /> */}
-        {/* <Route element={<RoleAuth />}> */}
-        {/* <Route path="vr" element={<VRPage />} /> */}
-        {/* <Route path="web" element={<WebTestPage />} /> */}
-        {/* </Route> */}
-        {/* </Route> */}
-        {/* </Route> */}
+        <Route element={<ProtectedRoutes />}>
+          <Route element={<Prefetch />}>
+            <Route path="home" element={<HomePage />} />
+            <Route path="leaderboard" element={<LeaderboardPage />} />
+            <Route path="profile/:id?" element={<ProfilePage />} />
+            <Route path="search" element={<SearchPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route element={<RoleAuth />}>
+              <Route path="vr" element={<VRPage />} />
+              <Route path="web" element={<WebTestPage />} />
+            </Route>
+          </Route>
+        </Route>
         {/*End Protected Routes*/}
-        {/* </Route> */}
       </Route>
     </Routes>
   );

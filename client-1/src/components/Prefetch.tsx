@@ -3,15 +3,11 @@ import { userApiSlice } from "../hooks/users/userApiSlice";
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 
-import React from "react";
-
 // Prefetch component. This component prefetches the leaderboard data.
 const Prefetch = () => {
   // Prefetch the leaderboard data when the component mounts
   useEffect(() => {
-    const users = store.dispatch(
-      userApiSlice.endpoints.getLeaderboard.initiate()
-    );
+    const users = store.dispatch(userApiSlice.endpoints.getLeaderboard.initiate());
     return () => {
       users.unsubscribe();
     };

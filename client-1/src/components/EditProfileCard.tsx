@@ -1,16 +1,21 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { updateUserInfoAndRefresh } from "../hooks/users/userApiSlice";
-import { formatBirthday } from "../utils/utils";
-import { useToast } from "./Toast";
+import { useState } from "react";
+import { formatBirthday } from "../lib/utils";
+import { useToast } from "@/components/ui/use-toast";
 import PhoneInput, { isPossiblePhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
-import validator from "validator";
-import { AiOutlineClose } from "react-icons/ai";
-import { Button, Card, CardHeader, IconButton } from "@material-tailwind/react";
+import { useUpdateUserInfoMutation } from "@/hooks/users/userApiSlice";
+import { Card, CardHeader } from "./ui/card";
+import { Button } from "./ui/button";
+import { X } from "lucide-react";
 
+type EditProfileCardProps = {
+  isVisible: boolean;
+  userId: string | null;
+  user: any;
+  onClose: () => void;
+};
 // EditProfileCard component. This component is a modal that allows the user to edit their profile information.
-const EditProfileCard = ({ isVisible, id, user, onClose }) => {
+const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardProps) => {
   // Initialize the state variables with the user's information
   const [firstname, setFirstname] = useState(user.firstname);
   const [lastname, setLastname] = useState(user.lastname);
@@ -19,8 +24,9 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
   const [schoolOrg, setSchoolOrg] = useState(user.school_organization);
   const [birthday, setBirthday] = useState(user.birthday);
   const [bio, setBio] = useState(user.bio);
-  const dispatch = useDispatch();
-  const { notify } = useToast();
+  const { toast } = useToast();
+
+  const [updateInfo] = useUpdateUserInfoMutation();
 
   // If the modal is not visible, return null
   if (!isVisible) return null;
@@ -28,62 +34,52 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
   // Handle the form submission. Requires the use to have a first name, last name, email, and school/organization.
   // If the phone number is provided, it must be a valid phone number. If the email is provided, it must be a valid email.
   // If all the required fields are provided, update the user's information and close the modal.
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     if (firstname === "" || firstname === undefined) {
-      notify("First name is required.", "error", "top-right");
+      toast({ variant: "destructive", description: "First name is required." });
       return;
     } else if (lastname === "" || lastname === undefined) {
-      notify("Last name is required.", "error", "top-right");
+      toast({ variant: "destructive", description: "Last name is required." });
       return;
     } else if (email === "" || email === undefined) {
-      notify("Email is required.", "error", "top-right");
+      toast({ variant: "destructive", description: "Email is required." });
       return;
     } else if (schoolOrg === "" || schoolOrg === undefined) {
-      notify("School/Organization is required.", "error", "top-right");
+      toast({ variant: "destructive", description: "School/Organization is required." });
       return;
     }
 
     if (number === undefined || isPossiblePhoneNumber(number)) {
-      if (validator.isEmail(email)) {
-        await dispatch(
-          updateUserInfoAndRefresh({
-            id: id,
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            phone_number: number,
-            school_organization: schoolOrg,
-            birthday: new Date(birthday),
-            bio: bio,
-          })
-        ).unwrap();
-      }
-      onClose();
+      await updateInfo({
+        userId: userId,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
+        phone_number: number,
+        school_organization: schoolOrg,
+        birthday: new Date(birthday),
+        bio: bio,
+      });
     }
+    onClose();
   };
 
   // Return the modal with the user's information
   const content = (
     <div
       id="update-profile-popup"
-      tabIndex="-1"
+      tabIndex={-1}
       className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
     >
-      <Card className="fade-in relative p-4 w-full h-full md:h-auto font-Audiowide max-w-3xl !bg-dark-secondary rounded-lg sm:p-5">
+      <Card className="fade-in relative p-4 w-full h-full md:h-auto font-Audiowide max-w-3xl sm:p-5">
         {/* Modal Header */}
         <div className="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
           <CardHeader className="text-lg font-semibold text-light-primary bg-transparent shadow-none mt-0">
             Update Profile
           </CardHeader>
-          <IconButton
-            variant="text"
-            ripple={false}
-            className="absolute top-1 right-2 !bg-transparent"
-            onClick={onClose}
-          >
-            <AiOutlineClose className="text-3xl text-green-primary hover:text-green-secondary" />
-          </IconButton>
+          <Button variant="ghost" size="icon" className="absolute top-1 right-2 hover:bg-transparent" onClick={onClose}>
+            <X className="text-3xl text-green-primary hover:text-green-secondary" />
+          </Button>
         </div>
         {/* End Modal Header */}
 
@@ -92,10 +88,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
           <div className="grid gap-4 mb-4 sm:grid-cols-2">
             {/* First Name Field */}
             <div>
-              <label
-                htmlFor="firstname"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="firstname" className="block mb-2 text-sm font-medium text-light-secondary">
                 First Name
               </label>
               <input
@@ -112,10 +105,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
 
             {/* Last Name Field */}
             <div>
-              <label
-                htmlFor="lastname"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="lastname" className="block mb-2 text-sm font-medium text-light-secondary">
                 Last Name
               </label>
               <input
@@ -132,10 +122,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
 
             {/* Email Field */}
             <div>
-              <label
-                htmlFor="email"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="email" className="block mb-2 text-sm font-medium text-light-secondary">
                 Email
               </label>
               <input
@@ -152,10 +139,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
 
             {/* Phone Number Field */}
             <div>
-              <label
-                htmlFor="phone_number"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="phone_number" className="block mb-2 text-sm font-medium text-light-secondary">
                 Phone Number
               </label>
               <PhoneInput
@@ -172,10 +156,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
 
             {/* School/Organization Field */}
             <div>
-              <label
-                htmlFor="school_org"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="school_org" className="block mb-2 text-sm font-medium text-light-secondary">
                 School/Organization
               </label>
               <input
@@ -192,10 +173,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
 
             {/* Birthday Field */}
             <div>
-              <label
-                htmlFor="birthday"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="birthday" className="block mb-2 text-sm font-medium text-light-secondary">
                 Birthday
               </label>
               <input
@@ -211,15 +189,12 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
 
             {/* Bio Field */}
             <div className="sm:col-span-2">
-              <label
-                htmlFor="bio"
-                className="block mb-2 text-sm font-medium text-light-secondary"
-              >
+              <label htmlFor="bio" className="block mb-2 text-sm font-medium text-light-secondary">
                 Bio
               </label>
               <textarea
                 id="bio"
-                rows="5"
+                rows={5}
                 className="block p-2.5 w-full text-sm rounded-lg border bg-light-primary"
                 placeholder="Write a summary about yourself..."
                 onChange={(e) => setBio(e.target.value)}
@@ -232,7 +207,7 @@ const EditProfileCard = ({ isVisible, id, user, onClose }) => {
           <div className="flex justify-center">
             <Button
               className="text-light-primary bg-green-primary hover:bg-green-secondary font-medium text-sm px-4 py-2 font-Audiowide rounded-full"
-              onClick={(e) => handleSubmit(e)}
+              onClick={handleSubmit}
             >
               Update Profile
             </Button>

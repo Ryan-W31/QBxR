@@ -247,8 +247,8 @@ const RegisterPage = () => {
                 )}
               />
               <div className="flex items-center justify-start text-sm mt-4">
-                <Checkbox id="persist" />
-                <label htmlFor="persist" className="ml-2 text-foreground">
+                <Checkbox id="tnc" />
+                <label htmlFor="tnc" className="ml-2 text-foreground">
                   I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
                 </label>
               </div>

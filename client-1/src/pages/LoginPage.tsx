@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../hooks/auth/authApiSlice";
-import usePersist from "../hooks/auth/usePersist";
 import ErrorMessage from "@/components/ErrorMessage";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +11,6 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 
 interface CustomError {
   status: number;
@@ -26,8 +24,6 @@ const LoginPage = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [showError, setShowError] = useState(false);
   const [customError, setCustomError] = useState("");
-
-  const [persist, setPersist] = usePersist();
   const navigate = useNavigate();
 
   const loginForm = useForm({
@@ -43,11 +39,6 @@ const LoginPage = () => {
   // Toggle the password visibility
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
-  };
-
-  // Handle the remember me event
-  const handlePersist = () => {
-    setPersist((prevState) => !prevState);
   };
 
   // Handle the login event
@@ -124,13 +115,7 @@ const LoginPage = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex items-center justify-between text-sm mt-4">
-                <div className="flex items-center">
-                  <Checkbox id="persist" onCheckedChange={handlePersist} checked={persist} />
-                  <label htmlFor="persist" className="ml-2 text-foreground">
-                    Remember Me
-                  </label>
-                </div>
+              <div className="flex items-center justify-end text-sm mt-4">
                 <Button variant="link" className="text-sm text-primary p-0" asChild>
                   <Link to="/reset">Forgot Password?</Link>
                 </Button>

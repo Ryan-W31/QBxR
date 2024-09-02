@@ -1,6 +1,7 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectCurrentToken, selectCurrentUser } from "../auth/authSlice";
+import { selectCurrentToken, selectCurrentUser } from "./authSlice";
+import { Loader2 } from "lucide-react";
 
 // ProtectedRoutes component. This component protects the routes that require authentication.
 const ProtectedRoutes = () => {

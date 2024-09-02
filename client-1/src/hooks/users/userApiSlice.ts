@@ -83,7 +83,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         }
       },
     }),
-    getUserById: builder.query<User, void>({
+    getUserById: builder.query<User, string | undefined>({
       query: (userId) => `/user/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response: User) => {

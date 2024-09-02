@@ -1,4 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
+import { authApiSlice } from "../auth/authApiSlice";
 
 // Score API slice. This slice contains the getScores, setVRScore, setWebScore, getVRScore, getWebScore, and getQBxRScore endpoints.
 export const scoreApiSlice = apiSlice.injectEndpoints({
@@ -15,6 +16,15 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: { ...body },
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(authApiSlice.endpoints.refresh.initiate());
+          console.log("VR score updated");
+        } catch (err) {
+          console.error("Error updating user info:", err);
+        }
+      },
     }),
     setWebScore: builder.mutation({
       query: (body) => ({
@@ -22,6 +32,15 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: { ...body },
       }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          dispatch(authApiSlice.endpoints.refresh.initiate());
+          console.log("Web score updated");
+        } catch (err) {
+          console.error("Error updating user info:", err);
+        }
+      },
     }),
     getVRScore: builder.query({
       query: (id) => `/score/getvrscore/${id}`,
