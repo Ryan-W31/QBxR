@@ -186,7 +186,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "bg-foreground text-background border text-sm rounded-lg block w-full p-2.5",
+                      "bg-foreground border text-sm rounded-lg block w-full p-2.5 hover:bg-foreground hover:text-muted-foreground",
                       !user?.birthday && "text-muted-foreground"
                     )}
                   >
@@ -196,7 +196,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
                     </div>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
+                <PopoverContent className="w-auto p-4">
                   <Calendar mode="single" selected={birthday} onSelect={setBirthday} />
                 </PopoverContent>
               </Popover>
