@@ -7,6 +7,8 @@ import { useUpdateUserInfoMutation } from "@/hooks/users/userApiSlice";
 import { Card, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 import { X } from "lucide-react";
+import { Input } from "./ui/input";
+import { Textarea } from "./ui/textarea";
 
 type EditProfileCardProps = {
   isVisible: boolean;
@@ -17,13 +19,13 @@ type EditProfileCardProps = {
 // EditProfileCard component. This component is a modal that allows the user to edit their profile information.
 const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardProps) => {
   // Initialize the state variables with the user's information
-  const [firstname, setFirstname] = useState(user.firstname);
-  const [lastname, setLastname] = useState(user.lastname);
-  const [email, setEmail] = useState(user.email);
-  const [number, setNumber] = useState(user.phone_number);
-  const [schoolOrg, setSchoolOrg] = useState(user.school_organization);
-  const [birthday, setBirthday] = useState(user.birthday);
-  const [bio, setBio] = useState(user.bio);
+  const [firstname, setFirstname] = useState(user?.firstname);
+  const [lastname, setLastname] = useState(user?.lastname);
+  const [email, setEmail] = useState(user?.email);
+  const [number, setNumber] = useState(user?.phone_number);
+  const [schoolOrg, setSchoolOrg] = useState(user?.school_organization);
+  const [birthday, setBirthday] = useState(user?.birthday);
+  const [bio, setBio] = useState(user?.bio);
   const { toast } = useToast();
 
   const [updateInfo] = useUpdateUserInfoMutation();
@@ -71,14 +73,14 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
       tabIndex={-1}
       className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
     >
-      <Card className="fade-in relative p-4 w-full h-full md:h-auto font-Audiowide max-w-3xl sm:p-5">
+      <Card className="relative !bg-card p-4 w-full h-full md:h-auto max-w-3xl sm:p-5">
         {/* Modal Header */}
-        <div className="flex justify-center items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
-          <CardHeader className="text-lg font-semibold text-light-primary bg-transparent shadow-none mt-0">
+        <div className="flex justify-center items-center rounded-t border-b">
+          <CardHeader className="pt-2 text-3xl font-semibold text-foreground shadow-none mt-0 uppercase font-Audiowide">
             Update Profile
           </CardHeader>
           <Button variant="ghost" size="icon" className="absolute top-1 right-2 hover:bg-transparent" onClick={onClose}>
-            <X className="text-3xl text-green-primary hover:text-green-secondary" />
+            <X className="text-3xl text-primary hover:text-primary-hover" />
           </Button>
         </div>
         {/* End Modal Header */}
@@ -88,15 +90,15 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
           <div className="grid gap-4 mb-4 sm:grid-cols-2">
             {/* First Name Field */}
             <div>
-              <label htmlFor="firstname" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="firstname" className="block mb-2 text-sm font-medium text-foreground-secondary ">
                 First Name
               </label>
-              <input
+              <Input
                 type="text"
                 name="firstname"
                 id="firstname"
                 value={firstname}
-                className="bg-light-primary border text-sm rounded-lg block w-full p-2.5 placeholder:text-light-secondary"
+                className="bg-foreground text-background border text-sm rounded-lg block w-full p-2.5"
                 placeholder="Ex. John"
                 onChange={(e) => setFirstname(e.target.value)}
               />
@@ -105,15 +107,15 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
 
             {/* Last Name Field */}
             <div>
-              <label htmlFor="lastname" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="lastname" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 Last Name
               </label>
-              <input
+              <Input
                 type="text"
                 name="lastname"
                 id="lastname"
                 value={lastname}
-                className="bg-light-primary border text-sm rounded-lg block w-full p-2.5 placeholder:text-light-secondary"
+                className="bg-foreground text-background border text-sm rounded-lg block w-full p-2.5"
                 placeholder="Ex. Doe"
                 onChange={(e) => setLastname(e.target.value)}
               />
@@ -122,15 +124,15 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
 
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="email" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 Email
               </label>
-              <input
+              <Input
                 type="text"
                 name="email"
                 id="email"
                 value={email}
-                className="bg-light-primary border text-sm rounded-lg block w-full p-2.5 placeholder:text-light-secondary"
+                className="bg-foreground text-background border text-sm rounded-lg block w-full p-2.5"
                 placeholder="Ex. johndoe@email.com"
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -139,7 +141,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
 
             {/* Phone Number Field */}
             <div>
-              <label htmlFor="phone_number" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="phone_number" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 Phone Number
               </label>
               <PhoneInput
@@ -148,7 +150,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
                 countryCallingCodeEditable={false}
                 onChange={setNumber}
                 value={number}
-                className="flex items-center bg-light-primary border text-sm rounded-lg w-full p-2.5 placeholder:text-light-secondary"
+                className="flex items-center bg-foreground text-background border text-sm rounded-lg w-full p-2.5"
                 placeholder="Enter phone number"
               />
             </div>
@@ -156,15 +158,15 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
 
             {/* School/Organization Field */}
             <div>
-              <label htmlFor="school_org" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="school_org" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 School/Organization
               </label>
-              <input
+              <Input
                 type="text"
                 value={schoolOrg}
                 name="school_org"
                 id="school_org"
-                className="bg-light-primary border text-sm rounded-lg block w-full p-2.5 placeholder:text-light-secondary"
+                className="bg-foreground text-background border text-sm rounded-lg block w-full p-2.5"
                 placeholder="University of Central Florida"
                 onChange={(e) => setSchoolOrg(e.target.value)}
               />
@@ -173,15 +175,15 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
 
             {/* Birthday Field */}
             <div>
-              <label htmlFor="birthday" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="birthday" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 Birthday
               </label>
-              <input
+              <Input
                 type="date"
                 value={formatBirthday(birthday)}
                 name="birthday"
                 id="birthday"
-                className="bg-light-primary border text-sm rounded-lg block w-full p-2.5 placeholder:text-light-secondary"
+                className="bg-foreground text-background border text-sm rounded-lg block w-full p-2.5"
                 onChange={(e) => setBirthday(e.target.value)}
               />
             </div>
@@ -189,24 +191,25 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
 
             {/* Bio Field */}
             <div className="sm:col-span-2">
-              <label htmlFor="bio" className="block mb-2 text-sm font-medium text-light-secondary">
+              <label htmlFor="bio" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 Bio
               </label>
-              <textarea
+              <Textarea
                 id="bio"
                 rows={5}
-                className="block p-2.5 w-full text-sm rounded-lg border bg-light-primary"
+                className="block p-2.5 w-full text-sm rounded-lg border bg-foreground text-background"
                 placeholder="Write a summary about yourself..."
                 onChange={(e) => setBio(e.target.value)}
               >
                 {bio}
-              </textarea>
+              </Textarea>
             </div>
             {/* End Bio Field */}
           </div>
           <div className="flex justify-center">
             <Button
-              className="text-light-primary bg-green-primary hover:bg-green-secondary font-medium text-sm px-4 py-2 font-Audiowide rounded-full"
+              size="lg"
+              className="font-semibold px-4 py-2 font-Audiowide rounded-full uppercase"
               onClick={handleSubmit}
             >
               Update Profile

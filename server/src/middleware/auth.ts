@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import appAssert from "../utils/appAssert";
-import AppErrorCode from "../contants/appErrorCode";
-import { UNAUTHORIZED } from "../contants/http";
+import AppErrorCode from "../constants/appErrorCode";
+import { UNAUTHORIZED } from "../constants/http";
 import { verifyToken } from "../utils/jwt";
 
 const auth: RequestHandler = (req, res, next) => {

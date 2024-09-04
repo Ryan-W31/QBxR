@@ -1,5 +1,5 @@
 # Development stage
-FROM node:18-bookworm-slim as development
+FROM node:18-bookworm-slim AS development
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ RUN npm run build
 CMD ["npm", "run", "dev"]
 
 # Production stage
-FROM node:18-bookworm-slim as production
+FROM node:18-bookworm-slim AS production
 
 WORKDIR /app
 

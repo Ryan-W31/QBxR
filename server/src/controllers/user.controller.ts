@@ -1,6 +1,7 @@
-import { NOT_FOUND, OK } from "../contants/http";
+import { NOT_FOUND, OK } from "../constants/http";
 import Score from "../models/score.model";
 import User from "../models/user.model";
+import { getAllScoresEndpoint } from "../services/score.service";
 import {
   getLeaderboardEndpoint,
   searchEndpoint,
@@ -14,6 +15,19 @@ import { searchSchema, updateUserPasswordSchema, updateUserSchema } from "./user
 
 // getLeaderboard is used to get the top 50 users with the highest scores.
 // The users' information is stored in the database.
+
+export const getUserController = catchErrors(async (req, res) => {
+  const user = await User.findById(req.userId);
+  appAssert(user, NOT_FOUND, "User not found");
+
+  let obj = null;
+
+  if (user.role === "PLAYER") {
+    obj = await getAllScoresEndpoint(req.userId as unknown as string);
+  }
+  return res.status(OK).json({ user: user.omitPassword(), scores: obj });
+});
+
 export const getLeaderboardController = catchErrors(async (req, res) => {
   const data = await getLeaderboardEndpoint();
 
@@ -35,9 +49,9 @@ export const getUserByIdController = catchErrors(async (req, res) => {
 // The user's information is updated in the database.
 export const updateUserInfoController = catchErrors(async (req, res) => {
   const request = updateUserSchema.parse({ ...req.body });
-  const user = updateUserInfoEndpoint(request);
+  const { user } = await updateUserInfoEndpoint(request);
 
-  return res.status(OK).json({ message: "Your account has been updated.", user });
+  return res.status(OK).json({ message: "Your account has been updated.", user: user });
 });
 
 // updateUserPassword is used to update the user's password.

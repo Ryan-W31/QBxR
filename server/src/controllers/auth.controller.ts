@@ -1,4 +1,4 @@
-import { CREATED, OK, UNAUTHORIZED } from "../contants/http";
+import { CREATED, OK, UNAUTHORIZED } from "../constants/http";
 import {
   loginEndpoint,
   refreshCookieEndpoint,
@@ -27,8 +27,8 @@ export const signUpController = catchErrors(async (req, res) => {
     userAgent: req.headers["user-agent"],
   });
 
-  const { user, accessToken, refreshToken } = await signUpEndpoint(request);
-  return setAuthCookies({ res, accessToken, refreshToken }).status(CREATED).json(user);
+  const { userId, user, accessToken, refreshToken } = await signUpEndpoint(request);
+  return setAuthCookies({ res, accessToken, refreshToken }).status(CREATED).json({ userId, user, scores: null });
 });
 
 // login is used to verify the user's credentials and return a JWT access token and refresh token.

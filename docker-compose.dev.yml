@@ -27,15 +27,15 @@ services:
 
   client:
     build:
-      context: ./client
+      context: ./client-1
       target: development
       args:
-        VITE_API_URL: https://api.localhost
+        VITE_API_URL: https://api.test.localhost
     env_file:
-      - ./client/.env
+      - ./client-1/.env
     restart: unless-stopped
     volumes:
-      - ./client:/app
+      - ./client-1:/app
       - /app/node_modules
     networks:
       - qbxr

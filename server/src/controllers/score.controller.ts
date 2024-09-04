@@ -1,5 +1,5 @@
 // score.controller is used to handle the setting and getting of the user's scores.
-import { NOT_FOUND, OK } from "../contants/http";
+import { NOT_FOUND, OK } from "../constants/http";
 import Score from "../models/score.model";
 import {
   getAllScoresEndpoint,

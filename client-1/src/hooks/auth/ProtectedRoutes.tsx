@@ -1,22 +1,20 @@
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectCurrentToken, selectCurrentUser } from "./authSlice";
 import { Loader2 } from "lucide-react";
+import { useGetUserQuery } from "../users/userApiSlice";
 
 // ProtectedRoutes component. This component protects the routes that require authentication.
 const ProtectedRoutes = () => {
-  const accessToken = useSelector(selectCurrentToken);
-  const user = useSelector(selectCurrentUser);
+  const { data: response, isLoading } = useGetUserQuery();
   const location = useLocation();
 
-  if (accessToken === undefined || user === undefined) {
-    <div className="h-screen flex justify-center items-center">
-      <Loader2 className="animate-spin h-12 w-12 text-primary" />
-    </div>;
-  }
+  const user = response?.user;
 
   // If the user is authenticated, display the protected routes. Otherwise, navigate to the login page.
-  return user ? (
+  return isLoading ? (
+    <div className="h-screen flex justify-center items-center">
+      <Loader2 className="animate-spin h-12 w-12 text-primary" />
+    </div>
+  ) : user ? (
     <>{user.isVerified ? <Outlet /> : <Navigate to="/email" state={{ from: location }} replace />}</>
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

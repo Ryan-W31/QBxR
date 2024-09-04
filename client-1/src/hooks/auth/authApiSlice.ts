@@ -2,7 +2,6 @@ import { apiSlice } from "../../app/api/apiSlice";
 import { setCredentials, logOut } from "./authSlice";
 
 interface AuthResponse {
-  accessToken: string;
   userId: string;
   user: any;
   scores: any;
@@ -16,6 +15,27 @@ interface Credentials {
 // Auth API slice. This slice contains the login, refresh, and logout endpoints.
 export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    signUp: builder.mutation({
+      query: (body) => ({
+        url: "/auth/signup",
+        method: "POST",
+        body: { ...body },
+      }),
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const res = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              userId: res.data.userId,
+              user: res.data.user,
+              scores: res.data.scores,
+            })
+          );
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    }),
     login: builder.mutation<AuthResponse, Credentials>({
       query: (credentials) => ({
         url: "/auth/login",
@@ -27,7 +47,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
           const res = await queryFulfilled;
           dispatch(
             setCredentials({
-              accessToken: res.data.accessToken,
               userId: res.data.userId,
               user: res.data.user,
               scores: res.data.scores,
@@ -38,7 +57,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }
       },
       transformResponse: (response: AuthResponse) => {
-        return response.user;
+        return response;
       },
     }),
     refresh: builder.query<AuthResponse, void>({
@@ -48,7 +67,6 @@ export const authApiSlice = apiSlice.injectEndpoints({
           const refresh = await queryFulfilled;
           dispatch(
             setCredentials({
-              accessToken: refresh.data.accessToken,
               userId: refresh.data.userId,
               user: refresh.data.user,
               scores: refresh.data.scores,
@@ -99,7 +117,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     logout: builder.mutation<void, void>({
       query: () => ({
         url: "/auth/logout",
-        method: "POST",
+        method: "GET",
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
@@ -115,6 +133,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useSignUpMutation,
   useLoginMutation,
   useRefreshQuery,
   useSendEmailVerificationMutation,

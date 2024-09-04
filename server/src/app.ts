@@ -2,9 +2,9 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { APP_ORIGIN_URL } from "./contants/env";
+import { APP_ORIGIN_URL } from "./constants/env";
 import errorHandler from "./middleware/errorHandler";
-import { OK } from "./contants/http";
+import { OK } from "./constants/http";
 
 import userRouter from "./routes/user.route";
 import authRouter from "./routes/auth.route";
@@ -29,10 +29,10 @@ app.get("/", (req, res) => {
   res.status(OK).send({ status: "healthy" });
 });
 
-app.use(errorHandler);
 // Routes
 app.use("/auth", authRouter);
 app.use("/user", auth, userRouter);
 app.use("/score", auth, scoreRouter);
+app.use(errorHandler);
 
 export default app;

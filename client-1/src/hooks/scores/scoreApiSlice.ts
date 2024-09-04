@@ -5,14 +5,14 @@ import { authApiSlice } from "../auth/authApiSlice";
 export const scoreApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getScores: builder.query({
-      query: (userId) => `/score/${userId}`,
+      query: (userId) => `/score/get/all/${userId}`,
       transformResponse: (response) => {
         return response;
       },
     }),
     setVRScore: builder.mutation({
       query: (body) => ({
-        url: `/score/setvrscore/${body.id}`,
+        url: `/score/set/vr`,
         method: "PATCH",
         body: { ...body },
       }),
@@ -28,7 +28,7 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
     }),
     setWebScore: builder.mutation({
       query: (body) => ({
-        url: `/score/setwebscore/${body.id}`,
+        url: `/score/set/web`,
         method: "PATCH",
         body: { ...body },
       }),
@@ -43,21 +43,21 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getVRScore: builder.query({
-      query: (id) => `/score/getvrscore/${id}`,
+      query: (userId) => `/score/get/vr/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response) => {
         return response;
       },
     }),
     getWebScore: builder.query({
-      query: (id) => `/score/getwebscore/${id}`,
+      query: (userId) => `/score/get/web/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response) => {
         return response;
       },
     }),
     getQBxRScore: builder.query({
-      query: (id) => `/score/getqbxrscore/${id}`,
+      query: (userId) => `/score/get/qbxr/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response) => {
         return response;

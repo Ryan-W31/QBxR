@@ -13,7 +13,7 @@ type NavBarProps = {
 };
 const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProps) => {
   const navList = isLandingPage ? (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 uppercase font-semibold">
       {/* Home Link */}
       <Button variant="link" asChild>
         <Link
@@ -65,7 +65,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
       {/* End How QBxR Works Link */}
     </ul>
   ) : (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 uppercase font-semibold">
       {/* Home Link */}
       <Button variant="link" asChild>
         <Link

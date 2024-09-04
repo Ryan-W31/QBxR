@@ -40,7 +40,7 @@ function App() {
           <Route element={<Prefetch />}>
             <Route path="home" element={<HomePage />} />
             <Route path="leaderboard" element={<LeaderboardPage />} />
-            <Route path="profile/:id?" element={<ProfilePage />} />
+            <Route path="profile/:userId?" element={<ProfilePage />} />
             <Route path="search" element={<SearchPage />} />
             <Route path="settings" element={<SettingsPage />} />
             <Route element={<RoleAuth />}>

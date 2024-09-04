@@ -6,7 +6,7 @@ import LeaderboardCard from "@/components/LeaderboardCard";
 import ProfileCard from "../components/ProfileCard";
 import { useGetLeaderboardQuery } from "../hooks/users/userApiSlice";
 import { useSelector } from "react-redux";
-import { selectCurrentId, selectCurrentScores } from "../hooks/auth/authSlice";
+import { selectCurrentId, selectCurrentScores, selectCurrentUser } from "../hooks/auth/authSlice";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
@@ -107,6 +107,7 @@ const LeaderboardPage = () => {
   const [totalRows, setTotalRows] = useState(0);
 
   const myId = useSelector(selectCurrentId);
+  const user = useSelector(selectCurrentUser);
 
   const {
     data: users,
@@ -219,25 +220,29 @@ const LeaderboardPage = () => {
                 <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4">Leaderboard</h1>
               </CardHeader>
               <CardContent className="p-2">
-                {qbxrData !== undefined ? (
+                {user?.role === "PLAYER" && (
                   <>
-                    {isLoading ? (
-                      <div className="font-Audiowide text-foreground text-center">
-                        <Skeleton className="w-[100px] h-[50px]" />
-                        <Skeleton className="w-[100px] h-[50px]" />
-                      </div>
+                    {qbxrData !== undefined ? (
+                      <>
+                        {isLoading ? (
+                          <div className="font-Audiowide text-foreground text-center">
+                            <Skeleton className="w-[100px] h-[50px]" />
+                            <Skeleton className="w-[100px] h-[50px]" />
+                          </div>
+                        ) : (
+                          <div className="font-Audiowide text-foreground text-center">
+                            <h2 className="text-2xl mb-2">Your Rank: {qbxrData.rank}</h2>
+                            <p className="text-lg mb-4">Your Score: {qbxrData.qbxr_score}</p>
+                          </div>
+                        )}
+                      </>
                     ) : (
-                      <div className="font-Audiowide text-foreground text-center">
-                        <h2 className="text-2xl mb-2">Your Rank: {qbxrData.rank}</h2>
-                        <p className="text-lg mb-4">Your Score: {qbxrData.qbxr_score}</p>
+                      <div className="text-foreground text-center">
+                        <h2 className="font-Audiowide text-2xl mb-2">Your Rank: No Data</h2>
+                        <p className="text-base mb-4">Take The Evalutation Tests On Your Profile</p>
                       </div>
                     )}
                   </>
-                ) : (
-                  <div className="text-foreground text-center">
-                    <h2 className="font-Audiowide text-2xl mb-2">Your Rank: No Data</h2>
-                    <p className="text-base mb-4">Take The Evalutation Tests On Your Profile</p>
-                  </div>
                 )}
               </CardContent>
               <CardContent>

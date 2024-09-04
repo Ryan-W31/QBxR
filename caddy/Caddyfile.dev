@@ -2,11 +2,11 @@
     local_certs
 }
 
-localhost {
+test.localhost {
     encode gzip
     reverse_proxy client:5173
 }
 
-api.localhost {
+api.test.localhost {
     reverse_proxy api:5001
 }

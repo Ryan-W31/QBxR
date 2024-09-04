@@ -3,7 +3,7 @@ import Score from "../models/score.model";
 import Session from "../models/session.model";
 import appAssert from "../utils/appAssert";
 import { formatWebScores, formatVRScores } from "../utils/utils";
-import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND, TOO_MANY_REQUESTS, UNAUTHORIZED } from "../contants/http";
+import { CONFLICT, INTERNAL_SERVER_ERROR, NOT_FOUND, TOO_MANY_REQUESTS, UNAUTHORIZED } from "../constants/http";
 import { RefreshTokenPayload, refreshTokenSignOptions, signToken, verifyToken } from "../utils/jwt";
 import VerificationCodeModel from "../models/verificationCode.model";
 import {
@@ -14,8 +14,8 @@ import {
   oneYearFromNow,
   sevenDaysFromNow,
 } from "../utils/date";
-import VerificationCodeType from "../contants/verificationCodeType";
-import { APP_ORIGIN_URL } from "../contants/env";
+import VerificationCodeType from "../constants/verificationCodeType";
+import { APP_ORIGIN_URL } from "../constants/env";
 import { sendMail } from "../utils/sendMail";
 import { getPasswordResetTemplate, getVerifyEmailTemplate } from "../utils/emailTemplates";
 import { hashValue } from "../utils/bcrypt";
@@ -55,7 +55,7 @@ export const loginEndpoint = async ({ email, password, userAgent }: LoginParams)
     appAssert(!error, INTERNAL_SERVER_ERROR, "Failed to send verification email");
   }
 
-  const scores = await Score.findOne({ user: user._id });
+  const scores = await Score.findOne({ userId: user._id });
   var obj = {
     qbxr: { qbxr_score: 0, rank: 0 },
     web: [{}],
@@ -127,7 +127,7 @@ export const signUpEndpoint = async ({
     status: true,
   });
 
-  if (role === "PLAYER") await Score.create({ user: user._id, qbxr_score: 0 });
+  if (role === "PLAYER") await Score.create({ userId: user._id, qbxr_score: 0 });
 
   const userId = user._id;
   const verificationCode = await VerificationCodeModel.create({
@@ -165,6 +165,7 @@ export const signUpEndpoint = async ({
   });
 
   return {
+    userId: userId,
     user: user.omitPassword(),
     accessToken,
     refreshToken,

@@ -34,7 +34,7 @@ const LoginPage = () => {
     },
   });
 
-  const [login, { isLoading, isSuccess, isError, error }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   // Toggle the password visibility
   const togglePasswordVisibility = () => {
@@ -43,12 +43,11 @@ const LoginPage = () => {
 
   // Handle the login event
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
-    const user = await login({ ...data });
-
-    if (isSuccess) {
-      const isVerified = (user as any)?.isVerified;
-      navigate(isVerified ? "/home" : "/verify", { replace: true });
-    } else if (isError) {
+    try {
+      const { data: response } = await login({ ...data });
+      const isVerified = response?.user?.isVerified;
+      navigate(isVerified ? "/home" : "/email", { replace: true });
+    } catch (error) {
       const err = error as CustomError;
       setShowError(true);
       setCustomError(err.data?.message || "Login failed. Please try again later.");
@@ -115,8 +114,8 @@ const LoginPage = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex items-center justify-end text-sm mt-4">
-                <Button variant="link" className="text-sm text-primary p-0" asChild>
+              <div className="flex items-center justify-end text-sm">
+                <Button variant="link" className="text-sm text-primary p-0 uppercase" asChild>
                   <Link to="/reset">Forgot Password?</Link>
                 </Button>
               </div>
@@ -124,7 +123,7 @@ const LoginPage = () => {
                 <Button
                   type="submit"
                   size="lg"
-                  className="font-Audiowide rounded-full tracking-wider"
+                  className="font-semibold font-Audiowide tracking-wider rounded-full uppercase"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -138,9 +137,9 @@ const LoginPage = () => {
               </div>
             </form>
           </Form>
-          <div className="text-sm text-center mt-4 font-Audiowide">
-            Don't have an account?{" "}
-            <Button variant="link" className="text-sm text-primary p-0" asChild>
+          <div className="text-sm text-center mt-4 font-Audiowide uppercase">
+            Don't have an account yet?{" "}
+            <Button variant="link" className="text-sm text-primary p-0 uppercase" asChild>
               <Link to="/register">Register</Link>
             </Button>
           </div>

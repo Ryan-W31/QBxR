@@ -3,6 +3,7 @@ import {
   deleteUserController,
   getLeaderboardController,
   getUserByIdController,
+  getUserController,
   getUserFavoritesController,
   searchController,
   updateUserInfoController,
@@ -13,9 +14,6 @@ const userRouter = Router();
 // Routes for user information.
 
 // base route: /user
-// Leaderboard: GET request to /leaderboard
-userRouter.route("/leaderboard").get(getLeaderboardController);
-
 // Update User Info: PATCH request to /updateinfo/:id
 userRouter.route("/update/info/:userId").patch(updateUserInfoController);
 
@@ -23,6 +21,13 @@ userRouter.route("/update/info/:userId").patch(updateUserInfoController);
 userRouter.route("/update/password/:userId").patch(updateUserPasswordController);
 
 userRouter.route("/:userId").delete(deleteUserController);
+
+// Get User: GET request to /
+userRouter.route("/").get(getUserController);
+
+// Leaderboard: GET request to /leaderboard
+userRouter.route("/leaderboard").get(getLeaderboardController);
+
 // Get User Favorites: GET request to /favorites/:id
 userRouter.route("/favorites/:userId").get(getUserFavoritesController);
 
@@ -30,6 +35,6 @@ userRouter.route("/favorites/:userId").get(getUserFavoritesController);
 userRouter.route("/search/:search").get(searchController);
 
 // Get User By ID: GET request to /:id
-userRouter.route("/:userId").get(getUserByIdController);
+userRouter.route("/id/:userId").get(getUserByIdController);
 
 export default userRouter;

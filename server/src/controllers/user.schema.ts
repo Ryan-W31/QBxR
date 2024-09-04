@@ -7,9 +7,9 @@ export const updateUserSchema = z.object({
   lastname: z.string().optional(),
   email: z.string().email().optional(),
   school_organization: z.string().optional(),
-  bio: z.string().optional(),
-  birthday: z.date().optional(),
-  phone_number: z.string().optional(),
+  bio: z.string().optional().nullable(),
+  birthday: z.date().optional().nullable(),
+  phone_number: z.string().optional().nullable(),
   status: z.boolean().optional(),
   favorite: z.string().optional(),
 });

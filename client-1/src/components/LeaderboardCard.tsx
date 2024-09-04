@@ -23,16 +23,24 @@ const LeaderboardCard = ({
     <tr className="border-b">
       {/* Display a skeleton card with a rank, name, school, and score */}
       <th scope="row" className="py-3">
-        <Skeleton className="w-[50px]" />
+        <div className="flex justify-center">
+          <Skeleton className="w-[50px] h-[10px]" />
+        </div>
       </th>
       <td className="py-3">
-        <Skeleton className="w-[100px]" />
+        <div className="flex justify-center">
+          <Skeleton className="w-[100px] h-[10px]" />
+        </div>
       </td>
       <td className="py-3">
-        <Skeleton className="w-[300px]" />
+        <div className="flex justify-center">
+          <Skeleton className="w-[300px] h-[10px]" />
+        </div>
       </td>
       <td className="py-3">
-        <Skeleton className="w-[50px]" />
+        <div className="flex justify-center">
+          <Skeleton className="w-[50px] h-[10px]" />
+        </div>
       </td>
       {/* End Display a skeleton card with a rank, name, school, and score */}
     </tr>

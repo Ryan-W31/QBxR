@@ -10,7 +10,6 @@ import { checkData } from "../lib/utils";
 import { useSelector } from "react-redux";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2 } from "lucide-react";
 
 type Profile = {
   userId: string;
@@ -83,90 +82,80 @@ const HomePage = () => {
   };
 
   // Home page content
-  let content;
+  let content = (
+    <div>
+      <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="home" />
 
-  if (!user || !data) {
-    content = (
-      <div className="h-screen flex justify-center items-center">
-        <Loader2 className="animate-spin h-12 w-12 text-primary" />
-      </div>
-    );
-  } else {
-    content = (
-      <div>
-        <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="home" />
-
-        <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
-          <ScrollToTop showMenu={showMenu} />
-          <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="home" />
-          <div className="flex items-center justify-center w-full h-full">
-            <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl">
-              <CardHeader className="mt-2 shadow-none text-center">
-                <h1 className="text-primary font-bold text-4xl md:text-6xl font-Audiowide">Welcome to QBxR</h1>
-              </CardHeader>
-              {user?.role === "PLAYER" && (
-                <>
-                  <div className="text-center justify-center font-Audiowide">
-                    <CardContent className="flex flex-col items-center justify-center text-foreground text-2xl md:text-4xl space-y-8">
-                      <p className="text-foreground-secondary">Your QBxR Score:</p>
-                      {qbxrData ? (
-                        <>
-                          {qbxrData.qbxr_score >= 0 ? (
-                            <p className="m-4 text-xl md:text-3xl">{qbxrData.qbxr_score}</p>
-                          ) : (
-                            <Skeleton className="w-[75px] h-[75px]" />
-                          )}
-                        </>
-                      ) : (
-                        <div>
-                          <p className="text-xl md:text-3xl">No Data</p>
-                          {checkData(webData, vrData)}
-                        </div>
-                      )}
-                    </CardContent>
-                  </div>
-                  <CardContent className="flex md:flex-row flex-col justify-center md:space-x-4">
-                    <ScoreCard
-                      title={"Your Web Test Scores"}
-                      errMessage={"Take The Web Test On Your Profile Page"}
-                      isLoading={false}
-                      data={webData}
-                    />
-
-                    <div className="my-4" />
-
-                    <ScoreCard
-                      title={"Your VR Test Scores"}
-                      errMessage={"Take The VR Test On Your Profile Page"}
-                      isLoading={false}
-                      data={vrData}
-                    />
+      <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+        <ScrollToTop showMenu={showMenu} />
+        <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="home" />
+        <div className="flex items-center justify-center w-full h-full">
+          <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl w-full">
+            <CardHeader className="mt-2 shadow-none text-center">
+              <h1 className="text-primary font-bold text-4xl md:text-6xl font-Audiowide uppercase">Welcome to QBxR</h1>
+            </CardHeader>
+            {user?.role === "PLAYER" && (
+              <>
+                <div className="text-center justify-center font-Audiowide">
+                  <CardContent className="flex flex-col items-center justify-center text-foreground text-2xl md:text-4xl space-y-8">
+                    <p className="text-foreground-secondary">Your QBxR Score:</p>
+                    {qbxrData ? (
+                      <>
+                        {qbxrData.qbxr_score >= 0 ? (
+                          <p className="m-4 text-xl md:text-3xl">{qbxrData.qbxr_score}</p>
+                        ) : (
+                          <Skeleton className="w-[75px] h-[75px]" />
+                        )}
+                      </>
+                    ) : (
+                      <div>
+                        <p className="text-xl md:text-3xl">No Data</p>
+                        {checkData(webData, vrData)}
+                      </div>
+                    )}
                   </CardContent>
-                </>
-              )}
-              {user?.role === "nonplayer" && (
-                <FavoritesCard
-                  userId={myId}
-                  toggleBlur={toggleBlur}
-                  setOpenProfile={setOpenProfile}
-                  setShowProfile={setShowProfile}
-                />
-              )}
-            </Card>
-          </div>
+                </div>
+                <CardContent className="flex md:flex-row flex-col justify-center md:space-x-4">
+                  <ScoreCard
+                    title={"Your Web Test Scores"}
+                    errMessage={"Take The Web Test On Your Profile Page"}
+                    isLoading={false}
+                    data={webData}
+                  />
+
+                  <div className="my-4" />
+
+                  <ScoreCard
+                    title={"Your VR Test Scores"}
+                    errMessage={"Take The VR Test On Your Profile Page"}
+                    isLoading={false}
+                    data={vrData}
+                  />
+                </CardContent>
+              </>
+            )}
+            {user?.role === "NONPLAYER" && (
+              <FavoritesCard
+                userId={myId}
+                toggleBlur={toggleBlur}
+                setOpenProfile={setOpenProfile}
+                setShowProfile={setShowProfile}
+              />
+            )}
+          </Card>
         </div>
-        <ProfileCard
-          myId={myId}
-          userId={openProfile.userId}
-          name={openProfile.name}
-          school={openProfile.school}
-          score={openProfile.score}
-          isVisible={showProfile}
-          onClose={handleClose}
-        />
       </div>
-    );
-  }
+      <ProfileCard
+        myId={myId}
+        userId={openProfile.userId}
+        name={openProfile.name}
+        school={openProfile.school}
+        score={openProfile.score}
+        isVisible={showProfile}
+        onClose={handleClose}
+      />
+    </div>
+  );
 
   return content;
 };

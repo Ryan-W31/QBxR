@@ -1,5 +1,5 @@
 // user.controller is used to handle the setting and getting of the user's information.
-import { NOT_FOUND } from "../contants/http";
+import { NOT_FOUND } from "../constants/http";
 import User from "../models/user.model";
 import appAssert from "../utils/appAssert";
 import { hashValue } from "../utils/bcrypt";
@@ -30,9 +30,9 @@ type UpdateUserInfoParams = {
   lastname?: string;
   email?: string;
   school_organization?: string;
-  bio?: string;
-  birthday?: Date;
-  phone_number?: string;
+  bio?: string | null;
+  birthday?: Date | null;
+  phone_number?: string | null;
   status?: boolean;
   favorite?: string;
 };
@@ -48,41 +48,53 @@ export const updateUserInfoEndpoint = async ({
   status,
   favorite,
 }: UpdateUserInfoParams) => {
+  console.log(
+    "updateUserInfoEndpoint",
+    userId,
+    firstname,
+    lastname,
+    email,
+    school_organization,
+    bio,
+    birthday,
+    phone_number,
+    status,
+    favorite
+  );
   const update = [];
 
-  firstname ? update.push({ $set: { firstname } }) : null;
-  lastname ? update.push({ $set: { lastname } }) : null;
-  email ? update.push({ $set: { email } }) : null;
-  school_organization ? update.push({ $set: { school_organization } }) : null;
-  bio ? update.push({ $set: { bio } }) : null;
-  birthday ? update.push({ $set: { birthday } }) : null;
-  phone_number ? update.push({ $set: { phone_number } }) : null;
-  status ? update.push({ $set: { status } }) : null;
-  favorite
-    ? update.push({
-        $set: {
-          favorites: {
-            $cond: {
-              if: { $in: [favorite, "$favorites"] },
-              then: {
-                $filter: {
-                  input: "$favorites",
-                  as: "fav",
-                  cond: { $ne: ["$$fav", favorite] },
-                },
+  if (firstname !== undefined && firstname !== "") update.push({ $set: { firstname } });
+  if (lastname !== undefined && lastname !== "") update.push({ $set: { lastname } });
+  if (email !== undefined && email !== "") update.push({ $set: { email } });
+  if (school_organization !== undefined && school_organization !== "") update.push({ $set: { school_organization } });
+  if (bio !== undefined && bio !== "") update.push({ $set: { bio } });
+  if (birthday !== undefined && birthday !== null) update.push({ $set: { birthday } });
+  if (phone_number !== undefined && phone_number !== null) update.push({ $set: { phone_number } });
+  if (status !== undefined) update.push({ $set: { status } });
+  if (favorite !== undefined) {
+    update.push({
+      $set: {
+        favorites: {
+          $cond: {
+            if: { $in: [favorite, "$favorites"] },
+            then: {
+              $filter: {
+                input: "$favorites",
+                as: "fav",
+                cond: { $ne: ["$$fav", favorite] },
               },
-              else: { $concatArrays: ["$favorites", [favorite]] },
             },
+            else: { $concatArrays: ["$favorites", [favorite]] },
           },
         },
-      })
-    : null;
+      },
+    });
+  }
 
   const user = await User.findByIdAndUpdate(userId, update.length > 0 ? update : {}, {
     new: true,
   });
   appAssert(user, NOT_FOUND, "User not found");
-
   return { user: user.omitPassword() };
 };
 

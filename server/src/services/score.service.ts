@@ -2,7 +2,7 @@
 import Score from "../models/score.model";
 import User from "../models/user.model";
 import { formatWebScores, formatVRScores } from "../utils/utils";
-import { NOT_FOUND } from "../contants/http";
+import { NOT_FOUND } from "../constants/http";
 import appAssert from "../utils/appAssert";
 
 // setVRScore is used to set the user's VR scores.

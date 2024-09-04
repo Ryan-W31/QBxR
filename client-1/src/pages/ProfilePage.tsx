@@ -18,6 +18,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Star, StarOff, UserPen } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
 
 type User = {
   _id: string;
@@ -64,13 +65,16 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState<User | undefined>(undefined);
   const [profileScores, setProfileScores] = useState<Scores | undefined>(undefined);
+  const { toast } = useToast();
 
   const { userId } = useParams();
   const myId = useSelector(selectCurrentId);
   const isMyProfile = !userId || myId === userId;
+  console.log(isMyProfile, userId, myId);
 
   const primaryUser = useSelector(selectCurrentUser) ?? undefined;
   const primaryUserScores = useSelector(selectCurrentScores) ?? undefined;
+  console.log(primaryUser);
 
   const [updateInfo] = useUpdateUserInfoMutation();
 
@@ -157,7 +161,11 @@ const ProfilePage = () => {
     const target = e.target as HTMLSelectElement;
     const status = target.value.toLowerCase() === "true";
 
-    await updateInfo({ userId: myId, status });
+    try {
+      await updateInfo({ userId: myId, status }).unwrap();
+    } catch (err) {
+      toast({ variant: "destructive", description: "Failed updating status." });
+    }
   };
 
   // Handle the favorite event
@@ -189,8 +197,8 @@ const ProfilePage = () => {
         <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
           <ScrollToTop showMenu={showMenu} />
           <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="profile" />
-          <div className="fade-in mx-auto flex flex-col md:flex-row my-5 p-5">
-            <Card className="md:w-1/3 w-full flex-col bg-dark-secondary/80 p-3 border-t-4 border-primary rounded-lg text-center font-Audiowide relative">
+          <div className=" mx-auto flex flex-col md:flex-row my-5 p-5">
+            <Card className="md:w-1/3 w-full flex-col p-3 border-t-4 border-primary rounded-lg text-center font-Audiowide uppercase relative">
               {!isMyProfile && (
                 <Button
                   variant="ghost"
@@ -206,7 +214,7 @@ const ProfilePage = () => {
                 </Button>
               )}
               <div className="image overflow-hidden p-3">
-                <div className="h-60 w-60 text-foreground bg-primary border border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
+                <div className="h-60 w-60 text-foreground bg-primary border-2 border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
                   {getInitials(`${profileData?.firstname} ${profileData?.lastname}`)}
                 </div>
               </div>
@@ -232,11 +240,15 @@ const ProfilePage = () => {
                         <select
                           className={cn(
                             profileData?.status ? "bg-primary" : "bg-red-600",
-                            "text-foreground py-1 px-2 rounded text-sm"
+                            "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
                           )}
-                          onChange={() => handleStatusChange}
+                          onChange={handleStatusChange}
                         >
-                          {profileData?.status ? <option selected>Active</option> : <option selected>Inactive</option>}
+                          {profileData?.status ? (
+                            <option defaultValue={"true"}>Active</option>
+                          ) : (
+                            <option defaultValue={"false"}>Inactive</option>
+                          )}
                           <option value={"true"}>Active</option>
                           <option value={"false"}>Inactive</option>
                         </select>
@@ -244,7 +256,7 @@ const ProfilePage = () => {
                         <div
                           className={cn(
                             profileData?.status ? "bg-primary" : "bg-red-600",
-                            "text-foreground py-1 px-2 rounded text-sm"
+                            "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
                           )}
                         >
                           {profileData?.status ? "Active" : "Inactive"}
@@ -263,16 +275,16 @@ const ProfilePage = () => {
                 </ul>
               </CardContent>
             </Card>
-            <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide">
-              <Card className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-primary">
+            <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide uppercase font-semibold">
+              <Card className="pt-0 p-4 rounded-lg border-t-4 border-primary relative">
                 {isMyProfile && (
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute top-0 right-0 text-xl hover:bg-transparent"
+                    className="absolute top-3 right-3 cursor-pointer hover:text-primary hover:bg-transparent z-50"
                     onClick={handleEditProfile}
                   >
-                    <UserPen />
+                    <UserPen size={24} />
                   </Button>
                 )}
                 <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-foreground mt-0 text-center relative overflow-visible">
@@ -281,11 +293,11 @@ const ProfilePage = () => {
                 <CardContent className="text-foreground-secondary">
                   <div className="grid md:grid-cols-2 text-lg">
                     <div className="grid grid-cols-2">
-                      <div className="px-2 py-2 font-semibold">Name</div>
+                      <div className="px-2 py-2">Name</div>
                       <div className="px-2 py-2">{profileData?.firstname + " " + profileData?.lastname}</div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-2 py-2 font-semibold">Email</div>
+                      <div className="px-2 py-2">Email</div>
                       <a
                         className="px-2 py-2 text-foreground hover:text-primary whitespace-nowrap overflow-hidden text-ellipsis block"
                         href={"mailto:" + profileData?.email}
@@ -294,7 +306,7 @@ const ProfilePage = () => {
                       </a>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-2 py-2 font-semibold">Phone No.</div>
+                      <div className="px-2 py-2">Phone No.</div>
                       {profileData?.phone_number !== undefined ? (
                         <div className="px-2 py-2">{formatPhoneNumberIntl(profileData?.phone_number)}</div>
                       ) : (
@@ -302,7 +314,7 @@ const ProfilePage = () => {
                       )}
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-2 py-2 font-semibold">Birthday</div>
+                      <div className="px-2 py-2">Birthday</div>
                       {profileData?.birthday !== undefined ? (
                         <div className="px-2 py-2">
                           {formatInTimeZone(new Date(profileData?.birthday), "UTC", "PP")}
@@ -317,7 +329,7 @@ const ProfilePage = () => {
 
               <div className="my-4"></div>
 
-              <Card className="bg-dark-secondary/80 p-4 rounded-lg border-t-4 border-primary">
+              <Card className=" p-4 rounded-lg border-t-4 border-primary">
                 {profileData?.role === "player" && (
                   <>
                     <div className="text-center mb-6">

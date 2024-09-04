@@ -1,5 +1,6 @@
 import { apiSlice } from "../../app/api/apiSlice";
 import { authApiSlice } from "../auth/authApiSlice";
+import { setCredentials } from "../auth/authSlice";
 
 interface LeaderboardUser {
   userId: string;
@@ -20,19 +21,42 @@ interface User {
   birthday: string;
   phone_number: string;
   status: boolean;
+  score: number;
   favorites: string[];
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface AuthResponse {
+  user: User;
+  scores: any;
 }
 
 type LeaderboardResponse = LeaderboardUser[];
 // User API slice. This slice contains the signUp, getLeaderboard, updateUserInfo, updateUserPassword, getUserById, and getUserFavorites endpoints.
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    signUp: builder.mutation({
-      query: (body) => ({
-        url: "/user/signup",
-        method: "POST",
-        body: { ...body },
-      }),
+    getUser: builder.query<AuthResponse, void>({
+      query: () => "/user",
+      keepUnusedDataFor: 60,
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          const response = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              userId: response.data.user._id,
+              user: response.data.user,
+              scores: response.data.scores,
+            })
+          );
+        } catch (err) {
+          console.error("Error when refreshing info:", err);
+        }
+      },
+      transformResponse: (response: AuthResponse) => {
+        return response;
+      },
     }),
     getLeaderboard: builder.query<LeaderboardUser[], void>({
       query: () => "/user/leaderboard",
@@ -53,14 +77,19 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserInfo: builder.mutation({
       query: (body) => ({
-        url: `/user/updateinfo/${body.userId}`,
+        url: `/user/update/info/${body.userId}`,
         method: "PATCH",
         body: body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
-          await queryFulfilled;
-          dispatch(authApiSlice.endpoints.refresh.initiate());
+          const response = await queryFulfilled;
+          console.log(response);
+          dispatch(
+            setCredentials({
+              user: response.data.user,
+            })
+          );
           console.log("User info updated");
         } catch (err) {
           console.error("Error updating user info:", err);
@@ -69,7 +98,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserPassword: builder.mutation({
       query: (body) => ({
-        url: `/user/updatepassword/${body.userId}`,
+        url: `/user/update/password/${body.userId}`,
         method: "PATCH",
         body: body,
       }),
@@ -84,7 +113,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       },
     }),
     getUserById: builder.query<User, string | undefined>({
-      query: (userId) => `/user/${userId}`,
+      query: (userId) => `/user/id/${userId}`,
       keepUnusedDataFor: 60,
       transformResponse: (response: User) => {
         return {
@@ -99,6 +128,10 @@ export const userApiSlice = apiSlice.injectEndpoints({
           phone_number: response.phone_number,
           status: response.status,
           favorites: response.favorites,
+          isVerified: response.isVerified,
+          score: response.score,
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt,
         };
       },
     }),
@@ -121,7 +154,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
-        url: `/user/delete/${id}`,
+        url: `/user/${id}`,
         method: "DELETE",
       }),
       transformResponse: (response) => {
@@ -132,7 +165,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useSignUpMutation,
+  useGetUserQuery,
   useGetLeaderboardQuery,
   useUpdateUserInfoMutation,
   useUpdateUserPasswordMutation,

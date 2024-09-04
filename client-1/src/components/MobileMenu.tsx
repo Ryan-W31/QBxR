@@ -2,8 +2,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
 import { currentPageStyle } from "../lib/utils";
-import usePersist from "../hooks/auth/usePersist";
-import { X, House, Info, CircleHelp, Trophy, Search, Settings, User, LogOut } from "lucide-react";
+import { House, Info, CircleHelp, Trophy, Search, Settings, User, LogOut } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 import { Button } from "./ui/button";
@@ -17,7 +16,6 @@ type MobileMenuProps = {
 };
 const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: MobileMenuProps) => {
   const [logout, { isLoading }] = useLogoutMutation();
-  const [persist, setPersist] = usePersist();
   const { toast } = useToast();
 
   const navigate = useNavigate();
@@ -40,7 +38,6 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: Mobile
 
   // Handle the logout event. If the user is logged out, display a success message and navigate to the login page.
   const handleLogout = () => {
-    if (persist) setPersist(false);
     logout();
 
     if (!isLoading) {

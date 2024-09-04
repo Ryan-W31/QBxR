@@ -1,7 +1,5 @@
-import { useCallback } from "react";
 import { Settings, User } from "lucide-react";
 import { useLogoutMutation } from "../hooks/auth/authApiSlice";
-import usePersist from "../hooks/auth/usePersist";
 import { useNavigate } from "react-router-dom";
 import { LogOut } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,29 +9,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "./ui/button";
 // ProfileDropdown component. This component displays the profile dropdown for the application.
 const ProfileDropdown = () => {
-  const [logout, { isLoading }] = useLogoutMutation();
-  const [persist, setPersist] = usePersist();
+  const [logOut, { isLoading }] = useLogoutMutation();
   const { toast } = useToast();
 
   const navigate = useNavigate();
 
   // Handle the logout event. If the user is logged out, display a success message and navigate to the login page
-  const handleLogout = useCallback(
-    (event: Event) => {
-      event.preventDefault();
-      if (persist) setPersist(false);
-      logout();
-
-      if (!isLoading) {
-        toast({ variant: "destructive", description: "You have successfully logged out." });
-        navigate("/login");
-      }
-    },
-    [logout, isLoading, setPersist, persist, navigate, toast]
-  );
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast({ variant: "destructive", description: "You have successfully logged out." });
+      navigate("/login");
+    } catch (error) {
+      toast({ variant: "destructive", description: "An error occurred while logging out. Please try again." });
+    }
+  };
 
   // If the user is logging out, display a loading message
   if (isLoading) return <div>Logging out...</div>;
@@ -44,21 +36,19 @@ const ProfileDropdown = () => {
       <DropdownMenu>
         <DropdownMenuTrigger>
           <div className="w-[120px] flex items-center justify-end">
-            <Button className="flex items-center p-0 h-9 w-9">
-              <div className="flex items-center justify-center h-9 w-9 bg-transparent rounded-full border-2 border-foreground">
-                <User size={24} />
-              </div>
-            </Button>
+            <div className="flex items-center justify-center h-9 w-9 bg-primary hover:bg-primary-hover rounded-full border-2 border-foreground">
+              <User size={24} />
+            </div>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="p-0 bg-background-secondary gap-y-2 w-48">
+        <DropdownMenuContent className="p-0 bg-background-secondary gap-y-2 w-48 uppercase font-semibold">
           <DropdownMenuItem
             onSelect={() => navigate("/profile")}
             className="flex items-center gap-2 rounded-b-none hover:!bg-primary w-full"
           >
             <User size={24} className="text-foreground" />
 
-            <span className="text-foreground font-Audiowide text-lg">My Profile</span>
+            <span className="text-foreground font-Audiowide text-base">My Profile</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => navigate("/settings")}
@@ -66,7 +56,7 @@ const ProfileDropdown = () => {
           >
             <Settings size={24} className="text-foreground" />
 
-            <span className="text-foreground font-Audiowide text-lg">Settings</span>
+            <span className="text-foreground font-Audiowide text-base">Settings</span>
           </DropdownMenuItem>
           <hr className="border-light-primary" />
           <DropdownMenuItem
@@ -75,7 +65,7 @@ const ProfileDropdown = () => {
           >
             <LogOut size={24} className="text-foreground" />
 
-            <span className="text-foreground font-Audiowide text-lg">Log Out</span>
+            <span className="text-foreground font-Audiowide text-base">Log Out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

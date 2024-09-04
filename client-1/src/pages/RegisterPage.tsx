@@ -11,8 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useSignUpMutation } from "@/hooks/users/userApiSlice";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSignUpMutation } from "@/hooks/auth/authApiSlice";
 
 interface CustomError {
   status: number;
@@ -43,7 +43,7 @@ const RegisterPage = () => {
     },
   });
 
-  const [signUp, { isLoading, isSuccess, isError, error }] = useSignUpMutation();
+  const [signUp, { isLoading }] = useSignUpMutation();
 
   // Toggle the password visibility
   const togglePasswordVisibility = () => {
@@ -67,12 +67,10 @@ const RegisterPage = () => {
 
   // Handle the login event
   const onSubmit = async (data: z.infer<typeof registerFormSchema>) => {
-    console.log(data);
-    await signUp({ ...data });
-
-    if (isSuccess) {
-      navigate("/verify", { replace: true });
-    } else if (isError) {
+    try {
+      await signUp({ ...data }).unwrap();
+      navigate("/email", { replace: true });
+    } catch (error) {
       const err = error as CustomError;
       setShowError(true);
       setCustomError(err.data?.message || "Sign up failed. Please try again later.");
@@ -249,7 +247,14 @@ const RegisterPage = () => {
               <div className="flex items-center justify-start text-sm mt-4">
                 <Checkbox id="tnc" />
                 <label htmlFor="tnc" className="ml-2 text-foreground">
-                  I agree to the <Link to="/terms">Terms of Service</Link> and <Link to="/privacy">Privacy Policy</Link>
+                  I agree to the{" "}
+                  <Link to="/terms" className="text-primary">
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link to="/privacy" className="text-primary">
+                    Privacy Policy
+                  </Link>
                 </label>
               </div>
               <div className="text-center mt-4">
@@ -261,7 +266,7 @@ const RegisterPage = () => {
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 size={24} className="mr-2 animate-spin" /> Signing In...
+                      <Loader2 size={24} className="mr-2 animate-spin" /> Signing Up...
                     </>
                   ) : (
                     "Sign Up"

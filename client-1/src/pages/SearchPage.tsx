@@ -217,7 +217,7 @@ const SearchPage = () => {
                       <div className="flex justify-center">
                         <Button
                           variant="link"
-                          className="flex justify-center items-center gap-2 font-Audiowide text-foreground py-0"
+                          className="flex justify-center items-center gap-2 font-semibold font-Audiowide text-foreground py-0 uppercase"
                         >
                           {col.title}
                           <ArrowDownUp />
