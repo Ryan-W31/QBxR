@@ -53,7 +53,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
             })
           );
         } catch (err) {
-          console.log(err);
+          throw err;
         }
       },
       transformResponse: (response: AuthResponse) => {

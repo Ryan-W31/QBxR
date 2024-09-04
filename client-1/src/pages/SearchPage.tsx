@@ -194,43 +194,45 @@ const SearchPage = () => {
       <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
         <ScrollToTop showMenu={showMenu} />
         <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="search" />
-        <Card className="fade-in container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 p-5 rounded-lg justify-center border-t-4 border-primary">
-          <CardHeader className="mt-2 bg-transparent shadow-none">
-            <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4">Search</h1>
-          </CardHeader>
-          <CardContent>
-            <Input
-              placeholder="Search Players, Coaches, Schools..."
-              className="bg-foreground text-background focus:border-primary focus:border-2"
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoComplete="nope"
-            />
-            <div className="my-4" />
-            <SearchPageFilterMenu getFilters={handleFilters} />
-          </CardContent>
-          <CardContent className="relative overflow-x-auto border-2 rounded-lg overflow-hidden border-primary font-Audiowide p-0">
-            <table className="table-auto w-full text-sm text-center text-foreground divide-y divide-primary overflow-x-auto">
-              <thead className="text-xs text-foreground bg-dark-secondary">
-                <tr>
-                  {cols.map((col) => (
-                    <th className="py-3 cursor-pointer" key={col.key} onClick={() => handleSort(col.key)}>
-                      <div className="flex justify-center">
-                        <Button
-                          variant="link"
-                          className="flex justify-center items-center gap-2 font-semibold font-Audiowide text-foreground py-0 uppercase"
-                        >
-                          {col.title}
-                          <ArrowDownUp />
-                        </Button>
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-primary">{tableContent}</tbody>
-            </table>
-          </CardContent>
-        </Card>
+        <div className="flex items-center justify-center w-full h-full">
+          <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl w-full">
+            <CardHeader className="mt-2 bg-transparent shadow-none">
+              <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4 uppercase">Search</h1>
+            </CardHeader>
+            <CardContent>
+              <Input
+                placeholder="Search Players, Coaches, Schools..."
+                className="bg-foreground text-background focus:border-primary focus:border-2"
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoComplete="nope"
+              />
+              <div className="my-4" />
+              <SearchPageFilterMenu getFilters={handleFilters} />
+            </CardContent>
+            <CardContent className="relative overflow-x-auto border-2 rounded-lg overflow-hidden border-primary font-Audiowide p-0">
+              <table className="table-auto w-full text-sm text-center text-foreground divide-y divide-primary overflow-x-auto">
+                <thead className="text-xs text-foreground bg-dark-secondary">
+                  <tr>
+                    {cols.map((col) => (
+                      <th className="py-3 cursor-pointer" key={col.key} onClick={() => handleSort(col.key)}>
+                        <div className="flex justify-center">
+                          <Button
+                            variant="link"
+                            className="flex justify-center items-center gap-2 font-semibold font-Audiowide text-foreground py-0 uppercase"
+                          >
+                            {col.title}
+                            <ArrowDownUp />
+                          </Button>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-primary">{tableContent}</tbody>
+              </table>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       <ProfileCard
         myId={myId}

@@ -109,28 +109,30 @@ const HomePage = () => {
                       </>
                     ) : (
                       <div>
-                        <p className="text-xl md:text-3xl">No Data</p>
+                        <p className="text-xl md:text-2xl">No Data</p>
                         {checkData(webData, vrData)}
                       </div>
                     )}
                   </CardContent>
                 </div>
                 <CardContent className="flex md:flex-row flex-col justify-center md:space-x-4">
-                  <ScoreCard
-                    title={"Your Web Test Scores"}
-                    errMessage={"Take The Web Test On Your Profile Page"}
-                    isLoading={false}
-                    data={webData}
-                  />
-
+                  <div className="flex items-center justify-center md:w-1/2">
+                    <ScoreCard
+                      title={"Web Test"}
+                      errMessage={"Take The Web Test On Your Profile Page"}
+                      isLoading={false}
+                      data={webData}
+                    />
+                  </div>
                   <div className="my-4" />
-
-                  <ScoreCard
-                    title={"Your VR Test Scores"}
-                    errMessage={"Take The VR Test On Your Profile Page"}
-                    isLoading={false}
-                    data={vrData}
-                  />
+                  <div className="flex items-center justify-center md:w-1/2">
+                    <ScoreCard
+                      title={"VR Test"}
+                      errMessage={"Take The VR Test On Your Profile Page"}
+                      isLoading={false}
+                      data={vrData}
+                    />
+                  </div>
                 </CardContent>
               </>
             )}

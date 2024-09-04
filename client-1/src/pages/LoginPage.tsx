@@ -44,7 +44,7 @@ const LoginPage = () => {
   // Handle the login event
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     try {
-      const { data: response } = await login({ ...data });
+      const response = await login({ ...data }).unwrap();
       const isVerified = response?.user?.isVerified;
       navigate(isVerified ? "/home" : "/email", { replace: true });
     } catch (error) {

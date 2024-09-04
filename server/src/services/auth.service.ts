@@ -20,13 +20,18 @@ import { sendMail } from "../utils/sendMail";
 import { getPasswordResetTemplate, getVerifyEmailTemplate } from "../utils/emailTemplates";
 import { hashValue } from "../utils/bcrypt";
 import { userRoleSchema } from "../controllers/auth.schemas";
-import app from "../app";
 
 type LoginParams = {
   email: string;
   password: string;
   userAgent?: string;
 };
+
+interface ScoreObject {
+  qbxr?: { qbxr_score: number; rank: number };
+  web?: { title: string; score: number }[];
+  vr?: { title: string; score: number }[];
+}
 export const loginEndpoint = async ({ email, password, userAgent }: LoginParams) => {
   const user = await User.findOne({ email: email.toLowerCase() });
   appAssert(user, UNAUTHORIZED, "Invalid username and/or password");
@@ -56,23 +61,14 @@ export const loginEndpoint = async ({ email, password, userAgent }: LoginParams)
   }
 
   const scores = await Score.findOne({ userId: user._id });
-  var obj = {
-    qbxr: { qbxr_score: 0, rank: 0 },
-    web: [{}],
-    vr: [{}],
-  };
-  var rank = null;
-  var qbxr_score = null;
+  var obj: ScoreObject = {};
 
-  if (scores?.qbxr_score === undefined) {
-    rank = await Score.where("qbxr_score").gt(0).countDocuments();
-    qbxr_score = 0;
-  } else {
-    rank = await Score.where("qbxr_score").gt(scores.qbxr_score).countDocuments();
-    qbxr_score = scores.qbxr_score;
+  if (scores?.qbxr_score !== undefined) {
+    const rank = await Score.where("qbxr_score").gt(scores.qbxr_score).countDocuments();
+    const qbxr_score = scores.qbxr_score;
+    obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
   }
 
-  obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
   obj.web = formatWebScores(scores);
   obj.vr = formatVRScores(scores);
 
@@ -127,7 +123,7 @@ export const signUpEndpoint = async ({
     status: true,
   });
 
-  if (role === "PLAYER") await Score.create({ userId: user._id, qbxr_score: 0 });
+  if (role === "PLAYER") await Score.create({ userId: user._id });
 
   const userId = user._id;
   const verificationCode = await VerificationCodeModel.create({

@@ -35,9 +35,9 @@ type User = {
 };
 
 type Scores = {
-  qbxr: { qbxr_score: number; rank: number };
-  web: { title: string; score: number }[];
-  vr: { title: string; score: number }[];
+  qbxr?: { qbxr_score: number; rank: number };
+  web?: { title: string; score: number }[];
+  vr?: { title: string; score: number }[];
 };
 
 type Profile = {
@@ -197,214 +197,216 @@ const ProfilePage = () => {
         <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
           <ScrollToTop showMenu={showMenu} />
           <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="profile" />
-          <div className=" mx-auto flex flex-col md:flex-row my-5 p-5">
-            <Card className="md:w-1/3 w-full flex-col p-3 border-t-4 border-primary rounded-lg text-center font-Audiowide uppercase relative">
-              {!isMyProfile && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-3 right-3 rounded-lg text-sm w-8 h-8 ml-auto inline-flex items-center justify-center hover:bg-transparent"
-                  onClick={handleFavorite}
-                >
-                  {isFavorite ? (
-                    <StarOff className="text-2xl text-[#DBAC34]/80" />
-                  ) : (
-                    <Star className="text-2xl text-[#DBAC34]/80" />
-                  )}
-                </Button>
-              )}
-              <div className="image overflow-hidden p-3">
-                <div className="h-60 w-60 text-foreground bg-primary border-2 border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
-                  {getInitials(`${profileData?.firstname} ${profileData?.lastname}`)}
-                </div>
-              </div>
-              <CardHeader className="mt-2 bg-transparent shadow-none">
-                <h1 className="text-foreground font-bold text-xl leading-8 my-1">
-                  {profileData?.firstname + " " + profileData?.lastname}
-                </h1>
-              </CardHeader>
-              <CardContent className="p-2">
-                <h3 className="text-foreground-secondary font-lg text-semibold leading-6">
-                  {profileData?.school_organization}
-                </h3>
-                <div>
-                  {profileData?.bio !== undefined && (
-                    <p className="text-sm text-foreground-secondary leading-6">{profileData?.bio}</p>
-                  )}
-                </div>
-                <ul className="bg-dark-secondary text-foreground-secondary py-2 px-3 mt-3 divide-y rounded border-2 border-primary">
-                  <li className="flex items-center py-3">
-                    <span>Status</span>
-                    <span className="ml-auto">
-                      {isMyProfile ? (
-                        <select
-                          className={cn(
-                            profileData?.status ? "bg-primary" : "bg-red-600",
-                            "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
-                          )}
-                          onChange={handleStatusChange}
-                        >
-                          {profileData?.status ? (
-                            <option defaultValue={"true"}>Active</option>
-                          ) : (
-                            <option defaultValue={"false"}>Inactive</option>
-                          )}
-                          <option value={"true"}>Active</option>
-                          <option value={"false"}>Inactive</option>
-                        </select>
-                      ) : (
-                        <div
-                          className={cn(
-                            profileData?.status ? "bg-primary" : "bg-red-600",
-                            "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
-                          )}
-                        >
-                          {profileData?.status ? "Active" : "Inactive"}
-                        </div>
-                      )}
-                    </span>
-                  </li>
-                  <li className="flex items-center py-3">
-                    <span>Age</span>
-                    {profileData?.birthday !== undefined ? (
-                      <span className="ml-auto">{getAge(profileData?.birthday)} years old</span>
-                    ) : (
-                      <span className="ml-auto">N/A</span>
-                    )}
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
-            <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide uppercase font-semibold">
-              <Card className="pt-0 p-4 rounded-lg border-t-4 border-primary relative">
-                {isMyProfile && (
+          <div className="flex items-center justify-center w-full h-full">
+            <div className="flex flex-col md:flex-row my-5 mx-6 mt-10 p-6 max-w-screen-2xl w-full">
+              <Card className="md:w-1/3 w-full flex-col p-3 border-t-4 border-primary rounded-lg text-center font-Audiowide uppercase relative">
+                {!isMyProfile && (
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute top-3 right-3 cursor-pointer hover:text-primary hover:bg-transparent z-50"
-                    onClick={handleEditProfile}
+                    className="absolute top-3 right-3 rounded-lg text-sm w-8 h-8 ml-auto inline-flex items-center justify-center hover:bg-transparent"
+                    onClick={handleFavorite}
                   >
-                    <UserPen size={24} />
+                    {isFavorite ? (
+                      <StarOff className="text-2xl text-[#DBAC34]/80" />
+                    ) : (
+                      <Star className="text-2xl text-[#DBAC34]/80" />
+                    )}
                   </Button>
                 )}
-                <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-foreground mt-0 text-center relative overflow-visible">
-                  About
-                </CardHeader>
-                <CardContent className="text-foreground-secondary">
-                  <div className="grid md:grid-cols-2 text-lg">
-                    <div className="grid grid-cols-2">
-                      <div className="px-2 py-2">Name</div>
-                      <div className="px-2 py-2">{profileData?.firstname + " " + profileData?.lastname}</div>
-                    </div>
-                    <div className="grid grid-cols-2">
-                      <div className="px-2 py-2">Email</div>
-                      <a
-                        className="px-2 py-2 text-foreground hover:text-primary whitespace-nowrap overflow-hidden text-ellipsis block"
-                        href={"mailto:" + profileData?.email}
-                      >
-                        {profileData?.email}
-                      </a>
-                    </div>
-                    <div className="grid grid-cols-2">
-                      <div className="px-2 py-2">Phone No.</div>
-                      {profileData?.phone_number !== undefined ? (
-                        <div className="px-2 py-2">{formatPhoneNumberIntl(profileData?.phone_number)}</div>
-                      ) : (
-                        <div className="px-2 py-2">N/A</div>
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2">
-                      <div className="px-2 py-2">Birthday</div>
-                      {profileData?.birthday !== undefined ? (
-                        <div className="px-2 py-2">
-                          {formatInTimeZone(new Date(profileData?.birthday), "UTC", "PP")}
-                        </div>
-                      ) : (
-                        <div className="px-2 py-2">N/A</div>
-                      )}
-                    </div>
+                <div className="image overflow-hidden p-3">
+                  <div className="h-60 w-60 text-foreground bg-primary border-2 border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
+                    {getInitials(`${profileData?.firstname} ${profileData?.lastname}`)}
                   </div>
+                </div>
+                <CardHeader className="py-0 bg-transparent shadow-none">
+                  <h1 className="text-foreground font-bold text-xl my-1">
+                    {profileData?.firstname + " " + profileData?.lastname}
+                  </h1>
+                </CardHeader>
+                <CardContent className="p-2 space-y-2">
+                  <h3 className="text-foreground-secondary text-sm font-semibold">
+                    {profileData?.school_organization}
+                  </h3>
+                  <div>
+                    {profileData?.bio !== undefined && (
+                      <p className="text-sm text-foreground-secondary">{profileData?.bio}</p>
+                    )}
+                  </div>
+                  <ul className="bg-dark-secondary text-foreground-secondary py-2 px-3 mt-3 divide-y rounded border-2 border-primary">
+                    <li className="flex items-center py-3">
+                      <span>Status</span>
+                      <span className="ml-auto">
+                        {isMyProfile ? (
+                          <select
+                            className={cn(
+                              profileData?.status ? "bg-primary" : "bg-red-600",
+                              "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
+                            )}
+                            onChange={handleStatusChange}
+                          >
+                            {profileData?.status ? (
+                              <option defaultValue={"true"}>Active</option>
+                            ) : (
+                              <option defaultValue={"false"}>Inactive</option>
+                            )}
+                            <option value={"true"}>Active</option>
+                            <option value={"false"}>Inactive</option>
+                          </select>
+                        ) : (
+                          <div
+                            className={cn(
+                              profileData?.status ? "bg-primary" : "bg-red-600",
+                              "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
+                            )}
+                          >
+                            {profileData?.status ? "Active" : "Inactive"}
+                          </div>
+                        )}
+                      </span>
+                    </li>
+                    <li className="flex items-center py-3">
+                      <span>Age</span>
+                      {profileData?.birthday !== undefined ? (
+                        <span className="ml-auto">{getAge(profileData?.birthday)} years old</span>
+                      ) : (
+                        <span className="ml-auto">N/A</span>
+                      )}
+                    </li>
+                  </ul>
                 </CardContent>
               </Card>
-
-              <div className="my-4"></div>
-
-              <Card className=" p-4 rounded-lg border-t-4 border-primary">
-                {profileData?.role === "player" && (
-                  <>
-                    <div className="text-center mb-6">
-                      <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-foreground m-2">
-                        Your QBxR Score
-                      </CardHeader>
-                      <CardContent className="p-2">
-                        {!isLoadingQBxRData ? (
-                          <>
-                            {profileScores?.qbxr?.qbxr_score ? (
-                              <p className="mx-5 text-5xl text-primary">{profileScores?.qbxr?.qbxr_score}</p>
-                            ) : (
-                              <div>
-                                <p className="m-4 text-3xl text-foreground">No Data</p>
-                                {checkData(profileScores?.web, profileScores?.vr)}
-                              </div>
-                            )}
-                          </>
+              <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide uppercase font-semibold">
+                <Card className="pt-0 p-4 rounded-lg border-t-4 border-primary relative">
+                  {isMyProfile && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-3 right-3 cursor-pointer hover:text-primary hover:bg-transparent z-50"
+                      onClick={handleEditProfile}
+                    >
+                      <UserPen size={24} />
+                    </Button>
+                  )}
+                  <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-foreground mt-0 text-center relative overflow-visible">
+                    About
+                  </CardHeader>
+                  <CardContent className="text-foreground-secondary">
+                    <div className="grid md:grid-cols-2 text-lg">
+                      <div className="grid grid-cols-2">
+                        <div className="px-2 py-2">Name</div>
+                        <div className="px-2 py-2">{profileData?.firstname + " " + profileData?.lastname}</div>
+                      </div>
+                      <div className="grid grid-cols-2">
+                        <div className="px-2 py-2">Email</div>
+                        <a
+                          className="px-2 py-2 text-foreground hover:text-primary whitespace-nowrap overflow-hidden text-ellipsis block"
+                          href={"mailto:" + profileData?.email}
+                        >
+                          {profileData?.email}
+                        </a>
+                      </div>
+                      <div className="grid grid-cols-2">
+                        <div className="px-2 py-2">Phone No.</div>
+                        {profileData?.phone_number !== undefined ? (
+                          <div className="px-2 py-2">{formatPhoneNumberIntl(profileData?.phone_number)}</div>
                         ) : (
-                          <Skeleton className="w-[75px] h-[75px]" />
+                          <div className="px-2 py-2">N/A</div>
                         )}
-
-                        <p className="text-foreground-secondary">
-                          Your QBxR score is calculated by taking the average of your Web and VR test scores.
-                        </p>
-                      </CardContent>
+                      </div>
+                      <div className="grid grid-cols-2">
+                        <div className="px-2 py-2">Birthday</div>
+                        {profileData?.birthday !== undefined ? (
+                          <div className="px-2 py-2">
+                            {formatInTimeZone(new Date(profileData?.birthday), "UTC", "PP")}
+                          </div>
+                        ) : (
+                          <div className="px-2 py-2">N/A</div>
+                        )}
+                      </div>
                     </div>
-                    <CardContent className="flex md:flex-row flex-col justify-evenly md:space-x-4 p-2">
-                      <div className="flex flex-col">
-                        <ScoreCard
-                          title={"Your Web Test Scores"}
-                          errMessage={"Take The Web Test"}
-                          isLoading={false}
-                          data={profileScores?.web}
-                        />
-                        {isMyProfile && (
-                          <Link to="/web">
-                            <Button className="w-full py-2 bg-primary hover:bg-green-secondary text-foreground rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
-                              {profileScores?.web === undefined || profileScores?.web?.length === 0
-                                ? "Take The Web Test"
-                                : "Retake The Web Test"}
-                            </Button>
-                          </Link>
-                        )}
+                  </CardContent>
+                </Card>
+
+                <div className="my-4"></div>
+
+                <Card className="p-4 rounded-lg border-t-4 border-primary">
+                  {profileData?.role === "PLAYER" && (
+                    <>
+                      <div className="text-center mb-6">
+                        <CardHeader className="pb-0 bg-tranparent shadow-none text-3xl font-bold text-foreground m-2">
+                          Your QBxR Score
+                        </CardHeader>
+                        <CardContent className="p-2 space-y-4">
+                          {isMyProfile || !isLoadingQBxRData ? (
+                            <>
+                              {profileScores?.qbxr ? (
+                                <p className="mx-5 text-5xl text-primary">{profileScores?.qbxr?.qbxr_score}</p>
+                              ) : (
+                                <div>
+                                  <p className="mb-4 text-3xl text-foreground">No Data</p>
+                                  {checkData(profileScores?.web, profileScores?.vr)}
+                                </div>
+                              )}
+                            </>
+                          ) : (
+                            <Skeleton className="w-[75px] h-[75px]" />
+                          )}
+
+                          <p className="text-sm text-foreground-secondary">
+                            Your QBxR score is calculated using you WEB and VR test scores and a machine learning model.
+                          </p>
+                        </CardContent>
                       </div>
-                      <div className="my-4 md:my-0"></div>
-                      <div className="flex flex-col justify-center">
-                        <ScoreCard
-                          title={"Your VR Test Scores"}
-                          errMessage={"Take The VR Test"}
-                          isLoading={false}
-                          data={profileScores?.vr}
-                        />
-                        {isMyProfile && (
-                          <Link to="/vr">
-                            <Button className="w-full py-2 bg-primary hover:bg-green-secondary text-foreground rounded-full font-semibold text-lg mt-4 text-center !font-Audiowide">
-                              {profileScores?.vr === undefined || profileScores?.vr?.length === 0
-                                ? "Take The VR Test"
-                                : "Retake The VR Test"}
+                      <CardContent className="flex md:flex-row flex-col justify-center md:space-x-4">
+                        <div className="flex flex-col items-center justify-center md:w-1/2 space-y-2">
+                          <ScoreCard
+                            title={"Web Test"}
+                            errMessage={"Take The Web Test"}
+                            isLoading={false}
+                            data={profileScores?.web}
+                          />
+                          {isMyProfile && (
+                            <Button size="lg" asChild>
+                              <Link to="/web">
+                                {profileScores?.web === undefined || profileScores?.web?.length === 0
+                                  ? "Take The Web Test"
+                                  : "Retake The Web Test"}
+                              </Link>
                             </Button>
-                          </Link>
-                        )}
-                      </div>
-                    </CardContent>
-                  </>
-                )}
-                {profileData?.role === "NONPLAYER" && (
-                  <FavoritesCard
-                    userId={profileData?._id}
-                    toggleBlur={toggleBlur}
-                    setOpenProfile={setOpenProfile}
-                    setShowProfile={setShowProfile}
-                  />
-                )}
-              </Card>
+                          )}
+                        </div>
+                        <div className="my-4 md:my-0"></div>
+                        <div className="flex flex-col items-center justify-center md:w-1/2 space-y-2">
+                          <ScoreCard
+                            title={"VR Test"}
+                            errMessage={"Take The VR Test"}
+                            isLoading={false}
+                            data={profileScores?.vr}
+                          />
+                          {isMyProfile && (
+                            <Button size="lg" asChild>
+                              <Link to="/vr">
+                                {profileScores?.vr === undefined || profileScores?.vr?.length === 0
+                                  ? "Take The VR Test"
+                                  : "Retake The VR Test"}
+                              </Link>
+                            </Button>
+                          )}
+                        </div>
+                      </CardContent>
+                    </>
+                  )}
+                  {profileData?.role === "NONPLAYER" && (
+                    <FavoritesCard
+                      userId={profileData?._id}
+                      toggleBlur={toggleBlur}
+                      setOpenProfile={setOpenProfile}
+                      setShowProfile={setShowProfile}
+                    />
+                  )}
+                </Card>
+              </div>
             </div>
           </div>
         </div>

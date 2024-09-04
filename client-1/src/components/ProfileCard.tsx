@@ -145,7 +145,7 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
             <CardContent className="flex flex-col items-center justify-around font-Audiowide">
               {/* Web Test Scores */}
               <ScoreCard
-                title={"Web Test Scores"}
+                title={"Web Test"}
                 errMessage={"No Web Data"}
                 isLoading={isLoadingWebData}
                 data={typedWebData}
@@ -155,12 +155,7 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
               <div className="my-4"></div>
 
               {/* VR Test Scores */}
-              <ScoreCard
-                title={"VR Test Scores"}
-                errMessage={"No VR Data"}
-                isLoading={isLoadingVRData}
-                data={typedVRData}
-              />
+              <ScoreCard title={"VR Test"} errMessage={"No VR Data"} isLoading={isLoadingVRData} data={typedVRData} />
               {/* End VR Test Scores */}
             </CardContent>
             {/* End Profile Test Scores */}

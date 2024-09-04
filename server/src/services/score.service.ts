@@ -113,27 +113,27 @@ export const getQBxRScoreEndpoint = async (userId: string) => {
 
 // getAllScores is used to get all the user's scores.
 // The user's Web, VR, and QBxR scores are retrieved from the database and returned to the client.
+
+interface ScoreObject {
+  qbxr?: { qbxr_score: number; rank: number };
+  web?: { title: string; score: number }[];
+  vr?: { title: string; score: number }[];
+}
+
 export const getAllScoresEndpoint = async (userId: string) => {
   const scores = await Score.findOne({ userId });
   appAssert(scores, NOT_FOUND, "User not found.");
 
-  let obj = {
-    qbxr: {},
-    web: {},
-    vr: {},
-  };
-  let rank = null;
-  let qbxr_score = null;
+  var obj: ScoreObject = {};
 
-  if (scores.qbxr_score === undefined) {
-    rank = await Score.where("qbxr_score").gt(0).countDocuments();
-    qbxr_score = 0;
-  } else {
-    rank = await Score.where("qbxr_score").gt(scores.qbxr_score).countDocuments();
-    qbxr_score = scores.qbxr_score;
+  if (scores?.qbxr_score !== undefined) {
+    const rank = await Score.where("qbxr_score").gt(scores.qbxr_score).countDocuments();
+    const qbxr_score = scores.qbxr_score;
+    obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
   }
 
-  obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
+  obj.web = formatWebScores(scores);
+  obj.vr = formatVRScores(scores);
 
   obj.web = formatWebScores(scores);
 

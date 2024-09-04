@@ -38,13 +38,6 @@ export function getAge(dob: string) {
   return age;
 }
 
-// Function to format the birthday date
-export const formatBirthday = (date: string) => {
-  if (!date) return "";
-  const d = date.substring(0, 10);
-  return d;
-};
-
 // Function to determine the color of the score based on the value
 export function scoreColor(scoreColor: number) {
   if (scoreColor < 50) {

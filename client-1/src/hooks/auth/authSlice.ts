@@ -21,9 +21,9 @@ export interface AuthState {
     updatedAt: string;
   } | null;
   scores: {
-    qbxr: { qbxr_score: number; rank: number };
-    web: { title: string; score: number }[];
-    vr: { title: string; score: number }[];
+    qbxr?: { qbxr_score: number; rank: number };
+    web?: { title: string; score: number }[];
+    vr?: { title: string; score: number }[];
   } | null;
 }
 

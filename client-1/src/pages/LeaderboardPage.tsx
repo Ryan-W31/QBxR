@@ -214,62 +214,66 @@ const LeaderboardPage = () => {
         <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
           <ScrollToTop showMenu={showMenu} />
           <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="leaderboard" />
-          <Card className="fade-in container flex flex-col mx-auto mt-10 space-y-12 md:space-y-0 p-5 rounded-lg justify-center border-t-4 border-primary">
-            <div>
-              <CardHeader className="mt-2 bg-transparent shadow-none">
-                <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4">Leaderboard</h1>
-              </CardHeader>
-              <CardContent className="p-2">
-                {user?.role === "PLAYER" && (
-                  <>
-                    {qbxrData !== undefined ? (
-                      <>
-                        {isLoading ? (
-                          <div className="font-Audiowide text-foreground text-center">
-                            <Skeleton className="w-[100px] h-[50px]" />
-                            <Skeleton className="w-[100px] h-[50px]" />
-                          </div>
-                        ) : (
-                          <div className="font-Audiowide text-foreground text-center">
-                            <h2 className="text-2xl mb-2">Your Rank: {qbxrData.rank}</h2>
-                            <p className="text-lg mb-4">Your Score: {qbxrData.qbxr_score}</p>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <div className="text-foreground text-center">
-                        <h2 className="font-Audiowide text-2xl mb-2">Your Rank: No Data</h2>
-                        <p className="text-base mb-4">Take The Evalutation Tests On Your Profile</p>
-                      </div>
-                    )}
-                  </>
-                )}
-              </CardContent>
-              <CardContent>
-                <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide">
-                  <table className="table-auto w-full text-sm text-center text-foreground">
-                    <thead className="text-xs text-foreground uppercase bg-background-secondary border-b">
-                      <tr>
-                        <th scope="col" className="py-3">
-                          Rank
-                        </th>
-                        <th scope="col" className="py-3">
-                          Name
-                        </th>
-                        <th scope="col" className="py-3">
-                          School/Organization
-                        </th>
-                        <th scope="col" className="py-3">
-                          Score
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>{tableContent}</tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </div>
-          </Card>
+          <div className="flex items-center justify-center w-full h-full">
+            <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl w-full">
+              <div>
+                <CardHeader className="mt-2 bg-transparent shadow-none">
+                  <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4 uppercase">
+                    Leaderboard
+                  </h1>
+                </CardHeader>
+                <CardContent className="p-2">
+                  {user?.role === "PLAYER" && (
+                    <>
+                      {qbxrData !== undefined ? (
+                        <>
+                          {isLoading ? (
+                            <div className="font-Audiowide text-foreground text-center">
+                              <Skeleton className="w-[100px] h-[50px]" />
+                              <Skeleton className="w-[100px] h-[50px]" />
+                            </div>
+                          ) : (
+                            <div className="font-Audiowide text-foreground text-center">
+                              <h2 className="text-2xl mb-2">Your Rank: {qbxrData.rank}</h2>
+                              <p className="text-lg mb-4">Your Score: {qbxrData.qbxr_score}</p>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="text-foreground text-center">
+                          <h2 className="font-Audiowide text-2xl mb-2">Your Rank: No Data</h2>
+                          <p className="text-base mb-4">Take The Evalutation Tests On Your Profile</p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </CardContent>
+                <CardContent>
+                  <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide uppercase">
+                    <table className="table-auto w-full text-sm text-center text-foreground">
+                      <thead className="text-xs text-foreground bg-background-secondary border-b">
+                        <tr>
+                          <th scope="col" className="py-3">
+                            Rank
+                          </th>
+                          <th scope="col" className="py-3">
+                            Name
+                          </th>
+                          <th scope="col" className="py-3">
+                            School/Organization
+                          </th>
+                          <th scope="col" className="py-3">
+                            Score
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>{tableContent}</tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </div>
+            </Card>
+          </div>
         </div>
         <ProfileCard
           myId={myId}

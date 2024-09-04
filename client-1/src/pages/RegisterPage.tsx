@@ -93,10 +93,10 @@ const RegisterPage = () => {
                     <FormControl>
                       <Tabs defaultValue={field.value} onValueChange={field.onChange}>
                         <TabsList className="w-full justify-center">
-                          <TabsTrigger className="w-1/2" value={roleEnum.enum.NONPLAYER}>
+                          <TabsTrigger className="w-1/2 uppercase" value={roleEnum.enum.NONPLAYER}>
                             Non-Player
                           </TabsTrigger>
-                          <TabsTrigger className="w-1/2" value={roleEnum.enum.PLAYER}>
+                          <TabsTrigger className="w-1/2 uppercase" value={roleEnum.enum.PLAYER}>
                             Player
                           </TabsTrigger>
                         </TabsList>
@@ -275,7 +275,7 @@ const RegisterPage = () => {
               </div>
             </form>
           </Form>
-          <div className="text-sm text-center mt-4 font-Audiowide">
+          <div className="text-sm text-center mt-4 font-Audiowide uppercase">
             Already have an account?{" "}
             <Button variant="link" className="text-sm text-primary p-0" asChild>
               <Link to="/login">Log In</Link>

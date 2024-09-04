@@ -36,19 +36,19 @@ function App() {
         {/*Begin Protected Routes*/}
         <Route path="email" element={<EmailInterceptPage />} />
         <Route path="verify" element={<VerifyEmailPage />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route element={<Prefetch />}>
-            <Route path="home" element={<HomePage />} />
-            <Route path="leaderboard" element={<LeaderboardPage />} />
-            <Route path="profile/:userId?" element={<ProfilePage />} />
-            <Route path="search" element={<SearchPage />} />
-            <Route path="settings" element={<SettingsPage />} />
-            <Route element={<RoleAuth />}>
-              <Route path="vr" element={<VRPage />} />
-              <Route path="web" element={<WebTestPage />} />
-            </Route>
-          </Route>
+        {/* <Route element={<ProtectedRoutes />}> */}
+        {/* <Route element={<Prefetch />}> */}
+        <Route path="home" element={<HomePage />} />
+        <Route path="leaderboard" element={<LeaderboardPage />} />
+        <Route path="profile/:userId?" element={<ProfilePage />} />
+        <Route path="search" element={<SearchPage />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route element={<RoleAuth />}>
+          <Route path="vr" element={<VRPage />} />
+          <Route path="web" element={<WebTestPage />} />
         </Route>
+        {/* </Route>
+        </Route> */}
         {/*End Protected Routes*/}
       </Route>
     </Routes>

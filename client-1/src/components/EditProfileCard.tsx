@@ -1,14 +1,17 @@
 import { useState } from "react";
-import { formatBirthday } from "../lib/utils";
+import { cn } from "../lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import PhoneInput, { isPossiblePhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { useUpdateUserInfoMutation } from "@/hooks/users/userApiSlice";
 import { Card, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
-import { X } from "lucide-react";
+import { CalendarIcon, X } from "lucide-react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Calendar } from "./ui/calendar";
+import { format } from "date-fns";
 
 type EditProfileCardProps = {
   isVisible: boolean;
@@ -24,7 +27,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
   const [email, setEmail] = useState(user?.email);
   const [number, setNumber] = useState(user?.phone_number);
   const [schoolOrg, setSchoolOrg] = useState(user?.school_organization);
-  const [birthday, setBirthday] = useState(user?.birthday);
+  const [birthday, setBirthday] = useState<Date | undefined>(new Date(user?.birthday));
   const [bio, setBio] = useState(user?.bio);
   const { toast } = useToast();
 
@@ -59,7 +62,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
         email: email,
         phone_number: number,
         school_organization: schoolOrg,
-        birthday: new Date(birthday),
+        birthday: birthday,
         bio: bio,
       });
     }
@@ -178,14 +181,25 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
               <label htmlFor="birthday" className="block mb-2 text-sm font-medium text-foreground-secondary">
                 Birthday
               </label>
-              <Input
-                type="date"
-                value={formatBirthday(birthday)}
-                name="birthday"
-                id="birthday"
-                className="bg-foreground text-background border text-sm rounded-lg block w-full p-2.5"
-                onChange={(e) => setBirthday(e.target.value)}
-              />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "bg-foreground text-background border text-sm rounded-lg block w-full p-2.5",
+                      !user?.birthday && "text-muted-foreground"
+                    )}
+                  >
+                    <div className="font-sans flex items-center justify-start normal-case font-normal tracking-normal">
+                      <CalendarIcon className="mr-2 h-4 w-4" />
+                      {user?.birthday && birthday ? format(birthday, "LLL dd, y") : <span>Pick a date</span>}
+                    </div>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar mode="single" selected={birthday} onSelect={setBirthday} />
+                </PopoverContent>
+              </Popover>
             </div>
             {/* End Birthday Field */}
 

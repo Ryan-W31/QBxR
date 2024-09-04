@@ -24,7 +24,7 @@ const LandingPage = () => {
           <h1 className="text-4xl md:text-5xl font-bold text-center text-primary font-Audiowide">
             QBxR: Quarterback Evaluation Platform
           </h1>
-          <h3 className="text-md md:text-xl font-bold text-center text-primary font-Audiowide">
+          <h3 className="text-md md:text-xl font-bold text-center text-primary font-Audiowide uppercase">
             Find your strengths and weaknesses.
           </h3>
           <p className="text-center text-foreground-secondary">
@@ -39,7 +39,7 @@ const LandingPage = () => {
       <Card id="features" className={`${showMenu ? "blur-lg" : ""} m-8`}>
         <CardContent className="container mx-auto flex flex-col lg:flex-row p-8 space-y-12 lg:space-y-0 rounded-lg">
           <div className="lg:w-1/2 space-y-12">
-            <h2 className="text-4xl font-bold text-center text-primary font-Audiowide">Why use QBxR?</h2>
+            <h2 className="text-4xl font-bold text-center text-primary font-Audiowide uppercase">Why use QBxR?</h2>
             <p className="text-left text-foreground-secondary">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
               dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
@@ -76,7 +76,9 @@ const LandingPage = () => {
 
       <section id="testimonials" className={showMenu ? "blur-lg" : ""}>
         <div className="max-w-6xl px-5 mx-auto mt-32 text-center">
-          <h2 className="text-4xl font-bold text-primary font-Audiowide">What Are Users Saying About QBxR?</h2>
+          <h2 className="text-4xl font-bold text-primary font-Audiowide uppercase">
+            What Are Users Saying About QBxR?
+          </h2>
           <div className="flex flex-col mt-24 md:flex-row md:space-x-6">
             {[1, 2, 3].map((user, index) => (
               <Card
@@ -102,7 +104,7 @@ const LandingPage = () => {
 
       <section id="cta" className={`${showMenu ? "blur-lg" : ""} bg-primary`}>
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between py-24 md:py-12 space-y-12 md:space-y-0 lg:px-24">
-          <h2 className="text-xl md:text-4xl font-bold text-center md:text-left text-light-primary font-Audiowide md:max-w-xl">
+          <h2 className="text-xl md:text-4xl font-bold text-center md:text-left text-light-primary font-Audiowide uppercase md:max-w-xl">
             Find your future quarterback today!
           </h2>
           <Button

@@ -65,7 +65,7 @@ const VerifyEmailPage = () => {
       <Card className="m-6 w-full max-w-xl p-6">
         <CardHeader className="text-center font-Audiowide font-bold shadow-none">
           <h1 className="text-5xl text-primary">QBxR</h1>
-          <h3 className="text-2xl text-primary">Email Verification</h3>
+          <h3 className="text-2xl text-primary uppercase">Email Verification</h3>
         </CardHeader>
         <hr className="border-light-secondary w-full" />
         <CardContent className="flex flex-col w-full p-0">
