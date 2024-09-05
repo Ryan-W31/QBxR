@@ -78,11 +78,11 @@ const RegisterPage = () => {
   };
 
   return (
-    <section className="h-screen flex flex-col justify-center items-center space-y-10">
+    <section className="flex h-screen flex-col items-center justify-center space-y-10">
       <Card className="m-6 w-full max-w-lg p-6">
-        <CardHeader className="text-center font-Audiowide text-5xl text-primary font-bold">QBxR</CardHeader>
+        <CardHeader className="text-center font-Audiowide text-5xl font-bold text-primary">QBxR</CardHeader>
         {showError && <ErrorMessage message={customError} onClose={() => setShowError(false)} />}
-        <CardContent className="flex flex-col w-full p-0">
+        <CardContent className="flex w-full flex-col p-0">
           <Form {...registerForm}>
             <form onSubmit={registerForm.handleSubmit(onSubmit, onFormError)}>
               <FormField
@@ -116,7 +116,7 @@ const RegisterPage = () => {
                         {...field}
                         type="text"
                         placeholder="First Name"
-                        className="bg-foreground text-background focus:border-primary focus:border-2"
+                        className="bg-foreground text-background focus:border-2 focus:border-primary"
                         autoFocus
                         required
                       />
@@ -135,7 +135,7 @@ const RegisterPage = () => {
                         {...field}
                         type="text"
                         placeholder="Last Name"
-                        className="bg-foreground text-background focus:border-primary focus:border-2"
+                        className="bg-foreground text-background focus:border-2 focus:border-primary"
                         required
                       />
                     </FormControl>
@@ -153,7 +153,7 @@ const RegisterPage = () => {
                         {...field}
                         type="text"
                         placeholder="School or Organization"
-                        className="bg-foreground text-background focus:border-primary focus:border-2"
+                        className="bg-foreground text-background focus:border-2 focus:border-primary"
                         required
                       />
                     </FormControl>
@@ -171,7 +171,7 @@ const RegisterPage = () => {
                         {...field}
                         type="email"
                         placeholder="Email Address"
-                        className="bg-foreground text-background focus:border-primary focus:border-2"
+                        className="bg-foreground text-background focus:border-2 focus:border-primary"
                         required
                       />
                     </FormControl>
@@ -190,20 +190,20 @@ const RegisterPage = () => {
                           {...field}
                           type={isPasswordVisible ? "text" : "password"}
                           placeholder="Password"
-                          className="bg-foreground text-background focus:border-primary focus:border-2"
+                          className="bg-foreground text-background focus:border-2 focus:border-primary"
                           required
                         />
                         <Button
                           variant="ghost"
                           type="button"
                           size="icon"
-                          className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                          className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                           onClick={togglePasswordVisibility}
                         >
                           {isPasswordVisible ? (
-                            <Eye size={24} className=" text-background" />
+                            <Eye size={24} className="text-background" />
                           ) : (
-                            <EyeOff size={24} className=" text-background" />
+                            <EyeOff size={24} className="text-background" />
                           )}
                         </Button>
                       </div>
@@ -223,20 +223,20 @@ const RegisterPage = () => {
                           {...field}
                           type={isConfirmPasswordVisible ? "text" : "password"}
                           placeholder="Password"
-                          className="bg-foreground text-background focus:border-primary focus:border-2"
+                          className="bg-foreground text-background focus:border-2 focus:border-primary"
                           required
                         />
                         <Button
                           variant="ghost"
                           type="button"
                           size="icon"
-                          className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                          className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                           onClick={toggleConfirmPasswordVisibility}
                         >
                           {isConfirmPasswordVisible ? (
-                            <Eye size={24} className=" text-background" />
+                            <Eye size={24} className="text-background" />
                           ) : (
-                            <EyeOff size={24} className=" text-background" />
+                            <EyeOff size={24} className="text-background" />
                           )}
                         </Button>
                       </div>
@@ -244,7 +244,7 @@ const RegisterPage = () => {
                   </FormItem>
                 )}
               />
-              <div className="flex items-center justify-start text-sm mt-4">
+              <div className="mt-4 flex items-center justify-start text-sm">
                 <Checkbox id="tnc" />
                 <label htmlFor="tnc" className="ml-2 text-foreground">
                   I agree to the{" "}
@@ -257,11 +257,11 @@ const RegisterPage = () => {
                   </Link>
                 </label>
               </div>
-              <div className="text-center mt-4">
+              <div className="mt-4 text-center">
                 <Button
                   type="submit"
                   size="lg"
-                  className="font-Audiowide rounded-full tracking-wider"
+                  className="rounded-full font-Audiowide tracking-wider"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -275,9 +275,9 @@ const RegisterPage = () => {
               </div>
             </form>
           </Form>
-          <div className="text-sm text-center mt-4 font-Audiowide uppercase">
+          <div className="mt-4 text-center font-Audiowide text-sm uppercase">
             Already have an account?{" "}
-            <Button variant="link" className="text-sm text-primary p-0" asChild>
+            <Button variant="link" className="p-0 text-sm text-primary" asChild>
               <Link to="/login">Log In</Link>
             </Button>
           </div>

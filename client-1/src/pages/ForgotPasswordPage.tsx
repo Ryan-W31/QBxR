@@ -30,23 +30,26 @@ const ForgotPasswordPage = () => {
       toast({ description: "Password reset email sent successfully." });
     } catch (err) {
       console.log(err);
-      toast({ variant: "destructive", description: "Failed to send password reset email." });
+      toast({
+        variant: "destructive",
+        description: "Failed to send password reset email.",
+      });
     }
   }
 
   // Return the forgot password form
   return (
-    <section className="h-screen flex flex-col justify-center items-center space-y-10">
+    <section className="flex h-screen flex-col items-center justify-center space-y-10">
       <Card className="m-6 w-full max-w-lg p-6">
         <CardHeader className="text-center font-Audiowide font-bold shadow-none">
           <h1 className="text-5xl text-primary">QBxR</h1>
           <h3 className="text-2xl text-primary">Forgot Password</h3>
         </CardHeader>
-        <hr className="border-foreground-secondary w-full" />
+        <hr className="w-full border-foreground-secondary" />
         <CardContent className="flex flex-col justify-center pt-4">
           {!isEmailSuccess ? (
             <>
-              <p className="text-foreground font-Audiowide text-md text-center">
+              <p className="text-md text-center font-Audiowide text-foreground">
                 Please enter the email you used to sign up with and we will send you a link to reset your password.
               </p>
               <div className="my-4" />
@@ -62,7 +65,7 @@ const ForgotPasswordPage = () => {
                             {...field}
                             type="email"
                             placeholder="Email Address"
-                            className="bg-foreground text-background focus:border-primary focus:border-2"
+                            className="bg-foreground text-background focus:border-2 focus:border-primary"
                             autoFocus
                             required
                           />
@@ -85,9 +88,10 @@ const ForgotPasswordPage = () => {
               </Form>
             </>
           ) : (
-            <p className="text-foreground font-Audiowide text-md text-center">
+            <p className="text-md text-center font-Audiowide text-foreground">
               An email with a link to reset your password has been sent to{" "}
-              <span className="text-primary">{resetEmailForm.getValues("email")}</span>.
+              <span className="text-primary">{resetEmailForm.getValues("email")}</span>
+              .
               <br />
               <br />
               Please check your inbox and/or spam/junk folder.

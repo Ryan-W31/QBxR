@@ -49,56 +49,56 @@ const SearchPageFilterMenu = ({ getFilters }: SearchPageFilterMenuProps) => {
       <Collapsible
         open={openCollapse}
         onOpenChange={toggleCollapse}
-        className={cn(openCollapse && "border-2 border-primary", "mt-2 rounded-lg w-[75%]")}
+        className={cn(openCollapse && "border-2 border-primary", "mt-2 w-[75%] rounded-lg")}
       >
-        <CollapsibleContent className="flex flex-row items-center justify-between bg-dark-secondary p-4">
+        <CollapsibleContent className="bg-dark-secondary flex flex-row items-center justify-between p-4">
           <div className="grid grid-cols-1 place-items-start">
-            <label className="flex items-center mb-2">
+            <label className="mb-2 flex items-center">
               <p className="text-light-primary text-base">Search By User Type:</p>
             </label>{" "}
             <div className="flex items-center">
               <Checkbox id="player" onCheckedChange={() => setPlayer(!player)} checked={player} />
-              <label htmlFor="player" className="text-light-primary text-base  ml-2">
+              <label htmlFor="player" className="text-light-primary ml-2 text-base">
                 Player
               </label>
             </div>
             <div className="flex items-center">
               <Checkbox id="nonplayer" onCheckedChange={() => setNonplayer(!nonplayer)} checked={nonplayer} />
-              <label htmlFor="label" className="text-light-primary text-base  ml-2">
+              <label htmlFor="label" className="text-light-primary ml-2 text-base">
                 Nonplayer
               </label>
             </div>
           </div>
           <div className="grid grid-cols-1 place-items-start">
-            <label className="flex  items-center mb-2">
+            <label className="mb-2 flex items-center">
               <p className="text-light-primary text-base">Search By Status:</p>
             </label>
             <div className="flex items-center">
               <Checkbox id="active" onCheckedChange={() => setActive(!active)} checked={active} />
-              <label htmlFor="active" className="text-light-primary text-base  ml-2">
+              <label htmlFor="active" className="text-light-primary ml-2 text-base">
                 Active
               </label>
             </div>
             <div className="flex items-center">
               <Checkbox id="inactive" onCheckedChange={() => setInactive(!inactive)} checked={inactive} />
-              <label htmlFor="inactive" className="text-light-primary text-base  ml-2">
+              <label htmlFor="inactive" className="text-light-primary ml-2 text-base">
                 Inactive
               </label>
             </div>
           </div>
           <div className="grid grid-cols-1 place-items-start">
-            <label className="flex items-center mb-2">
+            <label className="mb-2 flex items-center">
               <p className="text-light-primary text-base">Search By:</p>
             </label>
             <div className="flex items-center">
               <Checkbox id="name" onCheckedChange={() => setName(!name)} checked={name} />
-              <label htmlFor="name" className="text-light-primary text-base  ml-2">
+              <label htmlFor="name" className="text-light-primary ml-2 text-base">
                 Name
               </label>
             </div>
             <div className="flex items-center">
               <Checkbox id="school" onCheckedChange={() => setSchoolOrg(!schoolOrg)} checked={schoolOrg} />
-              <label htmlFor="school" className="text-light-primary text-base  ml-2">
+              <label htmlFor="school" className="text-light-primary ml-2 text-base">
                 School/Organization
               </label>
             </div>

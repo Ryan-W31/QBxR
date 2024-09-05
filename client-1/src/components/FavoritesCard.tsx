@@ -18,6 +18,7 @@ type FavoriteUser = {
 
 type Profile = {
   userId: string;
+  role: string;
   name: string;
   school: string;
   score: number;
@@ -135,7 +136,7 @@ const FavoritesCard = ({ userId, setOpenProfile, setShowProfile, toggleBlur }: F
   } else {
     tableContent = (
       <tr>
-        <td colSpan={4} className="py-4 text-md uppercase">
+        <td colSpan={4} className="text-md py-4 uppercase">
           You have no favorites.
         </td>
       </tr>
@@ -144,20 +145,20 @@ const FavoritesCard = ({ userId, setOpenProfile, setShowProfile, toggleBlur }: F
 
   return (
     <>
-      <CardHeader className="shadow-none text-3xl font-bold text-foreground text-center relative overflow-visible font-Audiowide p-6 uppercase">
+      <CardHeader className="relative overflow-visible p-6 text-center font-Audiowide text-3xl font-bold uppercase text-foreground shadow-none">
         Favorites
       </CardHeader>
-      <CardContent className="relative overflow-scroll border-2 rounded-lg border-primary font-Audiowide p-0">
+      <CardContent className="relative overflow-scroll rounded-lg border-2 border-primary p-0 font-Audiowide">
         <div className="max-h-64 overflow-y-auto">
-          <table className="table-auto w-full text-sm text-center text-foreground divide-y divide-primary overflow-x-auto">
-            <thead className="text-xs text-foreground bg-background-secondary">
+          <table className="w-full table-auto divide-y divide-primary overflow-x-auto text-center text-sm text-foreground">
+            <thead className="bg-background-secondary text-xs text-foreground">
               <tr>
                 {cols.map((col) => (
-                  <th className="py-3 cursor-pointer" key={col.key} onClick={() => handleSort(col.key)}>
+                  <th className="cursor-pointer py-3" key={col.key} onClick={() => handleSort(col.key)}>
                     <div className="flex justify-center">
                       <Button
                         variant="link"
-                        className="flex justify-center items-center gap-2 font-semibold font-Audiowide text-foreground py-0 uppercase"
+                        className="flex items-center justify-center gap-2 py-0 font-Audiowide font-semibold uppercase text-foreground"
                       >
                         {col.title}
                         <ArrowDownUp />
@@ -167,7 +168,7 @@ const FavoritesCard = ({ userId, setOpenProfile, setShowProfile, toggleBlur }: F
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-primary">{tableContent}</tbody>
+            <tbody className="divide-y divide-primary uppercase">{tableContent}</tbody>
           </table>
         </div>
       </CardContent>

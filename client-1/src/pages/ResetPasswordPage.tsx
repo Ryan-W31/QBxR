@@ -51,23 +51,26 @@ const ResetPasswordPage = () => {
       navigate("/login");
     } catch (err) {
       console.log(err);
-      toast({ variant: "destructive", description: "Failed to reset password." });
+      toast({
+        variant: "destructive",
+        description: "Failed to reset password.",
+      });
     }
   }
 
   // Return the forgot password form
   return (
-    <section className="h-screen flex flex-col justify-center items-center space-y-10">
+    <section className="flex h-screen flex-col items-center justify-center space-y-10">
       <Card className="m-6 w-full max-w-lg p-6">
         <CardHeader className="text-center font-Audiowide font-bold shadow-none">
           <h1 className="text-5xl text-primary">QBxR</h1>
           <h3 className="text-2xl text-primary">Forgot Password</h3>
         </CardHeader>
-        <hr className="border-foreground-secondary w-full" />
+        <hr className="w-full border-foreground-secondary" />
         <CardContent className="flex flex-col justify-center pt-4">
           {linkIsValid ? (
             <>
-              <p className="text-foreground font-Audiowide text-sm text-center">Please enter a new password.</p>
+              <p className="text-center font-Audiowide text-sm text-foreground">Please enter a new password.</p>
 
               <Form {...resetPasswordForm}>
                 <form onSubmit={resetPasswordForm.handleSubmit(onSubmit)}>
@@ -83,14 +86,14 @@ const ResetPasswordPage = () => {
                               {...field}
                               type={isPasswordVisible ? "text" : "password"}
                               placeholder="Password"
-                              className="bg-foreground text-background focus:border-primary focus:border-2"
+                              className="bg-foreground text-background focus:border-2 focus:border-primary"
                               required
                             />
                             <Button
                               variant="ghost"
                               type="button"
                               size="icon"
-                              className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                              className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                               onClick={togglePasswordVisibility}
                             >
                               {isPasswordVisible ? (
@@ -116,14 +119,14 @@ const ResetPasswordPage = () => {
                               {...field}
                               type={isConfirmPasswordVisible ? "text" : "password"}
                               placeholder="Password"
-                              className="bg-foreground text-background focus:border-primary focus:border-2"
+                              className="bg-foreground text-background focus:border-2 focus:border-primary"
                               required
                             />
                             <Button
                               variant="ghost"
                               type="button"
                               size="icon"
-                              className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                              className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                               onClick={toggleConfirmPasswordVisibility}
                             >
                               {isConfirmPasswordVisible ? (
@@ -137,11 +140,11 @@ const ResetPasswordPage = () => {
                       </FormItem>
                     )}
                   />
-                  <div className="text-center mt-4">
+                  <div className="mt-4 text-center">
                     <Button
                       type="submit"
                       size="lg"
-                      className="font-Audiowide rounded-full tracking-wider"
+                      className="rounded-full font-Audiowide tracking-wider"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -158,13 +161,13 @@ const ResetPasswordPage = () => {
             </>
           ) : (
             <div className="space-y-4">
-              <p className="text-foreground font-Audiowide text-md text-center">
+              <p className="text-md text-center font-Audiowide text-foreground">
                 The link you used to reset your password has expired. <br />
                 Please request a new link.
               </p>
               <Button
                 size="lg"
-                className="font-Audiowide rounded-full tracking-wider w-full"
+                className="w-full rounded-full font-Audiowide tracking-wider"
                 onClick={() => navigate("/forgot", { replace: true })}
               >
                 Request New Link

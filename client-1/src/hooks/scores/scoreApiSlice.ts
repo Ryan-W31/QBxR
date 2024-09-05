@@ -1,5 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice";
-import { authApiSlice } from "../auth/authApiSlice";
+import { setCredentials } from "../auth/authSlice";
 
 // Score API slice. This slice contains the getScores, setVRScore, setWebScore, getVRScore, getWebScore, and getQBxRScore endpoints.
 export const scoreApiSlice = apiSlice.injectEndpoints({
@@ -18,8 +18,12 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
-          await queryFulfilled;
-          dispatch(authApiSlice.endpoints.refresh.initiate());
+          const response = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              scores: response.data.score,
+            })
+          );
           console.log("VR score updated");
         } catch (err) {
           console.error("Error updating user info:", err);
@@ -34,8 +38,12 @@ export const scoreApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
-          await queryFulfilled;
-          dispatch(authApiSlice.endpoints.refresh.initiate());
+          const response = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              scores: response.data.score,
+            })
+          );
           console.log("Web score updated");
         } catch (err) {
           console.error("Error updating user info:", err);

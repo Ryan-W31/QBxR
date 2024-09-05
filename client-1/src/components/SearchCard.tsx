@@ -15,35 +15,35 @@ const SearchCard = ({ role = "", name = "", school = "", score = 0, skeleton = f
       {/* Display a skeleton card with a rank, name, school, and score */}
       <th scope="row" className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[50px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[50px]" />
         </div>
       </th>
       <td className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[100px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[100px]" />
         </div>
       </td>
       <td className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[300px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[300px]" />
         </div>
       </td>
       <td className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[50px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[50px]" />
         </div>
       </td>
       {/* End Display a skeleton card with a rank, name, school, and score */}
     </tr>
   ) : (
-    <tr className="hover:bg-gackground cursor-pointer" onClick={onClick}>
+    <tr className="hover:bg-background cursor-pointer" onClick={onClick}>
       {/* Display the user's role, name, school, and score */}
-      <th scope="row" className="py-3 font-medium text-primary whitespace-nowrap capitalize">
+      <th scope="row" className="whitespace-nowrap py-3 font-medium uppercase text-foreground">
         {role}
       </th>
-      <td className="py-3 font-medium text-primary whitespace-nowrap">{name}</td>
-      <td className="py-3 font-medium text-primary whitespace-nowrap">{school}</td>
-      <td className="py-3 font-medium text-primary whitespace-nowrap">{score}</td>
+      <td className="whitespace-nowrap py-3 font-medium text-foreground uppercase">{name}</td>
+      <td className="whitespace-nowrap py-3 font-medium text-foreground uppercase">{school}</td>
+      <td className="whitespace-nowrap py-3 font-medium text-foreground uppercase">{score}</td>
       {/* End Display the user's role, name, school, and score */}
     </tr>
   );

@@ -13,6 +13,7 @@ import { useUpdateUserInfoMutation } from "@/hooks/users/userApiSlice";
 type ProfileCardProps = {
   myId: string | null;
   userId: string;
+  role: string;
   name: string;
   school: string;
   score: number;
@@ -22,7 +23,7 @@ type ProfileCardProps = {
 
 type ScoreData = { title: string; score: number }[];
 // ProfileCard component. This component displays a profile card with the user's name, school, score, and test scores.
-const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: ProfileCardProps) => {
+const ProfileCard = ({ myId, userId, role, name, school, score, isVisible, onClose }: ProfileCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [myProfile, setMyProfile] = useState(false);
   const [updateInfo] = useUpdateUserInfoMutation();
@@ -73,14 +74,14 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
 
   // Return the profile card content
   const content = (
-    <div id="profile-popup" tabIndex={-1} className="fixed inset-0 z-50 flex items-center justify-center m-10">
+    <div id="profile-popup" tabIndex={-1} className="fixed inset-0 z-50 m-10 flex items-center justify-center">
       {/* Display the profile card */}
-      <Card className="relative p-4 w-3/4 max-h-full rounded-lg bg-background-secondary overflow-auto">
+      <Card className="relative max-h-full w-3/4 overflow-auto rounded-lg bg-background-secondary p-4">
         {/* Display the close button */}
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-3 right-3 rounded-lg text-sm ml-auto inline-flex items-center justify-center hover:bg-transparent"
+          className="absolute right-3 top-3 ml-auto inline-flex items-center justify-center rounded-lg text-sm hover:bg-transparent"
           onClick={onClose}
         >
           <X size={32} className="cursor-pointer text-3xl text-primary" />
@@ -92,7 +93,7 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-12 right-3 rounded-lg text-sm ml-auto inline-flex items-center justify-center hover:bg-transparent"
+            className="absolute right-3 top-12 ml-auto inline-flex items-center justify-center rounded-lg text-sm hover:bg-transparent"
             onClick={handleFavorite}
           >
             {isFavorite ? (
@@ -105,63 +106,73 @@ const ProfileCard = ({ myId, userId, name, school, score, isVisible, onClose }: 
         {/* End Display the favorite button */}
 
         {/* Display the profile details */}
-        <div className="p-4 md:p-5 text-center font-Audiowide">
-          <CardHeader className="mt-2 pb-2 bg-transparent rounded-none shadow-none border-b-2 border-primary">
-            <h3 className="text-3xl font-normal text-foreground">Profile Details</h3>
+        <div className="p-4 text-center font-Audiowide md:p-5">
+          <CardHeader className="mt-2 rounded-none border-b-2 border-primary bg-transparent pb-2 shadow-none">
+            <h3 className="text-3xl font-normal text-foreground uppercase">Profile Details</h3>
           </CardHeader>
-          <CardContent className="w-full flex-col p-3 rounded-lg text-center font-Audiowide">
+          <CardContent className="w-full flex-col rounded-lg p-3 text-center font-Audiowide">
             {/* Profile Image */}
             <div className="image overflow-hidden">
-              <div className="h-60 w-60 text-foreground bg-primary border border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
+              <div className="text-md inline-flex h-60 w-60 items-center justify-center rounded-full border border-foreground bg-primary text-foreground md:text-4xl">
                 {getInitials(name)}
               </div>
             </div>
             {/* End Profile Image */}
 
             {/* Profile Name */}
-            <h1 className="text-foreground text-xl mt-2">{name}</h1>
+            <h1 className="mt-2 text-xl text-foreground uppercase">{name}</h1>
             {/* End Profile Name */}
 
             {/* Profile School */}
-            <h3 className="text-light-secondary font-lg  mb-4">{school}</h3>
+            <h3 className="text-light-secondary font-lg mb-4 uppercase">{school}</h3>
             {/* End Profile School */}
 
-            <hr className="border-primary border-1 mx-auto" />
-            {/* Profile Score */}
-            {typedWebData === undefined ||
-            typedVRData === undefined ||
-            typedWebData?.length === 0 ||
-            typedVRData?.length === 0 ? (
-              <p className="text-3xl text-foreground m-4">QBxR Score: No Data</p>
-            ) : (
-              <p className="text-3xl text-foreground m-4">
-                QBxR Score: <span className={cn(scoreColor(score))}>{score}</span>
-              </p>
+            <hr className="border-1 mx-auto border-primary" />
+            {role === "PLAYER" && (
+              <>
+                {/* Profile Score */}
+                {typedWebData === undefined ||
+                typedVRData === undefined ||
+                typedWebData?.length === 0 ||
+                typedVRData?.length === 0 ? (
+                  <p className="m-4 text-3xl text-foreground uppercase">QBxR Score: No Data</p>
+                ) : (
+                  <p className="m-4 text-3xl text-foreground uppercase">
+                    QBxR Score: <span className={cn(scoreColor(score))}>{score}</span>
+                  </p>
+                )}
+
+                {/* End Profile Score */}
+
+                {/* Profile Test Scores */}
+                <CardContent className="flex flex-col items-center justify-around font-Audiowide">
+                  {/* Web Test Scores */}
+                  <ScoreCard
+                    title={"Web Test"}
+                    errMessage={"No Web Data"}
+                    isLoading={isLoadingWebData}
+                    data={typedWebData}
+                  />
+                  {/* End Web Test Scores */}
+
+                  <div className="my-4"></div>
+
+                  {/* VR Test Scores */}
+                  <ScoreCard
+                    title={"VR Test"}
+                    errMessage={"No VR Data"}
+                    isLoading={isLoadingVRData}
+                    data={typedVRData}
+                  />
+
+                  {/* End VR Test Scores */}
+                </CardContent>
+              </>
             )}
-
-            {/* End Profile Score */}
-
-            {/* Profile Test Scores */}
-            <CardContent className="flex flex-col items-center justify-around font-Audiowide">
-              {/* Web Test Scores */}
-              <ScoreCard
-                title={"Web Test"}
-                errMessage={"No Web Data"}
-                isLoading={isLoadingWebData}
-                data={typedWebData}
-              />
-              {/* End Web Test Scores */}
-
-              <div className="my-4"></div>
-
-              {/* VR Test Scores */}
-              <ScoreCard title={"VR Test"} errMessage={"No VR Data"} isLoading={isLoadingVRData} data={typedVRData} />
-              {/* End VR Test Scores */}
-            </CardContent>
             {/* End Profile Test Scores */}
 
             {/* Go To Profile Button */}
-            <Button size="lg" className="text-md font-Audiowide px-6 py-2 rounded-full tracking-wider" asChild>
+            <Button size="lg" className="mt-2" onClick={onClose} asChild>
               <Link to={`/profile/${userId}`}>Go To Profile</Link>
             </Button>
 

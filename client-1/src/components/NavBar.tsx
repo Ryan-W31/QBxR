@@ -13,7 +13,7 @@ type NavBarProps = {
 };
 const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProps) => {
   const navList = isLandingPage ? (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 uppercase font-semibold">
+    <ul className="mb-4 mt-2 flex flex-col gap-2 font-semibold uppercase lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {/* Home Link */}
       <Button variant="link" asChild>
         <Link
@@ -21,8 +21,8 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
           className={currentPageStyle(
             "home",
             currentPage,
-            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-            "relative w-fit block"
+            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
+            "relative block w-fit"
           )}
         >
           Home
@@ -37,8 +37,8 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
           className={currentPageStyle(
             "about",
             currentPage,
-            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-            "relative w-fit block"
+            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
+            "relative block w-fit"
           )}
         >
           About Us
@@ -54,8 +54,8 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
           className={currentPageStyle(
             "how",
             currentPage,
-            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-            "relative w-fit block"
+            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
+            "relative block w-fit"
           )}
         >
           How QBxR Works
@@ -65,7 +65,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
       {/* End How QBxR Works Link */}
     </ul>
   ) : (
-    <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6 uppercase font-semibold">
+    <ul className="mb-4 mt-2 flex flex-col gap-2 font-semibold uppercase lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {/* Home Link */}
       <Button variant="link" asChild>
         <Link
@@ -73,8 +73,8 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
           className={currentPageStyle(
             "home",
             currentPage,
-            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-            "relative w-fit block"
+            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
+            "relative block w-fit"
           )}
         >
           Home
@@ -89,8 +89,8 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
           className={currentPageStyle(
             "leaderboard",
             currentPage,
-            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-            "relative w-fit block"
+            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
+            "relative block w-fit"
           )}
         >
           Leaderboard
@@ -105,8 +105,8 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
           className={currentPageStyle(
             "search",
             currentPage,
-            "relative w-fit block text-primary underline underline-offset-[6.27px] decoration-[3px]",
-            "relative w-fit block"
+            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
+            "relative block w-fit"
           )}
         >
           Search
@@ -120,27 +120,27 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
     <nav
       className={cn(
         showMenu ? "blur-lg" : "",
-        "sticky w-full inset-x-0 border-b-2 border-primary top-0 mx-auto bg-background-secondary/80 shadow-md bg-opacity-80 backdrop-blur-xl backdrop-saturate-200 p-6 z-50"
+        "sticky inset-x-0 top-0 z-50 mx-auto w-full border-b-2 border-primary bg-background-secondary/80 bg-opacity-80 p-6 shadow-md backdrop-blur-xl backdrop-saturate-200"
       )}
     >
       {/* Display the navigation bar (Depending on Landing Page) */}
       {/* QBxR Logo */}
-      <div className="container px-4 flex items-center justify-between max-w-screen-2xl">
-        <div className="flex items-center justify-center h-[60px] w-[120px]">
-          <a href="/home" className="text-3xl font-extrabold text-primary font-Audiowide text-center">
+      <div className="container flex max-w-screen-2xl items-center justify-between px-4">
+        <div className="flex h-[60px] w-[120px] items-center justify-center">
+          <a href="/home" className="text-center font-Audiowide text-3xl font-extrabold text-primary">
             QBxR
           </a>
         </div>
         {/* End QBxR Logo */}
 
-        <div className="flex items-center gap-6 font-Audiowide text-md">
+        <div className="text-md flex items-center gap-6 font-Audiowide">
           <div className="hidden lg:block">{navList}</div>
         </div>
 
         {/* Sign In Link */}
         {isLandingPage ? (
           <div className="flex items-center">
-            <Button className="hidden lg:flex items-center justify-center font-Audiowide w-[120px] text-center" asChild>
+            <Button className="hidden w-[120px] items-center justify-center text-center font-Audiowide lg:flex" asChild>
               <Link to="/login">Log In</Link>
             </Button>
           </div>
@@ -152,7 +152,7 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
         {/* End Profile Dropdown */}
 
         {/* Mobile Menu (On Small Screen Size) */}
-        <Menu className="lg:hidden h-10 w-10 text-primary cursor-pointer" onClick={toggleMenu} />
+        <Menu className="h-10 w-10 cursor-pointer text-primary lg:hidden" onClick={toggleMenu} />
         {/* End Mobile Menu (On Small Screen Size) */}
       </div>
       {/* End Display the navigation bar (Depending on Landing Page) */}

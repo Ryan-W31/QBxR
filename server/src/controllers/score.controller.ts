@@ -15,19 +15,19 @@ import { userIdSchema, vrScoreSchema, webScoreSchema } from "./score.schema";
 // setVRScore is used to set the user's VR scores.
 // The user's VR scores are stored in the database.
 export const setVRScoreController = catchErrors(async (req, res) => {
-  const request = vrScoreSchema.parse(req.body);
-  await setVRScoreEndpoint(request);
+  const request = vrScoreSchema.parse({ ...req.body });
+  const { score } = await setVRScoreEndpoint(request);
 
-  return res.status(OK).json({ message: "VR Score set successfully." });
+  return res.status(OK).json({ message: "VR Score set successfully.", score: score });
 });
 
 // setWebScore is used to set the user's Web scores.
 // The user's Web scores are stored in the database.
 export const setWebScoreController = catchErrors(async (req, res) => {
-  const request = webScoreSchema.parse(req.body);
-  await setWebScoreEndpoint(request);
+  const request = webScoreSchema.parse({ ...req.body });
+  const { score } = await setWebScoreEndpoint(request);
 
-  return res.status(OK).json({ message: "Web Score set successfully." });
+  return res.status(OK).json({ message: "Web Score set successfully.", score: score });
 });
 
 // getVRScore is used to get the user's VR scores.

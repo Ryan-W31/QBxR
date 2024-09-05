@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 
 type Profile = {
   userId: string;
+  role: string;
   name: string;
   school: string;
   score: number;
@@ -46,7 +47,13 @@ const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState("");
   const [showProfile, setShowProfile] = useState(false);
-  const [openProfile, setOpenProfile] = useState<Profile>({ userId: "", name: "", school: "", score: 0 });
+  const [openProfile, setOpenProfile] = useState<Profile>({
+    userId: "",
+    role: "",
+    name: "",
+    school: "",
+    score: 0,
+  });
   const [visibleRows, setVisibleRows] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
   const [sortedUsers, setSortedUsers] = useState<SearchUser[]>([]);
@@ -149,7 +156,7 @@ const SearchPage = () => {
   // Close the profile card and remove the blur effect
   const handleClose = () => {
     setShowProfile(false);
-    setOpenProfile({ userId: "", name: "", school: "", score: 0 });
+    setOpenProfile({ userId: "", role: "", name: "", school: "", score: 0 });
     toggleBlur();
   };
 
@@ -191,34 +198,34 @@ const SearchPage = () => {
     <div>
       <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="search" />
 
-      <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+      <div className={showBlur ? "pointer-events-none blur-lg" : ""}>
         <ScrollToTop showMenu={showMenu} />
         <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="search" />
-        <div className="flex items-center justify-center w-full h-full">
-          <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl w-full">
+        <div className="flex h-full w-full items-center justify-center">
+          <Card className="mx-6 mt-10 flex w-full max-w-screen-2xl flex-col justify-center space-y-12 rounded-lg border-t-4 border-primary p-6 md:space-y-0">
             <CardHeader className="mt-2 bg-transparent shadow-none">
-              <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4 uppercase">Search</h1>
+              <h1 className="mb-4 text-center font-Audiowide text-6xl font-bold uppercase text-primary">Search</h1>
             </CardHeader>
             <CardContent>
               <Input
                 placeholder="Search Players, Coaches, Schools..."
-                className="bg-foreground text-background focus:border-primary focus:border-2"
+                className="bg-foreground text-background focus:border-2 focus:border-primary"
                 onChange={(e) => setSearchQuery(e.target.value)}
                 autoComplete="nope"
               />
               <div className="my-4" />
               <SearchPageFilterMenu getFilters={handleFilters} />
             </CardContent>
-            <CardContent className="relative overflow-x-auto border-2 rounded-lg overflow-hidden border-primary font-Audiowide p-0">
-              <table className="table-auto w-full text-sm text-center text-foreground divide-y divide-primary overflow-x-auto">
-                <thead className="text-xs text-foreground bg-dark-secondary">
+            <CardContent className="relative overflow-hidden overflow-x-auto rounded-lg border-2 border-primary p-0 font-Audiowide">
+              <table className="w-full table-auto divide-y divide-primary overflow-x-auto text-center text-sm text-foreground">
+                <thead className="bg-dark-secondary text-xs text-foreground">
                   <tr>
                     {cols.map((col) => (
-                      <th className="py-3 cursor-pointer" key={col.key} onClick={() => handleSort(col.key)}>
+                      <th className="cursor-pointer py-3" key={col.key} onClick={() => handleSort(col.key)}>
                         <div className="flex justify-center">
                           <Button
                             variant="link"
-                            className="flex justify-center items-center gap-2 font-semibold font-Audiowide text-foreground py-0 uppercase"
+                            className="flex items-center justify-center gap-2 py-0 font-Audiowide font-semibold uppercase text-foreground"
                           >
                             {col.title}
                             <ArrowDownUp />
@@ -237,6 +244,7 @@ const SearchPage = () => {
       <ProfileCard
         myId={myId}
         userId={openProfile?.userId}
+        role={openProfile?.role}
         name={openProfile?.name}
         school={openProfile?.school}
         score={openProfile?.score}

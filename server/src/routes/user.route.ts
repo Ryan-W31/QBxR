@@ -15,10 +15,10 @@ const userRouter = Router();
 
 // base route: /user
 // Update User Info: PATCH request to /updateinfo/:id
-userRouter.route("/update/info/:userId").patch(updateUserInfoController);
+userRouter.route("/update/info").patch(updateUserInfoController);
 
 // Update User Password: PATCH request to /updatepassword/:id
-userRouter.route("/update/password/:userId").patch(updateUserPasswordController);
+userRouter.route("/update/password").patch(updateUserPasswordController);
 
 userRouter.route("/:userId").delete(deleteUserController);
 

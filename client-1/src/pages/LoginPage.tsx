@@ -55,11 +55,11 @@ const LoginPage = () => {
   };
 
   return (
-    <section className="h-screen flex flex-col justify-center items-center space-y-10">
+    <section className="flex h-screen flex-col items-center justify-center space-y-10">
       <Card className="m-6 w-full max-w-lg p-6">
-        <CardHeader className="text-center font-Audiowide text-5xl text-primary font-bold">QBxR</CardHeader>
+        <CardHeader className="text-center font-Audiowide text-5xl font-bold text-primary">QBxR</CardHeader>
         {showError && <ErrorMessage message={customError} onClose={() => setShowError(false)} />}
-        <CardContent className="flex flex-col w-full p-0">
+        <CardContent className="flex w-full flex-col p-0">
           <Form {...loginForm}>
             <form onSubmit={loginForm.handleSubmit(onSubmit)}>
               <FormField
@@ -73,7 +73,7 @@ const LoginPage = () => {
                         {...field}
                         type="email"
                         placeholder="Email Address"
-                        className="bg-foreground text-background focus:border-primary focus:border-2"
+                        className="bg-foreground text-background focus:border-2 focus:border-primary"
                         autoFocus
                         required
                       />
@@ -93,14 +93,14 @@ const LoginPage = () => {
                           {...field}
                           type={isPasswordVisible ? "text" : "password"}
                           placeholder="Password"
-                          className="bg-foreground text-background focus:border-primary focus:border-2"
+                          className="bg-foreground text-background focus:border-2 focus:border-primary"
                           required
                         />
                         <Button
                           variant="ghost"
                           type="button"
                           size="icon"
-                          className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                          className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                           onClick={togglePasswordVisibility}
                         >
                           {isPasswordVisible ? (
@@ -115,15 +115,15 @@ const LoginPage = () => {
                 )}
               />
               <div className="flex items-center justify-end text-sm">
-                <Button variant="link" className="text-sm text-primary p-0 uppercase" asChild>
+                <Button variant="link" className="p-0 text-sm uppercase text-primary" asChild>
                   <Link to="/reset">Forgot Password?</Link>
                 </Button>
               </div>
-              <div className="text-center mt-4">
+              <div className="mt-4 text-center">
                 <Button
                   type="submit"
                   size="lg"
-                  className="font-semibold font-Audiowide tracking-wider rounded-full uppercase"
+                  className="rounded-full font-Audiowide font-semibold uppercase tracking-wider"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -137,9 +137,9 @@ const LoginPage = () => {
               </div>
             </form>
           </Form>
-          <div className="text-sm text-center mt-4 font-Audiowide uppercase">
+          <div className="mt-4 text-center font-Audiowide text-sm uppercase">
             Don't have an account yet?{" "}
-            <Button variant="link" className="text-sm text-primary p-0 uppercase" asChild>
+            <Button variant="link" className="p-0 text-sm uppercase text-primary" asChild>
               <Link to="/register">Register</Link>
             </Button>
           </div>

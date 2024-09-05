@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
-
+@import "react-day-picker/style.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -81,6 +81,17 @@
   body {
     @apply bg-background text-foreground;
   }
+  .PhoneInputInput {
+    @apply bg-foreground text-background;
+  }
+}
+
+@layer components {
+  .PhoneInputInput {
+    @apply bg-foreground text-background !important;
+  }
+
+  
 }
 
 @layer utilities {

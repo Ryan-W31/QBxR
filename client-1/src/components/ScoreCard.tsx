@@ -11,17 +11,17 @@ type ScoreCardProps = {
 const ScoreCard = ({ title, errMessage, isLoading = false, data }: ScoreCardProps) => {
   // If the data is undefined or empty, display a message indicating that there is no data
   const content = (
-    <Card className="flex flex-col bg-dark-secondary rounded-lg p-4 border-2 border-green-primary">
+    <Card className="bg-background-secondary border-primary flex flex-col rounded-lg border-2 p-4 w-full">
       {/* Display the title */}
-      <CardHeader className="text-2xl md:text-4xl font-Audiowide text-center pt-2 bg-transparent shadow-none text-light-secondary">
+      <CardHeader className="text-foreground-secondary bg-transparent pt-2 text-center font-Audiowide text-2xl shadow-none md:text-4xl">
         {title}
       </CardHeader>
       {/* End Display the title */}
 
       {/* Display the score card */}
       {data === undefined || data?.length === 0 ? (
-        <CardContent className="text-center text-light-primary">
-          <p className="text-xl sm:text-3xl justify-center mb-4 font-Audiowide">No Data</p>
+        <CardContent className="text-light-primary text-center">
+          <p className="mb-4 justify-center font-Audiowide text-xl sm:text-3xl">No Data</p>
           <p className="text-sm sm:text-xl">{errMessage}</p>
         </CardContent>
       ) : (

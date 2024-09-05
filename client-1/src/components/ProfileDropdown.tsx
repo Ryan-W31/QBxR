@@ -20,10 +20,16 @@ const ProfileDropdown = () => {
   const handleLogout = async () => {
     try {
       await logOut();
-      toast({ variant: "destructive", description: "You have successfully logged out." });
+      toast({
+        variant: "destructive",
+        description: "You have successfully logged out.",
+      });
       navigate("/login");
     } catch (error) {
-      toast({ variant: "destructive", description: "An error occurred while logging out. Please try again." });
+      toast({
+        variant: "destructive",
+        description: "An error occurred while logging out. Please try again.",
+      });
     }
   };
 
@@ -35,37 +41,37 @@ const ProfileDropdown = () => {
     <div className="hidden lg:block">
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <div className="w-[120px] flex items-center justify-end">
-            <div className="flex items-center justify-center h-9 w-9 bg-primary hover:bg-primary-hover rounded-full border-2 border-foreground">
+          <div className="flex w-[120px] items-center justify-end">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full border-2 border-foreground bg-primary hover:bg-primary-hover">
               <User size={24} />
             </div>
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="p-0 bg-background-secondary gap-y-2 w-48 uppercase font-semibold">
+        <DropdownMenuContent className="w-48 gap-y-2 bg-background-secondary p-0 font-semibold uppercase">
           <DropdownMenuItem
             onSelect={() => navigate("/profile")}
-            className="flex items-center gap-2 rounded-b-none hover:!bg-primary w-full"
+            className="flex w-full items-center gap-2 rounded-b-none hover:!bg-primary"
           >
             <User size={24} className="text-foreground" />
 
-            <span className="text-foreground font-Audiowide text-base">My Profile</span>
+            <span className="font-Audiowide text-base text-foreground">My Profile</span>
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => navigate("/settings")}
-            className="flex items-center gap-2 rounded-none hover:!bg-primary w-full"
+            className="flex w-full items-center gap-2 rounded-none hover:!bg-primary"
           >
             <Settings size={24} className="text-foreground" />
 
-            <span className="text-foreground font-Audiowide text-base">Settings</span>
+            <span className="font-Audiowide text-base text-foreground">Settings</span>
           </DropdownMenuItem>
           <hr className="border-light-primary" />
           <DropdownMenuItem
             onSelect={handleLogout}
-            className="flex items-center gap-2 rounded-t-none hover:!bg-red-600 w-full"
+            className="flex w-full items-center gap-2 rounded-t-none hover:!bg-red-600"
           >
             <LogOut size={24} className="text-foreground" />
 
-            <span className="text-foreground font-Audiowide text-base">Log Out</span>
+            <span className="font-Audiowide text-base text-foreground">Log Out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -12,7 +12,7 @@ export interface AuthState {
     role: string;
     school_organization: string;
     bio: string;
-    birthday: string;
+    birthday: Date;
     phone_number: string;
     score: number;
     isVerified: boolean;

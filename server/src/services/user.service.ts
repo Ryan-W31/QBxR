@@ -12,6 +12,7 @@ export const getLeaderboardEndpoint = async () => {
   const data = users.map((user, index) => {
     return {
       userId: user._id,
+      role: user.role,
       rank: index + 1,
       name: `${user.firstname} ${user.lastname}`,
       school: user.school_organization,
@@ -114,39 +115,39 @@ export const updateUserPasswordEndpoint = async ({ userId, newPassword }: Update
 type SearchParams = {
   search: string;
   filters: {
-    player?: boolean;
-    nonplayer?: boolean;
-    active?: boolean;
-    inactive?: boolean;
-    name?: boolean;
-    schoolOrg?: boolean;
+    player?: string;
+    nonplayer?: string;
+    active?: string;
+    inactive?: string;
+    name?: string;
+    schoolOrg?: string;
   };
 };
 export const searchEndpoint = async ({ search, filters }: SearchParams) => {
   let regexFilters = [];
   let searchFilters = [];
 
-  if (filters.player || filters.nonplayer) {
+  if (filters.player === "true" || filters.nonplayer === "true") {
     let roleFilters = [];
-    if (filters.player) roleFilters.push({ role: "PLAYER" });
-    if (filters.nonplayer) roleFilters.push({ role: "NONPLAYER" });
+    if (filters.player === "true") roleFilters.push({ role: "PLAYER" });
+    if (filters.nonplayer === "true") roleFilters.push({ role: "NONPLAYER" });
     searchFilters.push({ $or: roleFilters });
   }
 
-  if (filters.active || filters.inactive) {
+  if (filters.active === "true" || filters.inactive === "true") {
     let statusFilters = [];
-    if (filters.active) statusFilters.push({ status: true });
-    if (filters.inactive) statusFilters.push({ status: false });
+    if (filters.active === "true") statusFilters.push({ status: true });
+    if (filters.inactive === "true") statusFilters.push({ status: false });
     searchFilters.push({ $or: statusFilters });
   }
 
-  if (filters.name) {
+  if (filters.name === "true") {
     regexFilters.push(
       { firstname: { $regex: search, $options: "i" } },
       { lastname: { $regex: search, $options: "i" } }
     );
   }
-  if (filters.schoolOrg) {
+  if (filters.schoolOrg === "true") {
     regexFilters.push({
       school_organization: { $regex: search, $options: "i" },
     });

@@ -8,8 +8,8 @@ const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
   let content = skeleton ? (
     <div className="mb-10">
       {/* Display the skeleton loading animation */}
-      <div className="flex justify-between mb-1">
-        <span className={`text-base font-medium text-light-primary`}>{title}</span>
+      <div className="mb-1 flex justify-between">
+        <span className={`text-foreground text-base font-medium uppercase font-Audiowide`}>{title}</span>
         <Skeleton className="w-[50px]" />
       </div>
       <div>
@@ -18,16 +18,16 @@ const ProgressBar = ({ title = "", score = 0, skeleton = false }) => {
       {/* End Display the skeleton loading animation */}
     </div>
   ) : (
-    <div className="w-full mb-8">
+    <div className="mb-8 w-full">
       {/* Display the progress bar with the title and score */}
 
       <div className="mb-1 flex items-center justify-between gap-4">
         {/* Title */}
-        <span className={`text-base font-medium ${scoreColor(score)}`}>{title}</span>
+        <span className={`text-base font-medium uppercase font-Audiowide ${scoreColor(score)}`}>{title}</span>
         {/* End Title */}
 
         {/* Score */}
-        <span className={`text-sm font-medium ${scoreColor(score)}`}>{score}</span>
+        <span className={`text-sm font-medium uppercase font-Audiowide ${scoreColor(score)}`}>{score}</span>
         {/* End Score */}
       </div>
 

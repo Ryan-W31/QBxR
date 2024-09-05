@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 
 type Profile = {
   userId: string;
+  role: string;
   name: string;
   school: string;
   score: number;
@@ -101,7 +102,13 @@ interface CustomError {
 const LeaderboardPage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showBlur, setShowBlur] = useState(false);
-  const [openProfile, setOpenProfile] = useState<Profile>({ userId: "", name: "", school: "", score: 0 });
+  const [openProfile, setOpenProfile] = useState<Profile>({
+    userId: "",
+    role: "",
+    name: "",
+    school: "",
+    score: 0,
+  });
   const [showProfile, setShowProfile] = useState(false);
   const [visibleRows, setVisibleRows] = useState(5);
   const [totalRows, setTotalRows] = useState(0);
@@ -157,7 +164,7 @@ const LeaderboardPage = () => {
   // Close the profile card and remove the blur effect
   const handleClose = () => {
     setShowProfile(false);
-    setOpenProfile({ userId: "", name: "", school: "", score: 0 });
+    setOpenProfile({ userId: "", role: "", name: "", school: "", score: 0 });
     toggleBlur();
   };
 
@@ -177,8 +184,8 @@ const LeaderboardPage = () => {
   // Display loading message while fetching data
   if (isLoading)
     content = (
-      <div className="h-screen flex justify-center items-center">
-        <Loader2 className="animate-spin h-12 w-12 text-primary" />
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
 
@@ -211,14 +218,14 @@ const LeaderboardPage = () => {
       <div>
         <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="leaderboard" />
 
-        <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+        <div className={showBlur ? "pointer-events-none blur-lg" : ""}>
           <ScrollToTop showMenu={showMenu} />
           <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="leaderboard" />
-          <div className="flex items-center justify-center w-full h-full">
-            <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl w-full">
+          <div className="flex h-full w-full items-center justify-center">
+            <Card className="mx-6 mt-10 flex w-full max-w-screen-2xl flex-col justify-center space-y-12 rounded-lg border-t-4 border-primary p-6 md:space-y-0">
               <div>
                 <CardHeader className="mt-2 bg-transparent shadow-none">
-                  <h1 className="text-6xl font-bold font-Audiowide text-primary text-center mb-4 uppercase">
+                  <h1 className="mb-4 text-center font-Audiowide text-6xl font-bold uppercase text-primary">
                     Leaderboard
                   </h1>
                 </CardHeader>
@@ -228,30 +235,30 @@ const LeaderboardPage = () => {
                       {qbxrData !== undefined ? (
                         <>
                           {isLoading ? (
-                            <div className="font-Audiowide text-foreground text-center">
-                              <Skeleton className="w-[100px] h-[50px]" />
-                              <Skeleton className="w-[100px] h-[50px]" />
+                            <div className="text-center font-Audiowide text-foreground">
+                              <Skeleton className="h-[50px] w-[100px]" />
+                              <Skeleton className="h-[50px] w-[100px]" />
                             </div>
                           ) : (
-                            <div className="font-Audiowide text-foreground text-center">
-                              <h2 className="text-2xl mb-2">Your Rank: {qbxrData.rank}</h2>
-                              <p className="text-lg mb-4">Your Score: {qbxrData.qbxr_score}</p>
+                            <div className="text-center font-Audiowide text-foreground uppercase">
+                              <h2 className="mb-2 text-3xl">Your Rank: {qbxrData.rank}</h2>
+                              <p className="mb-4 text-xl">Your Score: {qbxrData.qbxr_score}</p>
                             </div>
                           )}
                         </>
                       ) : (
-                        <div className="text-foreground text-center">
-                          <h2 className="font-Audiowide text-2xl mb-2">Your Rank: No Data</h2>
-                          <p className="text-base mb-4">Take The Evalutation Tests On Your Profile</p>
+                        <div className="text-center text-foreground uppercase">
+                          <h2 className="mb-2 font-Audiowide text-2xl">Your Rank: No Data</h2>
+                          <p className="mb-4 text-lg">Take The Evalutation Tests On Your Profile</p>
                         </div>
                       )}
                     </>
                   )}
                 </CardContent>
                 <CardContent>
-                  <div className="relative overflow-x-auto sm:rounded-lg font-Audiowide uppercase">
-                    <table className="table-auto w-full text-sm text-center text-foreground">
-                      <thead className="text-xs text-foreground bg-background-secondary border-b">
+                  <div className="relative overflow-x-auto font-Audiowide uppercase sm:rounded-lg">
+                    <table className="w-full table-auto text-center text-sm text-foreground">
+                      <thead className="border-b bg-background-secondary text-foreground text-lg">
                         <tr>
                           <th scope="col" className="py-3">
                             Rank
@@ -278,6 +285,7 @@ const LeaderboardPage = () => {
         <ProfileCard
           myId={myId}
           userId={openProfile.userId}
+          role={openProfile.role}
           name={openProfile.name}
           school={openProfile.school}
           score={openProfile.score}

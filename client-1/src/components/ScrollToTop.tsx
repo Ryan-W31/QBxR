@@ -29,13 +29,13 @@ const ScrollToTop = ({ showMenu }: ScrollToTopProps) => {
   }, []);
 
   return (
-    <div className={showMenu ? "hidden fixed bottom-2 left-2" : "fixed bottom-2 left-2"}>
+    <div className={showMenu ? "fixed bottom-2 left-2 hidden" : "fixed bottom-2 left-2"}>
       <Button
         onClick={scrollToTop}
         size="icon"
         className={cn(
           isScrollToTopVisible ? "opacity-100" : "opacity-0",
-          "items-center text-light-primary transition-opacity"
+          "text-light-primary items-center transition-opacity"
         )}
       >
         <ArrowUpFromLine size={24} aria-hidden="true" />

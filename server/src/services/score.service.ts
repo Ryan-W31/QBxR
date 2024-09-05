@@ -4,6 +4,7 @@ import User from "../models/user.model";
 import { formatWebScores, formatVRScores } from "../utils/utils";
 import { NOT_FOUND } from "../constants/http";
 import appAssert from "../utils/appAssert";
+import { get } from "node:http";
 
 // setVRScore is used to set the user's VR scores.
 // The user's VR scores are stored in the database.
@@ -15,35 +16,51 @@ type setVRScoreParams = {
   userId: string;
 };
 export const setVRScoreEndpoint = async ({ vrScore1, vrScore2, vrScore3, vrScore4, userId }: setVRScoreParams) => {
-  const update = {
-    vr_reaction: vrScore1,
-    vr_playid: vrScore2,
-    vr_defense: vrScore3,
-    vr_crit: vrScore4,
-  };
-  const newScore = await Score.findOneAndUpdate({ userId }, update, {
-    new: true,
-  });
-  appAssert(newScore, NOT_FOUND, "User not found.");
+  let newScore = null;
+  const score = await Score.findOne({ userId });
+  appAssert(score, NOT_FOUND, "User not found.");
 
-  if (newScore.web_reaction && newScore.web_playid && newScore.web_defense && newScore.web_crit) {
+  if (score.web_reaction && score.web_playid && score.web_defense && score.web_crit) {
     const total =
-      (newScore.web_reaction +
-        newScore.web_playid +
-        newScore.web_defense +
-        newScore.web_crit +
-        newScore.vr_reaction +
-        newScore.vr_playid +
-        newScore.vr_defense +
-        newScore.vr_crit) /
+      (score.web_reaction +
+        score.web_playid +
+        score.web_defense +
+        score.web_crit +
+        vrScore1 +
+        vrScore2 +
+        vrScore3 +
+        vrScore4) /
       8;
 
-    newScore.qbxr_score = total;
+    const update = {
+      vr_reaction: vrScore1,
+      vr_playid: vrScore2,
+      vr_defense: vrScore3,
+      vr_crit: vrScore4,
+      qbxr_score: total,
+    };
+
+    newScore = await Score.findOneAndUpdate({ userId }, update, {
+      new: true,
+    });
     const user = await User.findByIdAndUpdate(userId, { score: total }, { new: true });
     appAssert(user, NOT_FOUND, "User not found.");
+  } else {
+    const update = {
+      vr_reaction: vrScore1,
+      vr_playid: vrScore2,
+      vr_defense: vrScore3,
+      vr_crit: vrScore4,
+    };
+
+    newScore = await Score.findOneAndUpdate({ userId }, update, {
+      new: true,
+    });
   }
 
-  return { score: newScore };
+  const obj = await getAllScoresEndpoint(userId);
+
+  return { score: obj };
 };
 
 // setWebScore is used to set the user's Web scores.
@@ -62,35 +79,51 @@ export const setWebScoreEndpoint = async ({
   webScore4,
   userId,
 }: setWebScoreParams) => {
-  const update = {
-    web_reaction: webScore1,
-    web_playid: webScore2,
-    web_defense: webScore3,
-    web_crit: webScore4,
-  };
-  const newScore = await Score.findOneAndUpdate({ userId }, update, {
-    new: true,
-  });
-  appAssert(newScore, NOT_FOUND, "User not found.");
+  let newScore = null;
+  const score = await Score.findOne({ userId });
+  appAssert(score, NOT_FOUND, "User not found.");
 
-  if (newScore.vr_reaction && newScore.vr_playid && newScore.vr_defense && newScore.vr_crit) {
+  if (score.vr_reaction && score.vr_playid && score.vr_defense && score.vr_crit) {
     const total =
-      (newScore.web_reaction +
-        newScore.web_playid +
-        newScore.web_defense +
-        newScore.web_crit +
-        newScore.vr_reaction +
-        newScore.vr_playid +
-        newScore.vr_defense +
-        newScore.vr_crit) /
+      (score.vr_reaction +
+        score.vr_playid +
+        score.vr_defense +
+        score.vr_crit +
+        webScore1 +
+        webScore2 +
+        webScore3 +
+        webScore4) /
       8;
 
-    newScore.qbxr_score = total;
+    const update = {
+      web_reaction: webScore1,
+      web_playid: webScore2,
+      web_defense: webScore3,
+      web_crit: webScore4,
+      qbxr_score: total,
+    };
+
+    newScore = await Score.findOneAndUpdate({ userId }, update, {
+      new: true,
+    });
     const user = await User.findByIdAndUpdate(userId, { score: total }, { new: true });
     appAssert(user, NOT_FOUND, "User not found.");
+  } else {
+    const update = {
+      web_reaction: webScore1,
+      web_playid: webScore2,
+      web_defense: webScore3,
+      web_crit: webScore4,
+    };
+
+    newScore = await Score.findOneAndUpdate({ userId }, update, {
+      new: true,
+    });
   }
 
-  return { score: newScore };
+  const obj = await getAllScoresEndpoint(userId);
+
+  return { score: obj };
 };
 
 // getQBxRScore is used to get the user's QBxR score.

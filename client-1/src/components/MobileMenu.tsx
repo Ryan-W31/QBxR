@@ -41,7 +41,10 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: Mobile
     logout();
 
     if (!isLoading) {
-      toast({ variant: "destructive", description: "You have successfully logged out." });
+      toast({
+        variant: "destructive",
+        description: "You have successfully logged out.",
+      });
       navigate("/login");
     }
   };
@@ -56,11 +59,11 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: Mobile
         <SheetContent side="right">
           <SheetHeader>
             <SheetTitle>
-              <h2 className="text-3xl font-extrabold text-primary font-Audiowide">QBxR</h2>
+              <h2 className="font-Audiowide text-3xl font-extrabold text-primary">QBxR</h2>
             </SheetTitle>
           </SheetHeader>
           {isLandingPage ? (
-            <div className="w-full grid grid-cols-1 place-items-start gap-y-8 mt-12">
+            <div className="mt-12 grid w-full grid-cols-1 place-items-start gap-y-8">
               <Button variant="link" asChild>
                 <Link to="#" className={currentPageStyle("home", currentPage, "text-primary", "")}>
                   <div className="flex flex-row items-center">
@@ -90,7 +93,7 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: Mobile
               </Button>
             </div>
           ) : (
-            <div className="w-full grid grid-cols-1 place-items-start gap-y-8 mt-12">
+            <div className="mt-12 grid w-full grid-cols-1 place-items-start gap-y-8">
               <Button variant="link" asChild>
                 <Link to="#" className={currentPageStyle("home", currentPage, "text-primary", "")}>
                   <div className="flex flex-row items-center">
@@ -134,13 +137,13 @@ const MobileMenu = ({ showMenu, toggleMenu, isLandingPage, currentPage }: Mobile
             </div>
           )}
           {!isLandingPage ? (
-            <div className="absolute w-full bottom-0 right-0">
+            <div className="absolute bottom-0 right-0 w-full">
               <Button
                 variant="destructive"
                 onClick={handleLogout}
-                className="py-2 px-6 text-light-primary rounded-none w-full text-center text-lg font-Audiowide"
+                className="text-light-primary w-full rounded-none px-6 py-2 text-center font-Audiowide text-lg"
               >
-                <LogOut className="inline-block mb-1 mr-2" />
+                <LogOut className="mb-1 mr-2 inline-block" />
                 Log Out
               </Button>
             </div>

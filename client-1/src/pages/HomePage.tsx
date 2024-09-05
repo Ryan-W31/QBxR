@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type Profile = {
   userId: string;
+  role: string;
   name: string;
   school: string;
   score: number;
@@ -52,7 +53,13 @@ type Profile = {
 const HomePage = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [openProfile, setOpenProfile] = useState<Profile>({ userId: "", name: "", school: "", score: 0 });
+  const [openProfile, setOpenProfile] = useState<Profile>({
+    userId: "",
+    role: "",
+    name: "",
+    school: "",
+    score: 0,
+  });
   const [showBlur, setShowBlur] = useState(false);
 
   const myId = useSelector(selectCurrentId);
@@ -86,36 +93,36 @@ const HomePage = () => {
     <div>
       <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="home" />
 
-      <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+      <div className={showBlur ? "pointer-events-none blur-lg" : ""}>
         <ScrollToTop showMenu={showMenu} />
         <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="home" />
-        <div className="flex items-center justify-center w-full h-full">
-          <Card className="flex flex-col mx-6 mt-10 space-y-12 md:space-y-0 p-6 rounded-lg justify-center border-t-4 border-primary max-w-screen-2xl w-full">
-            <CardHeader className="mt-2 shadow-none text-center">
-              <h1 className="text-primary font-bold text-4xl md:text-6xl font-Audiowide uppercase">Welcome to QBxR</h1>
+        <div className="flex h-full w-full items-center justify-center">
+          <Card className="mx-6 mt-10 flex w-full max-w-screen-2xl flex-col justify-center space-y-12 rounded-lg border-t-4 border-primary p-6 md:space-y-0">
+            <CardHeader className="mt-2 text-center shadow-none">
+              <h1 className="font-Audiowide text-4xl font-bold uppercase text-primary md:text-6xl">Welcome to QBxR</h1>
             </CardHeader>
             {user?.role === "PLAYER" && (
               <>
-                <div className="text-center justify-center font-Audiowide">
-                  <CardContent className="flex flex-col items-center justify-center text-foreground text-2xl md:text-4xl space-y-8">
-                    <p className="text-foreground-secondary">Your QBxR Score:</p>
+                <div className="justify-center text-center font-Audiowide">
+                  <CardContent className="flex flex-col items-center justify-center space-y-8 text-2xl text-foreground md:text-4xl">
+                    <p className="text-foreground-secondary uppercase">Your QBxR Score:</p>
                     {qbxrData ? (
                       <>
                         {qbxrData.qbxr_score >= 0 ? (
                           <p className="m-4 text-xl md:text-3xl">{qbxrData.qbxr_score}</p>
                         ) : (
-                          <Skeleton className="w-[75px] h-[75px]" />
+                          <Skeleton className="h-[75px] w-[75px]" />
                         )}
                       </>
                     ) : (
                       <div>
-                        <p className="text-xl md:text-2xl">No Data</p>
+                        <p className="text-xl md:text-2xl uppercase">No Data</p>
                         {checkData(webData, vrData)}
                       </div>
                     )}
                   </CardContent>
                 </div>
-                <CardContent className="flex md:flex-row flex-col justify-center md:space-x-4">
+                <CardContent className="flex flex-col justify-center md:flex-row md:space-x-4">
                   <div className="flex items-center justify-center md:w-1/2">
                     <ScoreCard
                       title={"Web Test"}
@@ -150,6 +157,7 @@ const HomePage = () => {
       <ProfileCard
         myId={myId}
         userId={openProfile.userId}
+        role={openProfile.role}
         name={openProfile.name}
         school={openProfile.school}
         score={openProfile.score}

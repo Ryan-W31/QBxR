@@ -27,7 +27,7 @@ type User = {
   email: string;
   phone_number: string;
   school_organization: string;
-  birthday: string;
+  birthday: Date;
   bio: string;
   status: boolean;
   role: string;
@@ -42,6 +42,7 @@ type Scores = {
 
 type Profile = {
   userId: string;
+  role: string;
   name: string;
   school: string;
   score: number;
@@ -59,7 +60,13 @@ const ProfilePage = () => {
   const [showBlur, setShowBlur] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [openProfile, setOpenProfile] = useState<Profile>({ userId: "", name: "", school: "", score: 0 });
+  const [openProfile, setOpenProfile] = useState<Profile>({
+    userId: "",
+    role: "",
+    name: "",
+    school: "",
+    score: 0,
+  });
   const [showEditProfile, setShowEditProfile] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -70,11 +77,9 @@ const ProfilePage = () => {
   const { userId } = useParams();
   const myId = useSelector(selectCurrentId);
   const isMyProfile = !userId || myId === userId;
-  console.log(isMyProfile, userId, myId);
 
   const primaryUser = useSelector(selectCurrentUser) ?? undefined;
   const primaryUserScores = useSelector(selectCurrentScores) ?? undefined;
-  console.log(primaryUser);
 
   const [updateInfo] = useUpdateUserInfoMutation();
 
@@ -101,7 +106,11 @@ const ProfilePage = () => {
       const typedQBxRData = qbxrData as { qbxr_score: number; rank: number };
       const typedWebData = webData as { title: string; score: number }[];
       const typedVRData = vrData as { title: string; score: number }[];
-      setProfileScores({ qbxr: typedQBxRData, web: typedWebData, vr: typedVRData });
+      setProfileScores({
+        qbxr: typedQBxRData,
+        web: typedWebData,
+        vr: typedVRData,
+      });
     }
 
     if (!isLoadingUser && !isLoadingQBxRData && !isLoadingVRScore && !isLoadingWebScore) {
@@ -180,31 +189,31 @@ const ProfilePage = () => {
   if (error) {
     const err = error as CustomError;
     content = (
-      <div className="flex flex-row jusitfy-center">
+      <div className="jusitfy-center flex flex-row">
         <p className="text-foreground">An error occurred: {err.data.message}.</p>
-        <Link to="/login" className="mx-2 px-6 py-2 font-Audiowide bg-primary text-foreground rounded-full">
+        <Link to="/login" className="mx-2 rounded-full bg-primary px-6 py-2 font-Audiowide text-foreground">
           Please login again
         </Link>
       </div>
     );
   } else if (isLoading) {
-    content = <p className="text-foreground font-Audiowide">Loading...</p>;
+    content = <p className="font-Audiowide text-foreground">Loading...</p>;
   } else {
     content = (
       <div>
         <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="profile" />
 
-        <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+        <div className={showBlur ? "pointer-events-none blur-lg" : ""}>
           <ScrollToTop showMenu={showMenu} />
           <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="profile" />
-          <div className="flex items-center justify-center w-full h-full">
-            <div className="flex flex-col md:flex-row my-5 mx-6 mt-10 p-6 max-w-screen-2xl w-full">
-              <Card className="md:w-1/3 w-full flex-col p-3 border-t-4 border-primary rounded-lg text-center font-Audiowide uppercase relative">
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="mx-6 my-5 mt-10 flex w-full max-w-screen-2xl flex-col p-6 md:flex-row">
+              <Card className="relative w-full flex-col rounded-lg border-t-4 border-primary p-3 text-center font-Audiowide uppercase md:w-1/3">
                 {!isMyProfile && (
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="absolute top-3 right-3 rounded-lg text-sm w-8 h-8 ml-auto inline-flex items-center justify-center hover:bg-transparent"
+                    className="absolute right-3 top-3 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg text-sm hover:bg-transparent"
                     onClick={handleFavorite}
                   >
                     {isFavorite ? (
@@ -215,17 +224,17 @@ const ProfilePage = () => {
                   </Button>
                 )}
                 <div className="image overflow-hidden p-3">
-                  <div className="h-60 w-60 text-foreground bg-primary border-2 border-foreground rounded-full inline-flex items-center justify-center text-md md:text-4xl">
+                  <div className="text-md inline-flex h-60 w-60 items-center justify-center rounded-full border-2 border-foreground bg-primary text-foreground md:text-4xl">
                     {getInitials(`${profileData?.firstname} ${profileData?.lastname}`)}
                   </div>
                 </div>
-                <CardHeader className="py-0 bg-transparent shadow-none">
-                  <h1 className="text-foreground font-bold text-xl my-1">
+                <CardHeader className="bg-transparent py-0 shadow-none">
+                  <h1 className="my-1 text-xl font-bold text-foreground">
                     {profileData?.firstname + " " + profileData?.lastname}
                   </h1>
                 </CardHeader>
-                <CardContent className="p-2 space-y-2">
-                  <h3 className="text-foreground-secondary text-sm font-semibold">
+                <CardContent className="space-y-2 p-2">
+                  <h3 className="text-sm font-semibold text-foreground-secondary">
                     {profileData?.school_organization}
                   </h3>
                   <div>
@@ -233,7 +242,7 @@ const ProfilePage = () => {
                       <p className="text-sm text-foreground-secondary">{profileData?.bio}</p>
                     )}
                   </div>
-                  <ul className="bg-dark-secondary text-foreground-secondary py-2 px-3 mt-3 divide-y rounded border-2 border-primary">
+                  <ul className="bg-dark-secondary mt-3 divide-y rounded border-2 border-primary px-3 py-2 text-foreground-secondary">
                     <li className="flex items-center py-3">
                       <span>Status</span>
                       <span className="ml-auto">
@@ -241,7 +250,7 @@ const ProfilePage = () => {
                           <select
                             className={cn(
                               profileData?.status ? "bg-primary" : "bg-red-600",
-                              "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
+                              "rounded px-2 py-1 text-center text-sm uppercase text-foreground"
                             )}
                             onChange={handleStatusChange}
                           >
@@ -257,7 +266,7 @@ const ProfilePage = () => {
                           <div
                             className={cn(
                               profileData?.status ? "bg-primary" : "bg-red-600",
-                              "text-foreground py-1 px-2 rounded text-sm uppercase text-center"
+                              "rounded px-2 py-1 text-center text-sm uppercase text-foreground"
                             )}
                           >
                             {profileData?.status ? "Active" : "Inactive"}
@@ -276,23 +285,23 @@ const ProfilePage = () => {
                   </ul>
                 </CardContent>
               </Card>
-              <div className="w-full md:w-9/12 my-4 md:my-0 md:mx-2 font-Audiowide uppercase font-semibold">
-                <Card className="pt-0 p-4 rounded-lg border-t-4 border-primary relative">
+              <div className="my-4 w-full font-Audiowide font-semibold uppercase md:mx-2 md:my-0 md:w-9/12">
+                <Card className="relative rounded-lg border-t-4 border-primary p-4 pt-0">
                   {isMyProfile && (
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="absolute top-3 right-3 cursor-pointer hover:text-primary hover:bg-transparent z-50"
+                      className="absolute right-3 top-3 z-40 cursor-pointer hover:bg-transparent hover:text-primary"
                       onClick={handleEditProfile}
                     >
                       <UserPen size={24} />
                     </Button>
                   )}
-                  <CardHeader className="bg-tranparent shadow-none text-3xl font-bold text-foreground mt-0 text-center relative overflow-visible">
+                  <CardHeader className="bg-tranparent relative mt-0 overflow-visible text-center text-3xl font-bold text-foreground shadow-none">
                     About
                   </CardHeader>
                   <CardContent className="text-foreground-secondary">
-                    <div className="grid md:grid-cols-2 text-lg">
+                    <div className="grid text-lg md:grid-cols-2">
                       <div className="grid grid-cols-2">
                         <div className="px-2 py-2">Name</div>
                         <div className="px-2 py-2">{profileData?.firstname + " " + profileData?.lastname}</div>
@@ -300,7 +309,7 @@ const ProfilePage = () => {
                       <div className="grid grid-cols-2">
                         <div className="px-2 py-2">Email</div>
                         <a
-                          className="px-2 py-2 text-foreground hover:text-primary whitespace-nowrap overflow-hidden text-ellipsis block"
+                          className="block overflow-hidden text-ellipsis whitespace-nowrap px-2 py-2 text-foreground hover:text-primary"
                           href={"mailto:" + profileData?.email}
                         >
                           {profileData?.email}
@@ -330,14 +339,14 @@ const ProfilePage = () => {
 
                 <div className="my-4"></div>
 
-                <Card className="p-4 rounded-lg border-t-4 border-primary">
+                <Card className="rounded-lg border-t-4 border-primary p-4">
                   {profileData?.role === "PLAYER" && (
                     <>
-                      <div className="text-center mb-6">
-                        <CardHeader className="pb-0 bg-tranparent shadow-none text-3xl font-bold text-foreground m-2">
+                      <div className="mb-6 text-center">
+                        <CardHeader className="bg-tranparent m-2 pb-0 text-3xl font-bold text-foreground shadow-none">
                           Your QBxR Score
                         </CardHeader>
-                        <CardContent className="p-2 space-y-4">
+                        <CardContent className="space-y-4 p-2">
                           {isMyProfile || !isLoadingQBxRData ? (
                             <>
                               {profileScores?.qbxr ? (
@@ -350,7 +359,7 @@ const ProfilePage = () => {
                               )}
                             </>
                           ) : (
-                            <Skeleton className="w-[75px] h-[75px]" />
+                            <Skeleton className="h-[75px] w-[75px]" />
                           )}
 
                           <p className="text-sm text-foreground-secondary">
@@ -358,8 +367,8 @@ const ProfilePage = () => {
                           </p>
                         </CardContent>
                       </div>
-                      <CardContent className="flex md:flex-row flex-col justify-center md:space-x-4">
-                        <div className="flex flex-col items-center justify-center md:w-1/2 space-y-2">
+                      <CardContent className="flex flex-col justify-center md:flex-row md:space-x-4">
+                        <div className="flex flex-col items-center justify-center space-y-2 md:w-1/2">
                           <ScoreCard
                             title={"Web Test"}
                             errMessage={"Take The Web Test"}
@@ -377,7 +386,7 @@ const ProfilePage = () => {
                           )}
                         </div>
                         <div className="my-4 md:my-0"></div>
-                        <div className="flex flex-col items-center justify-center md:w-1/2 space-y-2">
+                        <div className="flex flex-col items-center justify-center space-y-2 md:w-1/2">
                           <ScoreCard
                             title={"VR Test"}
                             errMessage={"Take The VR Test"}
@@ -413,6 +422,7 @@ const ProfilePage = () => {
         <ProfileCard
           myId={myId}
           userId={openProfile?.userId}
+          role={openProfile?.role}
           name={openProfile?.name}
           school={openProfile?.school}
           score={openProfile?.score}

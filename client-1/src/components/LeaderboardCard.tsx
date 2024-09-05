@@ -24,35 +24,35 @@ const LeaderboardCard = ({
       {/* Display a skeleton card with a rank, name, school, and score */}
       <th scope="row" className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[50px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[50px]" />
         </div>
       </th>
       <td className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[100px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[100px]" />
         </div>
       </td>
       <td className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[300px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[300px]" />
         </div>
       </td>
       <td className="py-3">
         <div className="flex justify-center">
-          <Skeleton className="w-[50px] h-[10px]" />
+          <Skeleton className="h-[10px] w-[50px]" />
         </div>
       </td>
       {/* End Display a skeleton card with a rank, name, school, and score */}
     </tr>
   ) : (
-    <tr className={cn(colorPodium(rank), "border-b hover:bg-background cursor-pointer")} onClick={onClick}>
+    <tr className={cn(colorPodium(rank), "cursor-pointer border-b hover:bg-background")} onClick={onClick}>
       {/* Display the user's rank, name, school, and score */}
-      <th scope="row" className="py-3 font-medium text-foreground whitespace-nowrap">
+      <th scope="row" className="whitespace-nowrap py-3 font-medium text-foreground">
         {rank}
       </th>
-      <td className="py-3 font-medium text-foreground whitespace-nowrap">{name}</td>
-      <td className="py-3 font-medium text-foreground whitespace-nowrap">{school}</td>
-      <td className="py-3 font-medium text-foreground whitespace-nowrap">{score}</td>
+      <td className="whitespace-nowrap py-3 font-medium text-foreground">{name}</td>
+      <td className="whitespace-nowrap py-3 font-medium text-foreground">{school}</td>
+      <td className="whitespace-nowrap py-3 font-medium text-foreground">{score}</td>
       {/* End Display the user's rank, name, school, and score */}
     </tr>
   );

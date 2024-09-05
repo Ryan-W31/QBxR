@@ -4,6 +4,7 @@ import { setCredentials } from "../auth/authSlice";
 
 interface LeaderboardUser {
   userId: string;
+  role: string;
   rank: number;
   name: string;
   school: string;
@@ -18,7 +19,7 @@ interface User {
   email: string;
   school_organization: string;
   bio: string;
-  birthday: string;
+  birthday: Date;
   phone_number: string;
   status: boolean;
   score: number;
@@ -77,14 +78,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserInfo: builder.mutation({
       query: (body) => ({
-        url: `/user/update/info/${body.userId}`,
+        url: `/user/update/info`,
         method: "PATCH",
         body: body,
       }),
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const response = await queryFulfilled;
-          console.log(response);
           dispatch(
             setCredentials({
               user: response.data.user,
@@ -98,7 +98,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserPassword: builder.mutation({
       query: (body) => ({
-        url: `/user/update/password/${body.userId}`,
+        url: `/user/update/password`,
         method: "PATCH",
         body: body,
       }),

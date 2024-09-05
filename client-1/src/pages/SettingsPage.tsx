@@ -135,22 +135,22 @@ const SettingsPage = () => {
     <div>
       <MobileMenu showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="profile" />
 
-      <div className={showBlur ? "blur-lg pointer-events-none" : ""}>
+      <div className={showBlur ? "pointer-events-none blur-lg" : ""}>
         <ScrollToTop showMenu={showMenu} />
         <NavBar showMenu={showMenu} toggleMenu={toggleMenu} isLandingPage={false} currentPage="profile" />
-        <section className="flex justify-center items-center mt-10 p-5">
+        <section className="mt-10 flex items-center justify-center p-5">
           <Card className="m-6 w-full max-w-lg p-6">
             <CardHeader className="mt-4 bg-transparent shadow-none">
-              <h1 className="text-6xl font-bold font-Audiowide text-primary text-center uppercase">Settings</h1>
+              <h1 className="text-center font-Audiowide text-6xl font-bold uppercase text-primary">Settings</h1>
             </CardHeader>
             <CardContent className="bg-transparent text-center">
-              <ul className="bg-background-secondary text-foreground-secondary py-2 px-3 mt-3 divide-y rounded border-2 border-primary">
+              <ul className="mt-3 divide-y rounded border-2 border-primary bg-background-secondary px-3 py-2 text-foreground-secondary">
                 <li className="flex items-center justify-between py-3">
-                  <span className="font-Audiowide text-foreground-secondary uppercase">Change Your Password:</span>
+                  <span className="font-Audiowide uppercase text-foreground-secondary">Change Your Password:</span>
                   <Button onClick={openPasswordPopup}>Change</Button>
                 </li>
                 <li className="flex items-center justify-between py-3">
-                  <span className="font-Audiowide text-foreground-secondary uppercase">Delete Your Account:</span>
+                  <span className="font-Audiowide uppercase text-foreground-secondary">Delete Your Account:</span>
                   <div className="flex items-center justify-center">
                     <Button variant="destructive" onClick={openDeletePopup}>
                       <Trash2 size={24} className="mr-2" />
@@ -167,18 +167,18 @@ const SettingsPage = () => {
         <div
           id="update-password-popup"
           tabIndex={-1}
-          className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
+          className="h-modal fixed flex w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0 md:h-full"
         >
-          <Card className="relative p-4 w-full h-full md:h-auto max-w-xl bg-background-secondary rounded-lg sm:p-5">
+          <Card className="relative h-full w-full max-w-xl rounded-lg bg-background-secondary p-4 sm:p-5 md:h-auto">
             {/* Modal Header */}
-            <div className="flex justify-center items-center rounded-t border-b">
-              <CardHeader className="pt-2 text-3xl font-semibold text-foreground bg-transparent shadow-none mt-0 font-Audiowide uppercase">
+            <div className="flex items-center justify-center rounded-t border-b">
+              <CardHeader className="mt-0 bg-transparent pt-2 font-Audiowide text-3xl font-semibold uppercase text-foreground shadow-none">
                 Change Password
               </CardHeader>
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-1 right-2 hover:bg-transparent"
+                className="absolute right-2 top-1 hover:bg-transparent"
                 onClick={handleClose}
               >
                 <X className="text-3xl text-primary hover:text-primary-hover" />
@@ -201,14 +201,14 @@ const SettingsPage = () => {
                             {...field}
                             type={isPasswordVisible ? "text" : "password"}
                             placeholder="Password"
-                            className="bg-foreground text-background focus:border-primary focus:border-2"
+                            className="bg-foreground text-background focus:border-2 focus:border-primary"
                             required
                           />
                           <Button
                             variant="ghost"
                             type="button"
                             size="icon"
-                            className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                            className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                             onClick={togglePasswordVisibility}
                           >
                             {isPasswordVisible ? (
@@ -234,14 +234,14 @@ const SettingsPage = () => {
                             {...field}
                             type={isConfirmPasswordVisible ? "text" : "password"}
                             placeholder="Password"
-                            className="bg-foreground text-background focus:border-primary focus:border-2"
+                            className="bg-foreground text-background focus:border-2 focus:border-primary"
                             required
                           />
                           <Button
                             variant="ghost"
                             type="button"
                             size="icon"
-                            className="absolute top-0 right-0 shadow-none hover:bg-transparent"
+                            className="absolute right-0 top-0 shadow-none hover:bg-transparent"
                             onClick={toggleConfirmPasswordVisibility}
                           >
                             {isConfirmPasswordVisible ? (
@@ -255,11 +255,11 @@ const SettingsPage = () => {
                     </FormItem>
                   )}
                 />
-                <div className="text-center mt-4">
+                <div className="mt-4 text-center">
                   <Button
                     type="submit"
                     size="lg"
-                    className="font-Audiowide rounded-full tracking-wider"
+                    className="rounded-full font-Audiowide tracking-wider"
                     disabled={isLoadingPassword}
                   >
                     {isLoadingPassword ? (
@@ -281,18 +281,18 @@ const SettingsPage = () => {
         <div
           id="delete-user-popup"
           tabIndex={-1}
-          className="overflow-y-auto overflow-x-hidden fixed flex justify-center items-center w-full md:inset-0 h-modal md:h-full"
+          className="h-modal fixed flex w-full items-center justify-center overflow-y-auto overflow-x-hidden md:inset-0 md:h-full"
         >
-          <Card className=" relative p-4 w-full h-full md:h-auto max-w-xl bg-background-secondary rounded-lg sm:p-5">
+          <Card className="relative h-full w-full max-w-xl rounded-lg bg-background-secondary p-4 sm:p-5 md:h-auto">
             {/* Modal Header */}
-            <div className="flex justify-center items-center rounded-t border-b">
-              <CardHeader className="pt-2 text-3xl font-semibold text-foreground bg-transparent shadow-none mt-0 font-Audiowide uppercase">
+            <div className="flex items-center justify-center rounded-t border-b">
+              <CardHeader className="mt-0 bg-transparent pt-2 font-Audiowide text-3xl font-semibold uppercase text-foreground shadow-none">
                 Delete Your Account
               </CardHeader>
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-1 right-2 hover:bg-transparent"
+                className="absolute right-2 top-1 hover:bg-transparent"
                 onClick={handleClose}
               >
                 <X className="text-3xl text-primary hover:text-primary-hover" />
@@ -306,9 +306,9 @@ const SettingsPage = () => {
               </>
             )}
             {/* Modal Body */}
-            <CardContent className="bg-transparent flex flex-col pt-2">
+            <CardContent className="flex flex-col bg-transparent pt-2">
               {/* Confirm Field */}
-              <p className="text-sm text-foreground text-center">
+              <p className="text-center text-sm text-foreground">
                 By deleting your account, all of your information, including your test scores, will be erased. If you
                 would like to proceed in deleting your account, type 'DELETE' (all uppercase) in the box below then
                 click the 'Delete' button.
@@ -317,7 +317,7 @@ const SettingsPage = () => {
               <Input
                 type="text"
                 placeholder="Type 'DELETE' to confirm"
-                className="bg-foreground text-background focus:border-primary focus:border-2"
+                className="bg-foreground text-background focus:border-2 focus:border-primary"
                 onChange={(e) => setDeleteMessage(e.target.value)}
                 required
               />
@@ -327,7 +327,7 @@ const SettingsPage = () => {
               <div className="flex items-center justify-center">
                 <Button disabled={isLoadingDeleteUser} variant="destructive" onClick={handleDeleteUser}>
                   {isLoadingDeleteUser ? (
-                    <Loader2 size={24} className="animate-spin mr-2" />
+                    <Loader2 size={24} className="mr-2 animate-spin" />
                   ) : (
                     <Trash2 size={24} className="mr-2" />
                   )}

@@ -32,9 +32,8 @@ export function getInitials(name: string) {
 }
 
 //Function to calculate age from date of birth
-export function getAge(dob: string) {
-  const date = new Date(dob);
-  const age = differenceInYears(new Date(), date);
+export function getAge(dob: Date) {
+  const age = differenceInYears(new Date(), dob);
   return age;
 }
 
