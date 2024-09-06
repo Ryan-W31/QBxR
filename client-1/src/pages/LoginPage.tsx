@@ -57,7 +57,12 @@ const LoginPage = () => {
   return (
     <section className="flex h-screen flex-col items-center justify-center space-y-10">
       <Card className="m-6 w-full max-w-lg p-6">
-        <CardHeader className="text-center font-Audiowide text-5xl font-bold text-primary">QBxR</CardHeader>
+        <CardHeader
+          data-testid="login-title"
+          className="text-center font-Audiowide text-5xl font-bold text-primary"
+        >
+          QBxR
+        </CardHeader>
         {showError && <ErrorMessage message={customError} onClose={() => setShowError(false)} />}
         <CardContent className="flex w-full flex-col p-0">
           <Form {...loginForm}>

@@ -62,19 +62,19 @@ const LandingPage = () => {
           <div className="space-y-12 lg:w-1/2">
             <h2 className="text-center font-Audiowide text-4xl font-bold uppercase text-primary">Why use QBxR?</h2>
             <p className="text-left text-foreground-secondary">
-              In today's world, where technology drives innovation in every sector, sports are no exception. The NFL
-              draft is one of the most crucial moments in a player's career, especially for quarterbacks, who often face
-              the toughest transition from college to the professional level. Evaluating a player's readiness for the
-              NFL has traditionally been subjective, but QBxR changes the game by providing a cutting-edge, data-driven
-              solution to assess a quarterback's potential.
+              In today's world, where technology drives innovation in every sector, sports are no exception. The
+              NFL draft is one of the most crucial moments in a player's career, especially for quarterbacks, who
+              often face the toughest transition from college to the professional level. Evaluating a player's
+              readiness for the NFL has traditionally been subjective, but QBxR changes the game by providing a
+              cutting-edge, data-driven solution to assess a quarterback's potential.
               <br />
               <br />
-              QBxR stands out by offering a unique blend of virtual reality and advanced testing to simulate real game
-              scenarios, allowing players to showcase their abilities in a high-pressure, decision-making environment.
-              By combining expert-backed research with state-of-the-art technology, QBxR delivers an experience that
-              doesn't just measure a player's skills but mirrors the demands they will face on the field. Whether you're
-              a player looking to improve or a scout aiming to make the best draft decision, QBxR is an essential tool
-              for a deep, accurate understanding of quarterback performance.
+              QBxR stands out by offering a unique blend of virtual reality and advanced testing to simulate real
+              game scenarios, allowing players to showcase their abilities in a high-pressure, decision-making
+              environment. By combining expert-backed research with state-of-the-art technology, QBxR delivers an
+              experience that doesn't just measure a player's skills but mirrors the demands they will face on the
+              field. Whether you're a player looking to improve or a scout aiming to make the best draft decision,
+              QBxR is an essential tool for a deep, accurate understanding of quarterback performance.
             </p>
           </div>
 
@@ -115,16 +115,6 @@ const LandingPage = () => {
           </Button>
         </div>
       </section>
-
-      <div className={`${showMenu ? "blur-lg" : ""} bg-dark-primary`}>
-        <div className="flex w-full flex-col items-center justify-center py-2 md:flex-row md:space-x-8">
-          {["Home", "About Us", "How It Works"].map((text) => (
-            <Button key={text} variant="link" asChild>
-              <Link to="/">{text}</Link>
-            </Button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };

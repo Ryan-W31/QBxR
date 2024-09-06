@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IRootState } from "../../app/store";
+import { AppDispatch, IRootState } from "../../app/store";
+import { useDispatch } from "react-redux";
 
 export interface AuthState {
   userId: string | null;
@@ -57,6 +58,9 @@ const authSlice = createSlice({
 
 export const { setCredentials, logOut } = authSlice.actions;
 export default authSlice.reducer;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+
 export const selectCurrentId = (state: IRootState) => state.auth.userId;
 export const selectCurrentUser = (state: IRootState) => state.auth.user;
 export const selectCurrentScores = (state: IRootState) => state.auth.scores;

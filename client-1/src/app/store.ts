@@ -1,19 +1,23 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
-import { setupListeners } from "@reduxjs/toolkit/query";
 import authReducer from "../hooks/auth/authSlice";
 
 // Create a Redux store using the configureStore function
-export const store = configureStore({
-  reducer: {
-    [apiSlice.reducerPath]: apiSlice.reducer,
-    auth: authReducer,
-  },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
-  devTools: true,
+
+const rootReducer = combineReducers({
+  [apiSlice.reducerPath]: apiSlice.reducer,
+  auth: authReducer,
 });
 
-setupListeners(store.dispatch);
+export const setupStore = (preloadedState?: Partial<IRootState>) => {
+  return configureStore({
+    reducer: rootReducer,
+    preloadedState,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+    devTools: true,
+  });
+};
 
-export type IRootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export type IRootState = ReturnType<typeof rootReducer>;
+export type AppStore = ReturnType<typeof setupStore>;
+export type AppDispatch = AppStore["dispatch"];

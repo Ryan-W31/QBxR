@@ -12,59 +12,7 @@ type NavBarProps = {
   currentPage: string;
 };
 const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProps) => {
-  const navList = isLandingPage ? (
-    <ul className="mb-4 mt-2 flex flex-col gap-2 font-semibold uppercase lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-      {/* Home Link */}
-      <Button variant="link" asChild>
-        <Link
-          to="#"
-          className={currentPageStyle(
-            "home",
-            currentPage,
-            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
-            "relative block w-fit"
-          )}
-        >
-          Home
-        </Link>
-      </Button>
-      {/*End Home Link */}
-
-      {/* About Us Link */}
-      <Button variant="link" asChild>
-        <Link
-          to="#"
-          className={currentPageStyle(
-            "about",
-            currentPage,
-            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
-            "relative block w-fit"
-          )}
-        >
-          About Us
-        </Link>
-      </Button>
-
-      {/* End About Us Link */}
-
-      {/* How QBxR Works Link */}
-      <Button variant="link" asChild>
-        <Link
-          to="#"
-          className={currentPageStyle(
-            "how",
-            currentPage,
-            "relative block w-fit text-primary underline decoration-[3px] underline-offset-[6.27px]",
-            "relative block w-fit"
-          )}
-        >
-          How QBxR Works
-        </Link>
-      </Button>
-
-      {/* End How QBxR Works Link */}
-    </ul>
-  ) : (
+  const navList = isLandingPage ? null : (
     <ul className="mb-4 mt-2 flex flex-col gap-2 font-semibold uppercase lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
       {/* Home Link */}
       <Button variant="link" asChild>
@@ -140,7 +88,10 @@ const NavBar = ({ showMenu, toggleMenu, isLandingPage, currentPage }: NavBarProp
         {/* Sign In Link */}
         {isLandingPage ? (
           <div className="flex items-center">
-            <Button className="hidden w-[120px] items-center justify-center text-center font-Audiowide lg:flex" asChild>
+            <Button
+              className="hidden w-[120px] items-center justify-center text-center font-Audiowide lg:flex"
+              asChild
+            >
               <Link to="/login">Log In</Link>
             </Button>
           </div>

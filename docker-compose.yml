@@ -13,8 +13,6 @@ services:
       context: ./server
       target: production
     restart: unless-stopped
-    env_file:
-      - ./server/.env
     networks:
       - qbxr
     depends_on:

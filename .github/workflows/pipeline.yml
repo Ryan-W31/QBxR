@@ -7,8 +7,7 @@ on:
 env:
   JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}
   JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
-  JWT_EMAIL_SECRET: ${{ secrets.JWT_EMAIL_SECRET }}
-  POSTMARK_API_KEY: ${{ secrets.POSTMARK_API_KEY }}
+  RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
 jobs:
   build-and-deploy:
@@ -29,32 +28,8 @@ jobs:
           npm install
           export JWT_ACCESS_SECRET=$JWT_ACCESS_SECRET
           export JWT_REFRESH_SECRET=$JWT_REFRESH_SECRET
-          export JWT_EMAIL_SECRET=$JWT_EMAIL_SECRET
-          export POSTMARK_API_KEY=$POSTMARK_API_KEY
+          export RESEND_API_KEY=$RESEND_API_KEY
           npm run test
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build Client Docker Image
-        working-directory: ./client
-        run: |
-          docker build -t ryanw31/qbxr:client-${{github.run_number}} -t ryanw31/qbxr:client-latest .
-
-      - name: Build Server Docker Image
-        working-directory: ./server
-        run: |
-          docker build -t ryanw31/qbxr:api-${{github.run_number}} -t ryanw31/qbxr:api-latest .
-
-      - name: Push Docker Images
-        run: |
-          docker push ryanw31/qbxr:client-${{github.run_number}}
-          docker push ryanw31/qbxr:api-${{github.run_number}}
-          docker push ryanw31/qbxr:client-latest
-          docker push ryanw31/qbxr:api-latest
 
       - name: Generate deployment package
         run: |
