@@ -23,8 +23,8 @@ export interface AuthState {
   } | null;
   scores: {
     qbxr?: { qbxr_score: number; rank: number };
-    web?: { title: string; score: number }[];
-    vr?: { title: string; score: number }[];
+    web?: { title: string; score: number; max: number }[];
+    vr?: { title: string; score: number; max: number }[];
   } | null;
 }
 

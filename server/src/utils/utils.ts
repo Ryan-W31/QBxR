@@ -3,23 +3,27 @@ export function formatWebScores(webData: any) {
   const web = [];
   if (webData?.web_reaction)
     web.push({
-      title: "Reaction Test",
-      score: webData.web_reaction,
+      title: "Play Identification",
+      score: webData.web_playid,
+      max: 100,
     });
   if (webData?.web_playid)
     web.push({
-      title: "Play Identification",
-      score: webData.web_playid,
+      title: "Reaction Time",
+      score: webData.web_reaction,
+      max: 100,
     });
   if (webData?.web_defense)
     web.push({
-      title: "Defense Reading",
+      title: "Defense Recognition",
       score: webData.web_defense,
+      max: 100,
     });
   if (webData?.web_crit)
     web.push({
-      title: "Critical Thinking",
+      title: "Critical Processing",
       score: webData.web_crit,
+      max: 100,
     });
 
   return web;
@@ -28,17 +32,18 @@ export function formatWebScores(webData: any) {
 // formatVRScores is used to format the VR scores.
 export function formatVRScores(vrData: any) {
   const vr = [];
-  if (vrData?.vr_reaction)
-    vr.push({ title: "Reaction Test", score: vrData.vr_reaction });
-  if (vrData?.vr_playid)
+  if (vrData?.vr_reaction) {
     vr.push({
       title: "Play Identification",
       score: vrData.vr_playid,
+      max: 100,
     });
-  if (vrData?.vr_defense)
-    vr.push({ title: "Defense Reading", score: vrData.vr_defense });
-  if (vrData?.vr_crit)
-    vr.push({ title: "Critical Thinking", score: vrData.vr_crit });
+  }
+
+  if (vrData?.vr_playid) vr.push({ title: "Reaction Time", score: vrData.vr_reaction, max: 100 });
+
+  if (vrData?.vr_defense) vr.push({ title: "Defense Recognition", score: vrData.vr_defense, max: 100 });
+  if (vrData?.vr_crit) vr.push({ title: "Critical Processing", score: vrData.vr_crit, max: 100 });
 
   return vr;
 }

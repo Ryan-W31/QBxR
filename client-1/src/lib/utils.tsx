@@ -49,13 +49,13 @@ export function scoreColor(scoreColor: number) {
 }
 
 // Function to determine the color of the score bar based on the value
-export function barColor(scoreColor: number) {
+export function dotColor(scoreColor: number) {
   if (scoreColor < 50) {
-    return "bg-red-500";
+    return "rgb(239 68 68)";
   } else if (scoreColor < 70) {
-    return "bg-yellow-600";
+    return "rgb(202 138 4)";
   } else {
-    return "bg-primary";
+    return "hsl(var(--primary))";
   }
 }
 

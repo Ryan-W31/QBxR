@@ -21,7 +21,7 @@ type ProfileCardProps = {
   onClose: () => void;
 };
 
-type ScoreData = { title: string; score: number }[];
+type ScoreData = { title: string; score: number; max: number }[];
 // ProfileCard component. This component displays a profile card with the user's name, school, score, and test scores.
 const ProfileCard = ({ myId, userId, role, name, school, score, isVisible, onClose }: ProfileCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -106,25 +106,25 @@ const ProfileCard = ({ myId, userId, role, name, school, score, isVisible, onClo
         {/* End Display the favorite button */}
 
         {/* Display the profile details */}
-        <div className="p-4 text-center font-Audiowide md:p-5">
+        <div className="p-4 font-Audiowide md:p-5">
           <CardHeader className="mt-2 rounded-none border-b-2 border-primary bg-transparent pb-2 shadow-none">
-            <h3 className="text-3xl font-normal text-foreground uppercase">Profile Details</h3>
+            <h3 className="text-3xl font-normal text-foreground uppercase text-center ">Profile Details</h3>
           </CardHeader>
-          <CardContent className="w-full flex-col rounded-lg p-3 text-center font-Audiowide">
+          <CardContent className="w-full flex-col rounded-lg p-3 font-Audiowide">
             {/* Profile Image */}
-            <div className="image overflow-hidden">
-              <div className="text-md inline-flex h-60 w-60 items-center justify-center rounded-full border border-foreground bg-primary text-foreground md:text-4xl">
+            <div className="image overflow-hidden text-center">
+              <div className="text-md inline-flex h-60 w-60 items-center justify-center rounded-full border-foreground border-2 bg-primary text-foreground md:text-4xl text-center">
                 {getInitials(name)}
               </div>
             </div>
             {/* End Profile Image */}
 
             {/* Profile Name */}
-            <h1 className="mt-2 text-xl text-foreground uppercase">{name}</h1>
+            <h1 className="mt-2 text-xl text-foreground uppercase text-center">{name}</h1>
             {/* End Profile Name */}
 
             {/* Profile School */}
-            <h3 className="text-light-secondary font-lg mb-4 uppercase">{school}</h3>
+            <h3 className="text-light-secondary font-lg mb-4 uppercase text-center">{school}</h3>
             {/* End Profile School */}
 
             <hr className="border-1 mx-auto border-primary" />
@@ -135,9 +135,9 @@ const ProfileCard = ({ myId, userId, role, name, school, score, isVisible, onClo
                 typedVRData === undefined ||
                 typedWebData?.length === 0 ||
                 typedVRData?.length === 0 ? (
-                  <p className="m-4 text-3xl text-foreground uppercase">QBxR Score: No Data</p>
+                  <p className="m-4 text-3xl text-foreground uppercase text-center">QBxR Score: No Data</p>
                 ) : (
-                  <p className="m-4 text-3xl text-foreground uppercase">
+                  <p className="m-4 text-3xl text-foreground uppercase text-center">
                     QBxR Score: <span className={cn(scoreColor(score))}>{score}</span>
                   </p>
                 )}
@@ -145,25 +145,15 @@ const ProfileCard = ({ myId, userId, role, name, school, score, isVisible, onClo
                 {/* End Profile Score */}
 
                 {/* Profile Test Scores */}
-                <CardContent className="flex flex-col items-center justify-around font-Audiowide">
+                <CardContent className="flex flex-col justify-center space-y-4">
                   {/* Web Test Scores */}
-                  <ScoreCard
-                    title={"Web Test"}
-                    errMessage={"No Web Data"}
-                    isLoading={isLoadingWebData}
-                    data={typedWebData}
-                  />
+                  <ScoreCard title={"Web Test"} isLoading={isLoadingWebData} data={typedWebData} />
                   {/* End Web Test Scores */}
 
                   <div className="my-4"></div>
 
                   {/* VR Test Scores */}
-                  <ScoreCard
-                    title={"VR Test"}
-                    errMessage={"No VR Data"}
-                    isLoading={isLoadingVRData}
-                    data={typedVRData}
-                  />
+                  <ScoreCard title={"VR Test"} isLoading={isLoadingVRData} data={typedVRData} />
 
                   {/* End VR Test Scores */}
                 </CardContent>
@@ -172,9 +162,11 @@ const ProfileCard = ({ myId, userId, role, name, school, score, isVisible, onClo
             {/* End Profile Test Scores */}
 
             {/* Go To Profile Button */}
-            <Button size="lg" className="mt-2" onClick={onClose} asChild>
-              <Link to={`/profile/${userId}`}>Go To Profile</Link>
-            </Button>
+            <div className="w-full flex items-center justify-center">
+              <Button size="lg" className="mt-2" onClick={onClose} asChild>
+                <Link to={`/profile/${userId}`}>Go To Profile</Link>
+              </Button>
+            </div>
 
             {/* End Go To Profile Button */}
           </CardContent>

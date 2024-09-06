@@ -8,7 +8,7 @@ import EditProfileCard from "../components/EditProfileCard";
 import { selectCurrentId, selectCurrentScores, selectCurrentUser } from "../hooks/auth/authSlice";
 import { useGetUserByIdQuery, useUpdateUserInfoMutation } from "../hooks/users/userApiSlice";
 import { useGetVRScoreQuery, useGetWebScoreQuery, useGetQBxRScoreQuery } from "../hooks/scores/scoreApiSlice";
-import { cn, checkData, getInitials, getAge } from "../lib/utils";
+import { cn, checkData, getInitials, getAge, scoreColor } from "../lib/utils";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { formatPhoneNumberIntl } from "react-phone-number-input";
@@ -36,8 +36,8 @@ type User = {
 
 type Scores = {
   qbxr?: { qbxr_score: number; rank: number };
-  web?: { title: string; score: number }[];
-  vr?: { title: string; score: number }[];
+  web?: { title: string; score: number; max: number }[];
+  vr?: { title: string; score: number; max: number }[];
 };
 
 type Profile = {
@@ -104,8 +104,8 @@ const ProfilePage = () => {
     } else {
       setProfileData(user);
       const typedQBxRData = qbxrData as { qbxr_score: number; rank: number };
-      const typedWebData = webData as { title: string; score: number }[];
-      const typedVRData = vrData as { title: string; score: number }[];
+      const typedWebData = webData as { title: string; score: number; max: number }[];
+      const typedVRData = vrData as { title: string; score: number; max: number }[];
       setProfileScores({
         qbxr: typedQBxRData,
         web: typedWebData,
@@ -237,11 +237,6 @@ const ProfilePage = () => {
                   <h3 className="text-sm font-semibold text-foreground-secondary">
                     {profileData?.school_organization}
                   </h3>
-                  <div>
-                    {profileData?.bio !== undefined && (
-                      <p className="text-sm text-foreground-secondary">{profileData?.bio}</p>
-                    )}
-                  </div>
                   <ul className="bg-dark-secondary mt-3 divide-y rounded border-2 border-primary px-3 py-2 text-foreground-secondary">
                     <li className="flex items-center py-3">
                       <span>Status</span>
@@ -283,6 +278,11 @@ const ProfilePage = () => {
                       )}
                     </li>
                   </ul>
+                  <div>
+                    {profileData?.bio !== undefined && (
+                      <p className="text-sm text-foreground-secondary">{profileData?.bio}</p>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
               <div className="my-4 w-full font-Audiowide font-semibold uppercase md:mx-2 md:my-0 md:w-9/12">
@@ -340,17 +340,19 @@ const ProfilePage = () => {
                 <div className="my-4"></div>
 
                 <Card className="rounded-lg border-t-4 border-primary p-4">
-                  {/* {true && ( */}
-                  <>
-                    <div className="mb-6 text-center">
-                      <CardHeader className="bg-tranparent m-2 pb-0 text-3xl font-bold text-foreground shadow-none">
-                        Your QBxR Score
-                      </CardHeader>
-                      <CardContent className="space-y-4 p-2">
-                        {/* {isMyProfile || !isLoadingQBxRData ? (
+                  {profileData?.role === "PLAYER" && (
+                    <>
+                      <div className="mb-6 text-center">
+                        <CardHeader className="bg-tranparent m-2 pb-0 text-3xl font-bold text-foreground shadow-none">
+                          Your QBxR Score
+                        </CardHeader>
+                        <CardContent className="space-y-4 p-2">
+                          {isMyProfile || !isLoadingQBxRData ? (
                             <>
                               {profileScores?.qbxr ? (
-                                <p className="mx-5 text-5xl text-primary">{profileScores?.qbxr?.qbxr_score}</p>
+                                <p className={cn(scoreColor(profileScores?.qbxr?.qbxr_score), "mx-5 text-5xl")}>
+                                  {profileScores?.qbxr?.qbxr_score}
+                                </p>
                               ) : (
                                 <div>
                                   <p className="mb-4 text-3xl text-foreground">No Data</p>
@@ -360,53 +362,33 @@ const ProfilePage = () => {
                             </>
                           ) : (
                             <Skeleton className="h-[75px] w-[75px]" />
-                          )} */}
+                          )}
 
-                        <p className="text-sm text-foreground-secondary">
-                          Your QBxR score is calculated using you WEB and VR test scores and a machine learning
-                          model.
-                        </p>
-                      </CardContent>
-                    </div>
-                    <CardContent className="flex flex-col justify-center space-y-4">
-                      <div className="flex flex-col items-center justify-center space-y-2">
+                          <p className="text-sm text-foreground-secondary">
+                            Your QBxR score is calculated using you WEB and VR test scores and a machine learning
+                            model.
+                          </p>
+                        </CardContent>
+                      </div>
+                      <CardContent className="flex flex-col justify-center space-y-4">
                         <ScoreCard
                           title={"Web Test"}
-                          errMessage={"Take The Web Test"}
                           isLoading={false}
                           data={profileScores?.web}
+                          isMyProfile={isMyProfile}
+                          isVr={false}
                         />
-                        {/* {isMyProfile && (
-                            <Button size="lg" asChild>
-                              <Link to="/web">
-                                {profileScores?.web === undefined || profileScores?.web?.length === 0
-                                  ? "Take The Web Test"
-                                  : "Retake The Web Test"}
-                              </Link>
-                            </Button>
-                          )} */}
-                      </div>
-                      <div className="my-4 md:my-0"></div>
-                      <div className="flex flex-col items-center justify-center space-y-2 ">
+                        <div className="my-4 md:my-0"></div>
                         <ScoreCard
                           title={"VR Test"}
-                          errMessage={"Take The VR Test"}
                           isLoading={false}
                           data={profileScores?.vr}
+                          isMyProfile={isMyProfile}
+                          isVr={true}
                         />
-                        {/* {isMyProfile && (
-                            <Button size="lg" asChild>
-                              <Link to="/vr">
-                                {profileScores?.vr === undefined || profileScores?.vr?.length === 0
-                                  ? "Take The VR Test"
-                                  : "Retake The VR Test"}
-                              </Link>
-                            </Button>
-                          )} */}
-                      </div>
-                    </CardContent>
-                  </>
-                  {/* )} */}
+                      </CardContent>
+                    </>
+                  )}
                   {profileData?.role === "NONPLAYER" && (
                     <FavoritesCard
                       userId={profileData?._id}
@@ -438,5 +420,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-
-// || profileData?.role === "PLAYER"

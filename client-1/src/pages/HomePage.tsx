@@ -6,7 +6,7 @@ import ScoreCard from "@/components/ScoreCard";
 import ProfileCard from "@/components/ProfileCard";
 import FavoritesCard from "@/components/FavoritesCard";
 import { selectCurrentScores, selectCurrentUser, selectCurrentId } from "../hooks/auth/authSlice";
-import { checkData } from "../lib/utils";
+import { checkData, cn, scoreColor } from "../lib/utils";
 import { useSelector } from "react-redux";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -99,7 +99,9 @@ const HomePage = () => {
         <div className="flex h-full w-full items-center justify-center">
           <Card className="mx-6 mt-10 flex w-full max-w-screen-2xl flex-col justify-center space-y-12 rounded-lg border-t-4 border-primary p-6 md:space-y-0">
             <CardHeader className="mt-2 text-center shadow-none">
-              <h1 className="font-Audiowide text-4xl font-bold uppercase text-primary md:text-6xl">Welcome to QBxR</h1>
+              <h1 className="font-Audiowide text-4xl font-bold uppercase text-primary md:text-6xl">
+                Welcome to QBxR
+              </h1>
             </CardHeader>
             {user?.role === "PLAYER" && (
               <>
@@ -109,7 +111,9 @@ const HomePage = () => {
                     {qbxrData ? (
                       <>
                         {qbxrData.qbxr_score >= 0 ? (
-                          <p className="m-4 text-xl md:text-3xl">{qbxrData.qbxr_score}</p>
+                          <p className={cn(scoreColor(qbxrData.qbxr_score), "m-4 text-xl md:text-5xl")}>
+                            {qbxrData.qbxr_score}
+                          </p>
                         ) : (
                           <Skeleton className="h-[75px] w-[75px]" />
                         )}
@@ -122,24 +126,10 @@ const HomePage = () => {
                     )}
                   </CardContent>
                 </div>
-                <CardContent className="flex flex-col justify-center md:flex-row md:space-x-4">
-                  <div className="flex items-center justify-center md:w-1/2">
-                    <ScoreCard
-                      title={"Web Test"}
-                      errMessage={"Take The Web Test On Your Profile Page"}
-                      isLoading={false}
-                      data={webData}
-                    />
-                  </div>
+                <CardContent className="flex flex-col items-center justify-around font-Audiowide">
+                  <ScoreCard title={"Web Test"} isLoading={false} data={webData} isMyProfile={true} isVr={false} />
                   <div className="my-4" />
-                  <div className="flex items-center justify-center md:w-1/2">
-                    <ScoreCard
-                      title={"VR Test"}
-                      errMessage={"Take The VR Test On Your Profile Page"}
-                      isLoading={false}
-                      data={vrData}
-                    />
-                  </div>
+                  <ScoreCard title={"VR Test"} isLoading={false} data={vrData} isMyProfile={true} isVr={true} />
                 </CardContent>
               </>
             )}
