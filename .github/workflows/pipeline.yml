@@ -31,9 +31,10 @@ jobs:
           export RESEND_API_KEY=$RESEND_API_KEY
           npm run test
 
+      # Exclude node_modules and any other unnecessary files like tests
       - name: Generate deployment package
         run: |
-          zip -r deploy.zip * .[^.]*
+          zip -r deploy.zip * .[^.]* -x "**/node_modules/*" "**/client-1/node_modules/*" "**/server/node_modules/*" "**/*.test.*" "**/__tests__/*"
 
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
