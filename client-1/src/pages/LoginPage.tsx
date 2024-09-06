@@ -116,7 +116,7 @@ const LoginPage = () => {
               />
               <div className="flex items-center justify-end text-sm">
                 <Button variant="link" className="p-0 text-sm uppercase text-primary" asChild>
-                  <Link to="/reset">Forgot Password?</Link>
+                  <Link to="/forgot">Forgot Password?</Link>
                 </Button>
               </div>
               <div className="mt-4 text-center">

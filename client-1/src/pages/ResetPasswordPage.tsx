@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useResetPasswordMutation } from "../hooks/auth/authApiSlice";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
@@ -64,13 +64,13 @@ const ResetPasswordPage = () => {
       <Card className="m-6 w-full max-w-lg p-6">
         <CardHeader className="text-center font-Audiowide font-bold shadow-none">
           <h1 className="text-5xl text-primary">QBxR</h1>
-          <h3 className="text-2xl text-primary">Forgot Password</h3>
+          <h3 className="text-2xl text-primary uppercase">Forgot Password</h3>
         </CardHeader>
         <hr className="w-full border-foreground-secondary" />
         <CardContent className="flex flex-col justify-center pt-4">
           {linkIsValid ? (
             <>
-              <p className="text-center font-Audiowide text-sm text-foreground">Please enter a new password.</p>
+              <p className="text-center text-sm text-foreground">Please enter a new password.</p>
 
               <Form {...resetPasswordForm}>
                 <form onSubmit={resetPasswordForm.handleSubmit(onSubmit)}>
@@ -141,12 +141,7 @@ const ResetPasswordPage = () => {
                     )}
                   />
                   <div className="mt-4 text-center">
-                    <Button
-                      type="submit"
-                      size="lg"
-                      className="rounded-full font-Audiowide tracking-wider"
-                      disabled={isLoading}
-                    >
+                    <Button type="submit" size="lg" disabled={isLoading}>
                       {isLoading ? (
                         <>
                           <Loader2 size={24} className="mr-2 animate-spin" /> Resetting Password...
@@ -160,17 +155,13 @@ const ResetPasswordPage = () => {
               </Form>
             </>
           ) : (
-            <div className="space-y-4">
-              <p className="text-md text-center font-Audiowide text-foreground">
+            <div className="space-y-4 text-center">
+              <p className="text-md text-foreground">
                 The link you used to reset your password has expired. <br />
                 Please request a new link.
               </p>
-              <Button
-                size="lg"
-                className="w-full rounded-full font-Audiowide tracking-wider"
-                onClick={() => navigate("/forgot", { replace: true })}
-              >
-                Request New Link
+              <Button size="lg" asChild>
+                <Link to="/forgot">Request New Link</Link>
               </Button>
             </div>
           )}

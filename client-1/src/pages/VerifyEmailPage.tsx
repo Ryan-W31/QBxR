@@ -129,7 +129,7 @@ const VerifyEmailPage = () => {
                       <Button
                         disabled={emailPending}
                         type="submit"
-                        className="w-full rounded-full text-center text-lg shadow-xl md:mt-8 md:w-1/2 md:text-xl"
+                        className="w-full rounded-full text-center text-lg shadow-xl md:w-1/2 md:text-xl"
                       >
                         {emailPending ? (
                           <Loader2 size={24} className="animate-spin" />

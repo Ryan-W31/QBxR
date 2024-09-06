@@ -178,7 +178,7 @@ const EditProfileCard = ({ isVisible, userId, user, onClose }: EditProfileCardPr
                 name="school_org"
                 id="school_org"
                 className="block w-full rounded-lg border bg-foreground p-2.5 text-sm text-background"
-                placeholder="University of Central Florida"
+                placeholder="Ex. University of Central Florida"
                 onChange={(e) => setSchoolOrg(e.target.value)}
               />
             </div>

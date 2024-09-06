@@ -43,13 +43,13 @@ const ForgotPasswordPage = () => {
       <Card className="m-6 w-full max-w-lg p-6">
         <CardHeader className="text-center font-Audiowide font-bold shadow-none">
           <h1 className="text-5xl text-primary">QBxR</h1>
-          <h3 className="text-2xl text-primary">Forgot Password</h3>
+          <h3 className="text-2xl text-primary uppercase">Forgot Password</h3>
         </CardHeader>
         <hr className="w-full border-foreground-secondary" />
         <CardContent className="flex flex-col justify-center pt-4">
           {!isEmailSuccess ? (
             <>
-              <p className="text-md text-center font-Audiowide text-foreground">
+              <p className="text-md text-center text-foreground">
                 Please enter the email you used to sign up with and we will send you a link to reset your password.
               </p>
               <div className="my-4" />
@@ -88,7 +88,7 @@ const ForgotPasswordPage = () => {
               </Form>
             </>
           ) : (
-            <p className="text-md text-center font-Audiowide text-foreground">
+            <p className="text-md text-center text-foreground">
               An email with a link to reset your password has been sent to{" "}
               <span className="text-primary">{resetEmailForm.getValues("email")}</span>
               .
