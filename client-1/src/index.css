@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+@import "react-day-picker/style.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 5%;
+    --background-secondary: 120 4% 15%;
+
+    --foreground: 0 0% 93%;
+    --foreground-secondary: 0 0% 67%;
+
+    --card: 120 4% 15%;
+    --card-foreground: 0 0% 67%;
+
+    --popover: 0 0% 93%;
+    --popover-foreground: 0 0% 5%;
+
+    --primary: 121 71% 42%;
+    --primary-hover: 121 71% 32%;
+    --primary-foreground: 0 0% 93%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 0 0% 5%;
+    --accent-foreground: 0 0% 93%;
+
+    --destructive: 0 100% 50%;
+    --destructive-hover:0 100% 60%;
+    --destructive-foreground: 0 0% 93%;
+
+    --border: 0 0% 93%;
+    --input: 121 71% 42%;
+
+    --ring: 121 71% 42%;
+
+    --radius: 0.5rem;
+
+    --chart-1: 121 71% 42%;
+    --chart-2: 0 100% 50%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  .PhoneInputInput {
+    @apply bg-foreground text-background;
+  }
+}
+
+@layer components {
+  .PhoneInputInput {
+    @apply bg-foreground text-background !important;
+  }
+
+  
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #0C0C0C;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #AAAAAA;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #AAAAAA;
+  }
+}

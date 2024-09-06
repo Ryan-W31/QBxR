@@ -1,11 +1,27 @@
-FROM node:18-alpine
+# Development stage
+FROM node:18-bookworm-slim AS development
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package*.json .
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
-CMD ["npm", "start"]
+RUN npm run build
+
+CMD ["npm", "run", "dev"]
+
+# Production stage
+FROM node:18-bookworm-slim AS production
+
+WORKDIR /app
+
+COPY package*.json .
+
+RUN npm ci --only=production
+
+COPY --from=development /app/dist ./dist
+
+CMD ["node", "dist/server.js"]

@@ -1,0 +1,45 @@
+# Production Caddyfile
+{$DOMAIN_NAME:domain.invalid} {
+    encode gzip
+	reverse_proxy client:80
+}
+
+www.{$DOMAIN_NAME:domain.invalid} {
+    redir https://{$DOMAIN_NAME}{uri} permanent
+}
+
+api.{$DOMAIN_NAME:domain.invalid} {
+    reverse_proxy api:5001
+
+    header {
+        -X-Powered-By
+        -Server
+
+        # enable HSTS
+        Strict-Transport-Security max-age=31536000;
+
+        # disable clients from sniffing the media type
+        X-Content-Type-Options nosniff
+
+        # clickjacking protection
+        X-Frame-Options DENY
+
+        # XSS Protection
+        X-XSS-Protection "1; mode=block"
+    }
+
+    rate_limit {
+        # limit requests based on IP address
+        zone api_limit {
+            key {remote_host}
+            events 100
+            window 1m
+        }
+
+        zone burst_limit {
+            key {remote_host}
+            events 20
+            window 1s
+        }
+    }
+}

@@ -1,0 +1,67 @@
+name: qbxr
+
+services:
+  mongodb:
+    image: mongo:7.0.12
+    ports:
+      - 27017:27017
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - qbxr
+
+  api:
+    build:
+      context: ./server
+      target: development
+    restart: unless-stopped
+    env_file:
+      - ./server/.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    networks:
+      - qbxr
+    depends_on:
+      - mongodb
+
+  client:
+    build:
+      context: ./client-1
+      target: development
+      args:
+        VITE_API_URL: https://api.test.localhost
+    env_file:
+      - ./client-1/.env
+    restart: unless-stopped
+    volumes:
+      - ./client-1:/app
+      - /app/node_modules
+    networks:
+      - qbxr
+    command: npm run dev -- --host
+    depends_on:
+      - api
+
+  caddy:
+    image: caddy:2-alpine
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./caddy/Caddyfile.dev:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - qbxr
+    depends_on:
+      - client
+      - api
+
+volumes:
+  mongo_data:
+  caddy_data:
+  caddy_config:
+networks:
+  qbxr:
+    driver: bridge
