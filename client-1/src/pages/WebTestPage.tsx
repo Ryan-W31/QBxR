@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Unity, useUnityContext } from "react-unity-webgl";
 import { useSelector } from "react-redux";
 import { useSetWebScoreMutation } from "../hooks/scores/scoreApiSlice";
 import { selectCurrentId } from "../hooks/auth/authSlice";
@@ -13,15 +12,6 @@ const WebPage = () => {
   const [customError, setCustomError] = useState("");
   const navigate = useNavigate();
   const userId = useSelector(selectCurrentId);
-  const { unityProvider } = useUnityContext({
-    loaderUrl: "./Build/vrtest2.loader.js",
-    dataUrl: "./Build/vrtest2.data",
-    frameworkUrl: "./Build/vrtest2.framework.js",
-    codeUrl: "./Build/vrtest2.wasm",
-    webglContextAttributes: {
-      preserveDrawingBuffer: true,
-    },
-  });
 
   const [updateWebScore] = useSetWebScoreMutation();
 
@@ -52,7 +42,11 @@ const WebPage = () => {
   // Return the WebPage component
   return (
     <div className="flex h-screen flex-col items-center justify-center space-y-10 md:space-x-16">
-      <Unity unityProvider={unityProvider} style={{ width: "960px", height: "600px" }} />
+      <iframe
+        src="./web.html"
+        title="Web Test"
+        style={{ width: "960px", height: "600px", border: "none" }}
+      ></iframe>
 
       <img src="./vite.svg" />
       <div className="text-center">
