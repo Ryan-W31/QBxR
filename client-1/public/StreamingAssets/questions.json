@@ -4,7 +4,7 @@
     "problem": "Test problem 1",
     "image": "ucf.png",
     "choices": ["Wrong", "Correct", "Wrong", "Wrong"],
-    "correctAnswer": 2
+    "correctAnswer": 1
   },
   {
     "id": 2,
@@ -18,7 +18,7 @@
     "problem": "Test problem 3",
     "image": "ucf.png",
     "choices": ["Wrong", "Correct", "Wrong", "Wrong"],
-    "correctAnswer": 2
+    "correctAnswer": 1
   },
   {
     "id": 4,
@@ -32,7 +32,7 @@
     "problem": "Test problem 5",
     "image": "ucf.png",
     "choices": ["Wrong", "Correct", "Wrong", "Wrong"],
-    "correctAnswer": 2
+    "correctAnswer": 1
   },
   {
     "id": 6,
@@ -46,7 +46,7 @@
     "problem": "Test problem 7",
     "image": "ucf.png",
     "choices": ["Wrong", "Correct", "Wrong", "Wrong"],
-    "correctAnswer": 2
+    "correctAnswer": 1
   },
   {
     "id": 8,
@@ -60,7 +60,7 @@
     "problem": "Test problem 9",
     "image": "ucf.png",
     "choices": ["Wrong", "Correct", "Wrong", "Wrong"],
-    "correctAnswer": 2
+    "correctAnswer": 1
   },
   {
     "id": 10,

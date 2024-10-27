@@ -22,7 +22,6 @@ const chartConfig = {
 
 const CustomizedTick = (props: any) => {
   const { cx, cy, orientation, radius, x, y, textAnchor, payload, index } = props;
-  console.log(props);
   let newY = y;
 
   if (index === 0) {

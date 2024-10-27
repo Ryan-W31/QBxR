@@ -1,15 +1,20 @@
 import { Unity, useUnityContext } from "react-unity-webgl";
-import { useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
-// import { useSelector } from "react-redux";
-// import { selectCurrentId } from "../hooks/auth/authSlice";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCurrentId } from "../hooks/auth/authSlice";
+import { useSetWebScoreMutation } from "@/hooks/scores/scoreApiSlice";
 
 // WebTestPage component. This component displays the web test page with the Unity WebGL build.
 const WebTestPage = () => {
-  //const id = useSelector(selectCurrentId);
-  const navigate = useNavigate(); // Use the useNavigate hook for navigation
+  const [isComplete, setIsComplete] = useState(false);
+  const [score, setScore] = useState(0);
+  const hasSubmitted = useRef(false);
 
-  const { unityProvider, addEventListener, removeEventListener } = useUnityContext({
+  const userId = useSelector(selectCurrentId);
+  const navigate = useNavigate();
+
+  const { unityProvider, isLoaded, addEventListener, removeEventListener } = useUnityContext({
     loaderUrl: "/2dBuild/2dBuild.loader.js",
     dataUrl: "/2dBuild/2dBuild.data",
     frameworkUrl: "/2dBuild/2dBuild.framework.js",
@@ -24,12 +29,56 @@ const WebTestPage = () => {
     navigate("/profile"); // Use react-router to navigate to a different page
   }, []);
 
-  // useEffect(() => {
-  //   // Ensure the ID is sent to Unity after it is loaded
-  //   if (isLoaded && id) {
-  //     sendMessage("QuizManager", "SetUserId", id);
-  //   }
-  // }, [isLoaded, id, sendMessage]);
+  const [updateWebScore] = useSetWebScoreMutation();
+
+  const handleScoreChange = useCallback(
+    (newScore: any, isComplete: any) => {
+      setScore(newScore);
+      setIsComplete(isComplete);
+    },
+    [setScore]
+  );
+
+  // Handle the form submit event. Update the VR test scores and refresh the user data.
+  const submitScore = async () => {
+    const webScore1: number = score * 10;
+    const webScore2: number = score * 10;
+    const webScore3: number = score * 10;
+    const webScore4: number = score * 10;
+
+    var obj = {
+      userId: userId,
+      webScore1: webScore1,
+      webScore2: webScore2,
+      webScore3: webScore3,
+      webScore4: webScore4,
+    };
+
+    try {
+      await updateWebScore(obj).unwrap();
+    } catch (error) {
+      console.error("An error occurred. Please try again later.");
+    }
+  };
+
+  useEffect(() => {
+    if (isComplete && !hasSubmitted.current) {
+      submitScore();
+      hasSubmitted.current = true;
+    }
+  }, [isComplete, submitScore, hasSubmitted]);
+
+  useEffect(() => {
+    if (isLoaded && isLoaded) {
+      // Add the external event listener for the navigation call from Unity
+      addEventListener("sendScore", handleScoreChange);
+
+      // Cleanup the event listener when the component unmounts
+      return () => {
+        removeEventListener("sendScore", handleScoreChange);
+      };
+    }
+  }, [isLoaded, addEventListener, removeEventListener, handleScoreChange]);
 
   useEffect(() => {
     // Add the external event listener for the navigation call from Unity
