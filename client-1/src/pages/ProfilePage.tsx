@@ -147,6 +147,10 @@ const ProfilePage = () => {
     toggleBlur();
   };
 
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
   // Toggle the blur effect
   const toggleBlur = () => setShowBlur((prevState) => !prevState);
 
@@ -365,8 +369,7 @@ const ProfilePage = () => {
                           )}
 
                           <p className="text-sm text-foreground-secondary">
-                            Your QBxR score is calculated using you WEB and VR test scores and a machine learning
-                            model.
+                            Your QBxR score is calculated using your Web and VR scores.
                           </p>
                         </CardContent>
                       </div>

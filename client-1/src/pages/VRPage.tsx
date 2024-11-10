@@ -9,16 +9,38 @@ import { User } from "lucide-react";
 const VRPage = () => {
   const navigate = useNavigate();
   const userId = useSelector(selectCurrentId);
-  const [score, setScore] = useState<number | null>(null);
+  const [scores, setScores] = useState<any>({
+    difficulty1Score: null,
+    difficulty2Score: null,
+    difficulty3Score: null,
+  });
 
   useEffect(() => {
     // Load score from localStorage
     const loadScoreFromStorage = () => {
-      const scoreFromStorage = localStorage.getItem("score");
-      if (scoreFromStorage !== null) {
-        const score = parseInt(scoreFromStorage, 10);
-        console.log("Score updated: ", score);
-        setScore(score);
+      const score1 = localStorage.getItem("score1");
+      const score2 = localStorage.getItem("score2");
+      const score3 = localStorage.getItem("score3");
+      if (score1 !== null && score2 !== null && score3 !== null) {
+        try {
+          const scoreObj = {
+            difficulty1Score: Number.isNaN(parseFloat(score1)) ? 0.0 : parseFloat(score1),
+            difficulty2Score: Number.isNaN(parseFloat(score2)) ? 0.0 : parseFloat(score2),
+            difficulty3Score: Number.isNaN(parseFloat(score3)) ? 0.0 : parseFloat(score3),
+          };
+
+          setScores(scoreObj);
+        } catch (error) {
+          console.error("Error parsing score from localStorage:", error);
+        }
+      } else {
+        const scoreObj = {
+          difficulty1Score: 0.0,
+          difficulty2Score: 0.0,
+          difficulty3Score: 0.0,
+        };
+
+        setScores(scoreObj);
       }
     };
 
@@ -37,23 +59,18 @@ const VRPage = () => {
       window.removeEventListener("scoreUpdated", handleScoreUpdatedEvent);
       clearInterval(pollInterval);
     };
-  }, []);
+  }, [setScores]);
 
   const [updateVRScore] = useSetVRScoreMutation();
 
   const handleSubmit = async () => {
-    if (score === null) return;
-    const vrScore1: number = score * 20;
-    const vrScore2: number = score * 20;
-    const vrScore3: number = score * 20;
-    const vrScore4: number = score * 20;
+    if (scores === null) {
+      navigate("/profile");
+    }
 
-    var obj = {
+    const obj = {
       userId: userId,
-      vrScore1: vrScore1,
-      vrScore2: vrScore2,
-      vrScore3: vrScore3,
-      vrScore4: vrScore4,
+      scores: scores,
     };
 
     try {
@@ -72,7 +89,7 @@ const VRPage = () => {
         style={{ width: "960px", height: "600px", border: "none" }}
       ></iframe>
       <Button className="md:text-md rounded-full text-sm lg:text-xl" onClick={handleSubmit}>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center justify-center">
           <User size={24} className="mr-2" />
           Go To Profile
         </div>

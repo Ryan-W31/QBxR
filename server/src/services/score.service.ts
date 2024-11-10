@@ -4,18 +4,21 @@ import User from "../models/user.model";
 import { formatWebScores, formatVRScores } from "../utils/utils";
 import { NOT_FOUND } from "../constants/http";
 import appAssert from "../utils/appAssert";
-import { get } from "node:http";
 
 // setVRScore is used to set the user's VR scores.
 // The user's VR scores are stored in the database.
 type setVRScoreParams = {
-  vrScore1: number;
-  vrScore2: number;
-  vrScore3: number;
-  vrScore4: number;
   userId: string;
+  difficulty1Score: number;
+  difficulty2Score: number;
+  difficulty3Score: number;
 };
-export const setVRScoreEndpoint = async ({ vrScore1, vrScore2, vrScore3, vrScore4, userId }: setVRScoreParams) => {
+export const setVRScoreEndpoint = async ({
+  userId,
+  difficulty1Score,
+  difficulty2Score,
+  difficulty3Score,
+}: setVRScoreParams) => {
   let newScore = null;
   const score = await Score.findOne({ userId });
   appAssert(score, NOT_FOUND, "User not found.");
@@ -26,17 +29,15 @@ export const setVRScoreEndpoint = async ({ vrScore1, vrScore2, vrScore3, vrScore
         score.web_playid +
         score.web_defense +
         score.web_crit +
-        vrScore1 +
-        vrScore2 +
-        vrScore3 +
-        vrScore4) /
-      8;
+        difficulty1Score * 100 +
+        difficulty2Score * 100 +
+        difficulty3Score * 100) /
+      7;
 
     const update = {
-      vr_reaction: vrScore1,
-      vr_playid: vrScore2,
-      vr_defense: vrScore3,
-      vr_crit: vrScore4,
+      vr_difficulty_1: difficulty1Score,
+      vr_difficulty_2: difficulty2Score,
+      vr_difficulty_3: difficulty3Score,
       qbxr_score: total,
     };
 
@@ -47,10 +48,9 @@ export const setVRScoreEndpoint = async ({ vrScore1, vrScore2, vrScore3, vrScore
     appAssert(user, NOT_FOUND, "User not found.");
   } else {
     const update = {
-      vr_reaction: vrScore1,
-      vr_playid: vrScore2,
-      vr_defense: vrScore3,
-      vr_crit: vrScore4,
+      vr_difficulty_1: difficulty1Score,
+      vr_difficulty_2: difficulty2Score,
+      vr_difficulty_3: difficulty3Score,
     };
 
     newScore = await Score.findOneAndUpdate({ userId }, update, {
@@ -83,17 +83,16 @@ export const setWebScoreEndpoint = async ({
   const score = await Score.findOne({ userId });
   appAssert(score, NOT_FOUND, "User not found.");
 
-  if (score.vr_reaction && score.vr_playid && score.vr_defense && score.vr_crit) {
+  if (score.vr_difficulty_1 && score.vr_difficulty_2 && score.vr_difficulty_3) {
     const total =
-      (score.vr_reaction +
-        score.vr_playid +
-        score.vr_defense +
-        score.vr_crit +
+      (score.vr_difficulty_1 * 100 +
+        score.vr_difficulty_2 * 100 +
+        score.vr_difficulty_3 * 100 +
         webScore1 +
         webScore2 +
         webScore3 +
         webScore4) /
-      8;
+      7;
 
     const update = {
       web_reaction: webScore1,

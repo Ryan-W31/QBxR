@@ -32,18 +32,36 @@ export function formatWebScores(webData: any) {
 // formatVRScores is used to format the VR scores.
 export function formatVRScores(vrData: any) {
   const vr = [];
-  if (vrData?.vr_reaction) {
+  const vr1 = vrData?.vr_difficulty_1;
+  const vr2 = vrData?.vr_difficulty_2;
+  const vr3 = vrData?.vr_difficulty_3;
+  if (vr1) {
     vr.push({
-      title: "Play Identification",
-      score: vrData.vr_playid,
+      title: "Easy",
+      score: vrData.vr_difficulty_1 * 100,
       max: 100,
     });
   }
 
-  if (vrData?.vr_playid) vr.push({ title: "Reaction Time", score: vrData.vr_reaction, max: 100 });
+  if (vr2) {
+    vr.push({ title: "Medium", score: vrData.vr_difficulty_2 * 100, max: 100 });
+  }
 
-  if (vrData?.vr_defense) vr.push({ title: "Defense Recognition", score: vrData.vr_defense, max: 100 });
-  if (vrData?.vr_crit) vr.push({ title: "Critical Processing", score: vrData.vr_crit, max: 100 });
+  if (vr3) {
+    vr.push({ title: "Hard", score: vrData.vr_difficulty_3 * 100, max: 100 });
+  }
 
+  if (vr1 || vr2 || vr3) {
+    if (!vr1) {
+      vr.push({ title: "Easy", score: 0, max: 100 });
+    }
+    if (!vr2) {
+      vr.push({ title: "Medium", score: 0, max: 100 });
+    }
+    if (!vr3) {
+      vr.push({ title: "Hard", score: 0, max: 100 });
+    }
+  }
+  console.log(vr);
   return vr;
 }

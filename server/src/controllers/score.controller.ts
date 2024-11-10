@@ -15,7 +15,13 @@ import { userIdSchema, vrScoreSchema, webScoreSchema } from "./score.schema";
 // setVRScore is used to set the user's VR scores.
 // The user's VR scores are stored in the database.
 export const setVRScoreController = catchErrors(async (req, res) => {
-  const request = vrScoreSchema.parse({ ...req.body });
+  const userId = userIdSchema.parse(req.body.userId);
+  const difficulty1Score = req.body.scores.difficulty1Score;
+  const difficulty2Score = req.body.scores.difficulty2Score;
+  const difficulty3Score = req.body.scores.difficulty3Score;
+
+  console.log(userId, difficulty1Score, difficulty2Score, difficulty3Score);
+  const request = vrScoreSchema.parse({ difficulty1Score, difficulty2Score, difficulty3Score, userId });
   const { score } = await setVRScoreEndpoint(request);
 
   return res.status(OK).json({ message: "VR Score set successfully.", score: score });

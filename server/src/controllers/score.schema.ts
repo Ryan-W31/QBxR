@@ -1,10 +1,9 @@
 import { z } from "zod";
 export const userIdSchema = z.string().min(1).max(24);
 export const vrScoreSchema = z.object({
-  vrScore1: z.number(),
-  vrScore2: z.number(),
-  vrScore3: z.number(),
-  vrScore4: z.number(),
+  difficulty1Score: z.number(),
+  difficulty2Score: z.number(),
+  difficulty3Score: z.number(),
   userId: userIdSchema,
 });
 

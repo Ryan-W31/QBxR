@@ -7,10 +7,9 @@ export interface ScoreDocument extends mongoose.Document {
   web_playid: number;
   web_defense: number;
   web_crit: number;
-  vr_reaction: number;
-  vr_playid: number;
-  vr_defense: number;
-  vr_crit: number;
+  vr_difficulty_1: number;
+  vr_difficulty_2: number;
+  vr_difficulty_3: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,16 +35,13 @@ const scoreSchema = new mongoose.Schema<ScoreDocument>(
     web_crit: {
       type: Number,
     },
-    vr_reaction: {
+    vr_difficulty_1: {
       type: Number,
     },
-    vr_playid: {
+    vr_difficulty_2: {
       type: Number,
     },
-    vr_defense: {
-      type: Number,
-    },
-    vr_crit: {
+    vr_difficulty_3: {
       type: Number,
     },
   },
