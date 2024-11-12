@@ -1,30 +1,39 @@
 // formatWebScores is used to format the web scores.
 export function formatWebScores(webData: any) {
   const web = [];
-  if (webData?.web_reaction)
+  const web1 = webData?.web_crit;
+  const web2 = webData?.web_defense;
+  const web3 = webData?.web_playid;
+  if (web1)
     web.push({
-      title: "Play Identification",
-      score: webData.web_playid,
-      max: 100,
-    });
-  if (webData?.web_playid)
-    web.push({
-      title: "Reaction Time",
-      score: webData.web_reaction,
-      max: 100,
-    });
-  if (webData?.web_defense)
-    web.push({
-      title: "Defense Recognition",
-      score: webData.web_defense,
-      max: 100,
-    });
-  if (webData?.web_crit)
-    web.push({
-      title: "Critical Processing",
+      title: "Critical Thinking",
       score: webData.web_crit,
       max: 100,
     });
+  if (web2)
+    web.push({
+      title: "Defensive Reading",
+      score: webData.web_defense,
+      max: 100,
+    });
+  if (web3)
+    web.push({
+      title: "Play Recognition",
+      score: webData.web_playid,
+      max: 100,
+    });
+
+  if (web1 || web2 || web3) {
+    if (!web1) {
+      web.push({ title: "Critical Thinking", score: 0, max: 100 });
+    }
+    if (!web2) {
+      web.push({ title: "Defensive Reading", score: 0, max: 100 });
+    }
+    if (!web3) {
+      web.push({ title: "Play Recognition", score: 0, max: 100 });
+    }
+  }
 
   return web;
 }
@@ -62,6 +71,5 @@ export function formatVRScores(vrData: any) {
       vr.push({ title: "Hard", score: 0, max: 100 });
     }
   }
-  console.log(vr);
   return vr;
 }

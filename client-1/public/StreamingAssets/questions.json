@@ -15,7 +15,7 @@
   },
   {
     "id": 3,
-    "problem": "Below is a route combination. Who is about to be wide open?",
+    "problem": "Below is a route combination. Who is this best option?",
     "media": "q1.png",
     "choices": ["Red", "Blue", "Green", "Yellow"],
     "correctAnswer": 1
@@ -57,16 +57,16 @@
   },
   {
     "id": 9,
-    "problem": "Test problem 9",
-    "media": "ucf.png",
-    "choices": ["Wrong", "Correct", "Wrong", "Wrong"],
-    "correctAnswer": 1
+    "problem": "What coverage is the defense in?",
+    "media": "Q5.mp4",
+    "choices": ["Cover 2 Man", "Cover 3 Buzz", "Cover 2 Squat", "Quarters"],
+    "correctAnswer": 2
   },
   {
     "id": 10,
-    "problem": "Test problem 10",
-    "media": "ucf.png",
-    "choices": ["Correct", "Wrong", "Wrong", "Wrong"],
-    "correctAnswer": 0
+    "problem": "What coverage is the defense in?",
+    "media": "Q10.mp4",
+    "choices": ["Cover 2 Buzz", "Cover 2 Trap", "Cover 2 Read", "Cover 2 Squat"],
+    "correctAnswer": 3
   }
 ]

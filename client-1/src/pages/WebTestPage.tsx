@@ -9,6 +9,8 @@ import { useSetWebScoreMutation } from "@/hooks/scores/scoreApiSlice";
 const WebTestPage = () => {
   const [isComplete, setIsComplete] = useState(false);
   const [score, setScore] = useState(0);
+  const [defensiveReadScore, setDefensiveReadScore] = useState(0);
+  const [playRecognitionScore, setPlayRecognitionScore] = useState(0);
   const hasSubmitted = useRef(false);
 
   const userId = useSelector(selectCurrentId);
@@ -32,8 +34,10 @@ const WebTestPage = () => {
   const [updateWebScore] = useSetWebScoreMutation();
 
   const handleScoreChange = useCallback(
-    (newScore: any, isComplete: any) => {
+    (newScore: any, defensiveReadScore: any, playRecognitionScore: any, isComplete: any) => {
       setScore(newScore);
+      setDefensiveReadScore(defensiveReadScore);
+      setPlayRecognitionScore(playRecognitionScore);
       setIsComplete(isComplete);
     },
     [setScore]
@@ -42,16 +46,14 @@ const WebTestPage = () => {
   // Handle the form submit event. Update the VR test scores and refresh the user data.
   const submitScore = async () => {
     const webScore1: number = score * 10;
-    const webScore2: number = score * 10;
-    const webScore3: number = score * 10;
-    const webScore4: number = score * 10;
+    const webScore2: number = (defensiveReadScore / 6) * 100;
+    const webScore3: number = (playRecognitionScore / 4) * 100;
 
     var obj = {
       userId: userId,
       webScore1: webScore1,
       webScore2: webScore2,
       webScore3: webScore3,
-      webScore4: webScore4,
     };
 
     try {

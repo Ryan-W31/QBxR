@@ -11,6 +11,5 @@ export const webScoreSchema = z.object({
   webScore1: z.number(),
   webScore2: z.number(),
   webScore3: z.number(),
-  webScore4: z.number(),
   userId: userIdSchema,
 });

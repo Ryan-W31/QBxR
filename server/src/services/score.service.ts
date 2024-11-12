@@ -23,16 +23,15 @@ export const setVRScoreEndpoint = async ({
   const score = await Score.findOne({ userId });
   appAssert(score, NOT_FOUND, "User not found.");
 
-  if (score.web_reaction && score.web_playid && score.web_defense && score.web_crit) {
+  if (score.web_playid && score.web_defense && score.web_crit) {
     const total =
-      (score.web_reaction +
-        score.web_playid +
+      (score.web_playid +
         score.web_defense +
         score.web_crit +
         difficulty1Score * 100 +
         difficulty2Score * 100 +
         difficulty3Score * 100) /
-      7;
+      6;
 
     const update = {
       vr_difficulty_1: difficulty1Score,
@@ -69,16 +68,9 @@ type setWebScoreParams = {
   webScore1: number;
   webScore2: number;
   webScore3: number;
-  webScore4: number;
   userId: string;
 };
-export const setWebScoreEndpoint = async ({
-  webScore1,
-  webScore2,
-  webScore3,
-  webScore4,
-  userId,
-}: setWebScoreParams) => {
+export const setWebScoreEndpoint = async ({ webScore1, webScore2, webScore3, userId }: setWebScoreParams) => {
   let newScore = null;
   const score = await Score.findOne({ userId });
   appAssert(score, NOT_FOUND, "User not found.");
@@ -90,15 +82,13 @@ export const setWebScoreEndpoint = async ({
         score.vr_difficulty_3 * 100 +
         webScore1 +
         webScore2 +
-        webScore3 +
-        webScore4) /
-      7;
+        webScore3) /
+      6;
 
     const update = {
-      web_reaction: webScore1,
-      web_playid: webScore2,
-      web_defense: webScore3,
-      web_crit: webScore4,
+      web_crit: webScore1,
+      web_defense: webScore2,
+      web_playid: webScore3,
       qbxr_score: total,
     };
 
@@ -109,10 +99,9 @@ export const setWebScoreEndpoint = async ({
     appAssert(user, NOT_FOUND, "User not found.");
   } else {
     const update = {
-      web_reaction: webScore1,
-      web_playid: webScore2,
-      web_defense: webScore3,
-      web_crit: webScore4,
+      web_crit: webScore1,
+      web_defense: webScore2,
+      web_playid: webScore3,
     };
 
     newScore = await Score.findOneAndUpdate({ userId }, update, {

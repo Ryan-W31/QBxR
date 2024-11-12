@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 export interface ScoreDocument extends mongoose.Document {
   userId: mongoose.Types.ObjectId;
   qbxr_score: number;
-  web_reaction: number;
   web_playid: number;
   web_defense: number;
   web_crit: number;
@@ -21,9 +20,6 @@ const scoreSchema = new mongoose.Schema<ScoreDocument>(
       required: true,
     },
     qbxr_score: {
-      type: Number,
-    },
-    web_reaction: {
       type: Number,
     },
     web_playid: {
