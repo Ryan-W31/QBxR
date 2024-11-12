@@ -355,7 +355,7 @@ const ProfilePage = () => {
                             <>
                               {profileScores?.qbxr ? (
                                 <p className={cn(scoreColor(profileScores?.qbxr?.qbxr_score), "mx-5 text-5xl")}>
-                                  {profileScores?.qbxr?.qbxr_score}
+                                  {Math.floor(profileScores?.qbxr?.qbxr_score * 100) / 100}
                                 </p>
                               ) : (
                                 <div>

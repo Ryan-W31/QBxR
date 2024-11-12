@@ -185,7 +185,7 @@ const SearchPage = () => {
         role={user.role}
         name={user.name}
         school={user.school}
-        score={user.score}
+        score={Math.floor(user.score * 100) / 100}
         onClick={() => handleRowClick(user)}
       />
     ));
@@ -247,7 +247,7 @@ const SearchPage = () => {
         role={openProfile?.role}
         name={openProfile?.name}
         school={openProfile?.school}
-        score={openProfile?.score}
+        score={Math.floor((openProfile?.score * 100) / 100)}
         isVisible={showProfile}
         onClose={handleClose}
       />

@@ -206,7 +206,7 @@ const LeaderboardPage = () => {
               rank={user.rank}
               name={user.name}
               school={user.school}
-              score={user.score}
+              score={Math.floor(user.score * 100) / 100}
               onClick={() => handleRowClick(user)}
             />
           ))
@@ -242,13 +242,15 @@ const LeaderboardPage = () => {
                           ) : (
                             <div className="text-center font-Audiowide text-foreground uppercase">
                               <h2 className="mb-2 text-3xl">Your Rank: {qbxrData.rank}</h2>
-                              <p className="mb-4 text-xl">Your Score: {qbxrData.qbxr_score}</p>
+                              <p className="mb-4 text-xl">
+                                Your Score: {Math.floor(qbxrData.qbxr_score * 100) / 100}
+                              </p>
                             </div>
                           )}
                         </>
                       ) : (
-                        <div className="text-center text-foreground uppercase">
-                          <h2 className="mb-2 font-Audiowide text-2xl">Your Rank: No Data</h2>
+                        <div className="text-center font-Audiowide text-foreground uppercase">
+                          <h2 className="mb-2 text-2xl">Your Rank: No Data</h2>
                           <p className="mb-4 text-lg">Take The Evalutation Tests On Your Profile</p>
                         </div>
                       )}
@@ -288,7 +290,7 @@ const LeaderboardPage = () => {
           role={openProfile.role}
           name={openProfile.name}
           school={openProfile.school}
-          score={openProfile.score}
+          score={Math.floor(openProfile.score * 100) / 100}
           isVisible={showProfile}
           onClose={handleClose}
         />

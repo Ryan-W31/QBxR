@@ -129,7 +129,7 @@ const FavoritesCard = ({ userId, setOpenProfile, setShowProfile, toggleBlur }: F
         role={user.role}
         name={user.name}
         school={user.school}
-        score={user.score}
+        score={Math.floor(user.score * 100) / 100}
         onClick={() => handleRowClick(user)}
       />
     ));

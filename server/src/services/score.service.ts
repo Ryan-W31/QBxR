@@ -24,26 +24,35 @@ export const setVRScoreEndpoint = async ({
   appAssert(score, NOT_FOUND, "User not found.");
 
   if (score.web_playid && score.web_defense && score.web_crit) {
-    const total =
-      (score.web_playid +
-        score.web_defense +
-        score.web_crit +
-        difficulty1Score * 100 +
-        difficulty2Score * 100 +
-        difficulty3Score * 100) /
-      6;
+    var total = undefined;
+    if (difficulty1Score !== 0 || difficulty2Score !== 0 || difficulty3Score !== 0) {
+      total =
+        (score.web_playid +
+          score.web_defense +
+          score.web_crit +
+          difficulty1Score * 100 +
+          difficulty2Score * 100 +
+          difficulty3Score * 100) /
+        6;
+    }
 
     const update = {
       vr_difficulty_1: difficulty1Score,
       vr_difficulty_2: difficulty2Score,
       vr_difficulty_3: difficulty3Score,
-      qbxr_score: total,
+      qbxr_score: total === undefined ? null : total,
     };
+
+    console.log(update);
 
     newScore = await Score.findOneAndUpdate({ userId }, update, {
       new: true,
     });
-    const user = await User.findByIdAndUpdate(userId, { score: total }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { score: total === undefined ? null : total },
+      { new: true }
+    );
     appAssert(user, NOT_FOUND, "User not found.");
   } else {
     const update = {
@@ -76,26 +85,33 @@ export const setWebScoreEndpoint = async ({ webScore1, webScore2, webScore3, use
   appAssert(score, NOT_FOUND, "User not found.");
 
   if (score.vr_difficulty_1 && score.vr_difficulty_2 && score.vr_difficulty_3) {
-    const total =
-      (score.vr_difficulty_1 * 100 +
-        score.vr_difficulty_2 * 100 +
-        score.vr_difficulty_3 * 100 +
-        webScore1 +
-        webScore2 +
-        webScore3) /
-      6;
+    var total = undefined;
+    if (webScore1 !== 0 || webScore2 !== 0 || webScore3 === 0) {
+      total =
+        (score.vr_difficulty_1 * 100 +
+          score.vr_difficulty_2 * 100 +
+          score.vr_difficulty_3 * 100 +
+          webScore1 +
+          webScore2 +
+          webScore3) /
+        6;
+    }
 
     const update = {
       web_crit: webScore1,
       web_defense: webScore2,
       web_playid: webScore3,
-      qbxr_score: total,
+      qbxr_score: total === undefined ? null : total,
     };
 
     newScore = await Score.findOneAndUpdate({ userId }, update, {
       new: true,
     });
-    const user = await User.findByIdAndUpdate(userId, { score: total }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { score: total === undefined ? null : total },
+      { new: true }
+    );
     appAssert(user, NOT_FOUND, "User not found.");
   } else {
     const update = {
@@ -145,19 +161,17 @@ export const getAllScoresEndpoint = async (userId: string) => {
   const scores = await Score.findOne({ userId });
   appAssert(scores, NOT_FOUND, "User not found.");
 
+  console.log(scores);
+
   var obj: ScoreObject = {};
 
-  if (scores?.qbxr_score !== undefined) {
+  if (scores?.qbxr_score !== undefined && scores?.qbxr_score !== null) {
     const rank = await Score.where("qbxr_score").gt(scores.qbxr_score).countDocuments();
     const qbxr_score = scores.qbxr_score;
     obj.qbxr = { qbxr_score: qbxr_score, rank: rank + 1 };
   }
 
   obj.web = formatWebScores(scores);
-  obj.vr = formatVRScores(scores);
-
-  obj.web = formatWebScores(scores);
-
   obj.vr = formatVRScores(scores);
 
   return obj;

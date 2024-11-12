@@ -112,7 +112,7 @@ const HomePage = () => {
                       <>
                         {qbxrData.qbxr_score >= 0 ? (
                           <p className={cn(scoreColor(qbxrData.qbxr_score), "m-4 text-xl md:text-5xl")}>
-                            {qbxrData.qbxr_score}
+                            {Math.floor(qbxrData.qbxr_score * 100) / 100}
                           </p>
                         ) : (
                           <Skeleton className="h-[75px] w-[75px]" />
@@ -150,7 +150,7 @@ const HomePage = () => {
         role={openProfile.role}
         name={openProfile.name}
         school={openProfile.school}
-        score={openProfile.score}
+        score={Math.floor(openProfile.score * 100) / 100}
         isVisible={showProfile}
         onClose={handleClose}
       />

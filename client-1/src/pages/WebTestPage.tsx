@@ -46,8 +46,8 @@ const WebTestPage = () => {
   // Handle the form submit event. Update the VR test scores and refresh the user data.
   const submitScore = async () => {
     const webScore1: number = score * 10;
-    const webScore2: number = (defensiveReadScore / 6) * 100;
-    const webScore3: number = (playRecognitionScore / 4) * 100;
+    const webScore2: number = Math.floor((defensiveReadScore / 6) * 100 * 100) / 100;
+    const webScore3: number = Math.floor((playRecognitionScore / 4) * 100 * 100) / 100;
 
     var obj = {
       userId: userId,
