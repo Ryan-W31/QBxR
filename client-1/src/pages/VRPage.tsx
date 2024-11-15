@@ -82,11 +82,11 @@ const VRPage = () => {
   };
 
   return (
-    <div className="flex h-screen flex-col items-center justify-center space-y-10 md:space-x-16">
+    <div className="flex h-screen flex-col items-center justify-center space-y-10">
       <iframe
         src="./web.html"
         title="Web Test"
-        style={{ width: "960px", height: "600px", border: "none" }}
+        style={{ width: "1000px", height: "800px", border: "none" }}
       ></iframe>
       <Button className="md:text-md rounded-full text-sm lg:text-xl" onClick={handleSubmit}>
         <div className="flex flex-row items-center justify-center">

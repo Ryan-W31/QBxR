@@ -161,8 +161,6 @@ export const getAllScoresEndpoint = async (userId: string) => {
   const scores = await Score.findOne({ userId });
   appAssert(scores, NOT_FOUND, "User not found.");
 
-  console.log(scores);
-
   var obj: ScoreObject = {};
 
   if (scores?.qbxr_score !== undefined && scores?.qbxr_score !== null) {

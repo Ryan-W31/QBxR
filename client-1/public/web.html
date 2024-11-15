@@ -3,10 +3,38 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Unity WebGL Player | Test</title>
+    <title>QBxR VR Test</title>
     <meta name="description" content="" />
     <link rel="shortcut icon" href="TemplateData/favicon.ico" />
     <link rel="stylesheet" href="TemplateData/style.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet" />
+
+    <style>
+      .font-Audiowide {
+        background: #1fb622;
+        color: #eeeeee;
+        font-family: "Audiowide", serif;
+        font-weight: 600;
+        font-style: normal;
+        letter-spacing: 0.05em;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        text-transform: uppercase;
+        border-radius: 9999px;
+        border: none;
+      }
+      .font-Audiowide:hover {
+        background: #1c6000;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
     <div id="unity-container">
@@ -19,9 +47,8 @@
           <div id="unity-progress-bar-full"></div>
         </div>
       </div>
-      <div id="unity-footer">
-        <button id="entervr" value="Enter VR" disabled>VR</button>
-        <button id="enterar" value="Enter AR" disabled>AR</button>
+      <div id="unity-footer" style="display: flex; justify-content: center; align-items: center; margin-top: 2rem">
+        <button id="entervr" value="Enter VR" class="font-Audiowide" disabled>Enter VR</button>
       </div>
     </div>
     <script>
@@ -70,16 +97,8 @@
       };
       document.body.appendChild(script);
 
-      let enterARButton = document.getElementById("enterar");
       let enterVRButton = document.getElementById("entervr");
 
-      document.addEventListener(
-        "onARSupportedCheck",
-        function (event) {
-          enterARButton.disabled = !event.detail.supported;
-        },
-        false
-      );
       document.addEventListener(
         "onVRSupportedCheck",
         function (event) {
@@ -88,13 +107,6 @@
         false
       );
 
-      enterARButton.addEventListener(
-        "click",
-        function (event) {
-          unityInstance.Module.WebXR.toggleAR();
-        },
-        false
-      );
       enterVRButton.addEventListener(
         "click",
         function (event) {
